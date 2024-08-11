@@ -6,7 +6,7 @@ extension CustomThemeData on ThemeData {
         vertical: 5,
       );
   EdgeInsets get largemainPadding => const EdgeInsets.symmetric(
-        horizontal: 20.0,
+        horizontal: 30.0,
         vertical: 5.0,
       );
   EdgeInsets get largeHorizontalAndVerticalPadding =>
