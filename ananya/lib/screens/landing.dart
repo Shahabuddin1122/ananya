@@ -1,4 +1,6 @@
 import 'package:ananya/screens/home.dart';
+import 'package:ananya/screens/unlock_process1.dart';
+import 'package:ananya/screens/unlock_process2.dart';
 import 'package:ananya/utils/constants.dart';
 import 'package:ananya/widgets/user_sidebar.dart';
 import 'package:flutter/material.dart';
@@ -33,13 +35,7 @@ class _LandingState extends State<Landing> {
         bodyWidget = const Home();
     }
     return Container(
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          colors: [Colors.white, PRIMARY_COLOR],
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-        ),
-      ),
+      color: Colors.white,
       child: Scaffold(
         drawer: UserSidebar(),
         backgroundColor: Colors.transparent,

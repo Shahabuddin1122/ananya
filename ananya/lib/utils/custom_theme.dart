@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 extension CustomThemeData on ThemeData {
@@ -19,6 +20,9 @@ extension CustomThemeData on ThemeData {
       );
   EdgeInsets get subSectionDividerPadding => const EdgeInsets.symmetric(
         vertical: 10.0,
+      );
+  EdgeInsets get smallSubSectionDividerPadding => const EdgeInsets.symmetric(
+        vertical: 5,
       );
   EdgeInsets get insideCardPadding => const EdgeInsets.symmetric(
         vertical: 10,
