@@ -4,8 +4,21 @@ import 'package:ananya/widgets/circle_image.dart';
 import 'package:ananya/widgets/history_component.dart';
 import 'package:flutter/material.dart';
 
-class CohortHistory extends StatelessWidget {
+class CohortHistory extends StatefulWidget {
   const CohortHistory({super.key});
+
+  @override
+  State<CohortHistory> createState() => _CohortHistoryState();
+}
+
+class _CohortHistoryState extends State<CohortHistory> {
+  int _selectedIndex = 0;
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -133,6 +146,41 @@ class CohortHistory extends StatelessWidget {
                 ),
               ),
             ),
+          ),
+        ],
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Colors.grey[100],
+        currentIndex: _selectedIndex,
+        onTap: _onItemTapped,
+        selectedItemColor: SECONDARY_COLOR,
+        unselectedItemColor: Colors.grey[600],
+        selectedFontSize: 16,
+        unselectedFontSize: 14,
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.calendar_today,
+              size: _selectedIndex == 0 ? 40 : 30,
+              color: _selectedIndex == 0 ? SECONDARY_COLOR : Colors.grey[600],
+            ),
+            label: "Tracker",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.language,
+              size: _selectedIndex == 1 ? 40 : 30,
+              color: _selectedIndex == 1 ? SECONDARY_COLOR : Colors.grey[600],
+            ),
+            label: "Knowledge Nexus",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.shopping_cart,
+              size: _selectedIndex == 2 ? 40 : 30,
+              color: _selectedIndex == 2 ? SECONDARY_COLOR : Colors.grey[600],
+            ),
+            label: "Shop",
           ),
         ],
       ),
