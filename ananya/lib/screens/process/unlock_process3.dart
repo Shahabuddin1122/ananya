@@ -1,6 +1,7 @@
 import 'package:ananya/utils/constants.dart';
 import 'package:ananya/utils/custom_theme.dart';
 import 'package:ananya/widgets/custom_app_bar_with_progress.dart';
+import 'package:ananya/widgets/dynamic_calender.dart';
 import 'package:ananya/widgets/input_box.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -41,11 +42,7 @@ class UnlockProcess3 extends StatelessWidget {
                   ),
                   Container(
                     color: Colors.white,
-                    child: TableCalendar(
-                      firstDay: DateTime.utc(2010, 10, 16),
-                      lastDay: DateTime.utc(2030, 3, 14),
-                      focusedDay: DateTime.now(),
-                    ),
+                    child: const DynamicCalender(),
                   ),
                   const SizedBox(
                     height: 20,

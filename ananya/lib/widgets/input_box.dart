@@ -1,3 +1,4 @@
+import 'package:ananya/utils/constants.dart';
 import 'package:ananya/utils/custom_theme.dart';
 import 'package:flutter/material.dart';
 
@@ -26,11 +27,14 @@ class InputBox extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             TextField(
-              style: TextStyle(
-                color: Colors.grey[200],
+              style: const TextStyle(
+                color: Colors.black,
               ),
               decoration: InputDecoration(
                 hintText: text,
+                hintStyle: const TextStyle(
+                  color: ACCENT,
+                ),
                 border: InputBorder.none,
               ),
             )

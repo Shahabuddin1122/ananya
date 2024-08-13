@@ -91,8 +91,9 @@ class UserSidebar extends StatelessWidget {
               ],
             ),
           ),
-          const ListTile(
-            title: Text("PERIOD HISTORY"),
+          ListTile(
+            title: const Text("PERIOD HISTORY"),
+            onTap: () => Navigator.pushNamed(context, '/history/indivisual'),
           ),
         ],
       ),
