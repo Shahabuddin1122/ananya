@@ -1,15 +1,19 @@
 import 'package:ananya/utils/constants.dart';
 import 'package:ananya/utils/custom_theme.dart';
-import 'package:ananya/widgets/user_sidebar.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:ananya/widgets/period_cycle_information.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg/svg.dart';
 
-class Home extends StatelessWidget {
+class Home extends StatefulWidget {
   const Home({super.key});
 
+  @override
+  State<Home> createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
+  bool get_data = true;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -206,23 +210,25 @@ class Home extends StatelessWidget {
               const SizedBox(
                 height: 30,
               ),
-              Column(
-                children: [
-                  SvgPicture.asset(
-                    'assets/images/period_cycle.svg',
-                    width: 150,
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, '/unlock-process/1');
-                    },
-                    child: const Text('UNLOCK PERIOD PREDICTION'),
-                  )
-                ],
-              ),
+              get_data
+                  ? PeriodCycleInformation()
+                  : Column(
+                      children: [
+                        SvgPicture.asset(
+                          'assets/images/period_cycle.svg',
+                          width: 150,
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.pushNamed(context, '/unlock-process/1');
+                          },
+                          child: const Text('UNLOCK PERIOD PREDICTION'),
+                        )
+                      ],
+                    ),
               SizedBox(
                 width: double.infinity,
                 height: MediaQuery.of(context).size.height * 0.5,

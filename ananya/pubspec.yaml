@@ -69,6 +69,9 @@ flutter:
     - assets/images/Anannya Anim 1.svg
     - assets/images/knowledge_nexus.svg
     - assets/images/Sanitary Pads 1.svg
+    - assets/images/logo.png
+    - assets/images/me.png
+    - assets/images/default_person.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

@@ -1,6 +1,6 @@
-import 'package:ananya/screens/home.dart';
-import 'package:ananya/screens/unlock_process1.dart';
-import 'package:ananya/screens/unlock_process2.dart';
+import 'package:ananya/screens/landing/home.dart';
+import 'package:ananya/screens/process/unlock_process1.dart';
+import 'package:ananya/screens/process/unlock_process2.dart';
 import 'package:ananya/utils/constants.dart';
 import 'package:ananya/widgets/user_sidebar.dart';
 import 'package:flutter/material.dart';
