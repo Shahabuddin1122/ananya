@@ -3,8 +3,21 @@ import 'package:ananya/utils/custom_theme.dart';
 import 'package:ananya/widgets/history_component.dart';
 import 'package:flutter/material.dart';
 
-class IndividualHistory extends StatelessWidget {
+class IndividualHistory extends StatefulWidget {
   const IndividualHistory({super.key});
+
+  @override
+  State<IndividualHistory> createState() => _IndividualHistoryState();
+}
+
+class _IndividualHistoryState extends State<IndividualHistory> {
+  int _selectedIndex = 0;
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -116,6 +129,41 @@ class IndividualHistory extends StatelessWidget {
                 ),
               ),
             ),
+          ),
+        ],
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Colors.grey[100],
+        currentIndex: _selectedIndex,
+        onTap: _onItemTapped,
+        selectedItemColor: SECONDARY_COLOR,
+        unselectedItemColor: Colors.grey[600],
+        selectedFontSize: 16,
+        unselectedFontSize: 14,
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.calendar_today,
+              size: _selectedIndex == 0 ? 40 : 30,
+              color: _selectedIndex == 0 ? SECONDARY_COLOR : Colors.grey[600],
+            ),
+            label: "Tracker",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.language,
+              size: _selectedIndex == 1 ? 40 : 30,
+              color: _selectedIndex == 1 ? SECONDARY_COLOR : Colors.grey[600],
+            ),
+            label: "Knowledge Nexus",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.shopping_cart,
+              size: _selectedIndex == 2 ? 40 : 30,
+              color: _selectedIndex == 2 ? SECONDARY_COLOR : Colors.grey[600],
+            ),
+            label: "Shop",
           ),
         ],
       ),
