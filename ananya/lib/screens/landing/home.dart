@@ -6,14 +6,14 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg/svg.dart';
 
 class Home extends StatefulWidget {
-  const Home({super.key});
+  final bool get_data;
+  const Home({required this.get_data, super.key});
 
   @override
   State<Home> createState() => _HomeState();
 }
 
 class _HomeState extends State<Home> {
-  bool get_data = true;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -210,7 +210,7 @@ class _HomeState extends State<Home> {
               const SizedBox(
                 height: 30,
               ),
-              get_data
+              widget.get_data
                   ? PeriodCycleInformation()
                   : Column(
                       children: [

@@ -1,0 +1,4 @@
+-------------Superuser information-----------
+email: admin@gmail.com
+username: admin
+password: admin

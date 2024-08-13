@@ -19,7 +19,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(MaterialApp(
     debugShowCheckedModeBanner: false,
-    initialRoute: '/history/cohort',
+    initialRoute: '/',
     theme: Scheme.lightTheme,
     themeMode: ThemeMode.system,
     routes: {

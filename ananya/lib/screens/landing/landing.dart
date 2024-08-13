@@ -1,7 +1,6 @@
 import 'package:ananya/screens/landing/home.dart';
-import 'package:ananya/screens/process/unlock_process1.dart';
-import 'package:ananya/screens/process/unlock_process2.dart';
 import 'package:ananya/utils/constants.dart';
+import 'package:ananya/utils/custom_theme.dart';
 import 'package:ananya/widgets/user_sidebar.dart';
 import 'package:flutter/material.dart';
 
@@ -14,6 +13,7 @@ class Landing extends StatefulWidget {
 
 class _LandingState extends State<Landing> {
   int _selectedIndex = 0;
+  final bool _isLoggedIn = false;
 
   void _onItemTapped(int index) {
     setState(() {
@@ -26,27 +26,57 @@ class _LandingState extends State<Landing> {
     Widget bodyWidget;
     switch (_selectedIndex) {
       case 0:
-        bodyWidget = const Home();
+        bodyWidget = Home(
+          get_data: _isLoggedIn,
+        );
         break;
       case 1:
-        bodyWidget = const Home();
+        bodyWidget = Home(
+          get_data: _isLoggedIn,
+        );
         break;
       default:
-        bodyWidget = const Home();
+        bodyWidget = Home(
+          get_data: _isLoggedIn,
+        );
     }
     return Container(
       color: Colors.white,
       child: Scaffold(
-        drawer: UserSidebar(),
+        drawer: const UserSidebar(),
         backgroundColor: Colors.transparent,
         appBar: AppBar(
           actions: [
-            IconButton(
-              icon: const Icon(
-                Icons.notifications,
-              ),
-              onPressed: () {},
-            ),
+            _isLoggedIn
+                ? IconButton(
+                    icon: const Icon(
+                      Icons.notifications,
+                    ),
+                    onPressed: () {},
+                  )
+                : Padding(
+                    padding: Theme.of(context).largemainPadding,
+                    child: ElevatedButton(
+                      style: ButtonStyle(
+                        backgroundColor: const WidgetStatePropertyAll(ACCENT),
+                        minimumSize: const WidgetStatePropertyAll(Size(50, 20)),
+                        shape: WidgetStateProperty.all(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                        ),
+                      ),
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/signin');
+                      },
+                      child: const Text(
+                        'Log in',
+                        style: TextStyle(
+                          fontSize: 12,
+                        ),
+                      ),
+                    ),
+                  ),
           ],
         ),
         body: bodyWidget,
