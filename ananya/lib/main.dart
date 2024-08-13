@@ -1,4 +1,6 @@
 import 'package:ananya/screens/landing.dart';
+import 'package:ananya/screens/loading.dart';
+import 'package:ananya/screens/period_date_show.dart';
 import 'package:ananya/screens/unlock_process1.dart';
 import 'package:ananya/screens/unlock_process2.dart';
 import 'package:ananya/screens/unlock_process3.dart';
@@ -23,6 +25,8 @@ Future<void> main() async {
       '/unlock-process/4': (context) => const UnlockProcess4(),
       '/unlock-process/5': (context) => const UnlockProcess5(),
       '/unlock-process/6': (context) => const UnlockProcess6(),
+      '/loading': (context) => const Loading(),
+      '/period-date': (context) => const PeriodDateShow(),
     },
   ));
 }
