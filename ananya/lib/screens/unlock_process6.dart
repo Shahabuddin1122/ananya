@@ -69,7 +69,7 @@ class UnlockProcess6 extends StatelessWidget {
               ),
               ElevatedButton(
                 onPressed: () {
-                  Navigator.pushNamed(context, '/');
+                  Navigator.pushNamed(context, '/period-date');
                 },
                 style: const ButtonStyle(
                   backgroundColor: WidgetStatePropertyAll(ACCENT),
