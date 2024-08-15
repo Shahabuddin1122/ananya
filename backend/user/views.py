@@ -1,10 +1,11 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-
 from rest_framework import status
 
-from .models import User, SuperUser
-from .serializers import UserSerializer, SuperUserSerializer
+from .models import User, SuperUser, Questionnaire, PeriodHistory, PeriodPrediction
+from .serializers import UserSerializer, SuperUserSerializer, QuestionnaireSerializer, PeriodHistorySerializer, \
+    PeriodPredictionSerializer
+from .utils import *
 
 
 @api_view(['POST'])
@@ -92,3 +93,67 @@ def get_user(request, user_id):
         return Response(serializer.data, status=status.HTTP_200_OK)
     return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
 
+
+@api_view(['POST'])
+def add_period_info(request, user_id):
+    try:
+        user = User.objects.get(id=user_id)
+    except User.DoesNotExist:
+        return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+
+    data = request.data.copy()
+    data['user'] = user.id
+
+    serializer = QuestionnaireSerializer(data=data)
+    if serializer.is_valid():
+        questionnaire = serializer.save()
+
+        period_history_data = {
+            'period_start': questionnaire.last_period_start,
+            'cycle_length': questionnaire.days_between_period,
+            'anomalies': 'no anomalies',
+            'user': user
+        }
+        PeriodHistory.objects.create(**period_history_data)
+
+        predicted_date = get_period_date(serializer.data)
+        if predicted_date:
+            period_prediction_data = {
+                'period_start_from': predicted_date.get('period_start_from'),
+                'period_start_to': predicted_date.get('period_start_to'),
+                'user': user
+            }
+            period_prediction = PeriodPrediction.objects.create(**period_prediction_data)
+            serializer = PeriodPredictionSerializer(period_prediction)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response({'error': 'Unable to predict period dates'}, status=status.HTTP_400_BAD_REQUEST)
+    else:
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+def get_user_period_questionnaire(request, user_id):
+    try:
+        user = User.objects.get(id=user_id)
+    except User.DoesNotExist:
+        return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+
+    try:
+        questionnaire = Questionnaire.objects.get(user_id=user.id)
+        serializer = QuestionnaireSerializer(questionnaire)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    except Questionnaire.DoesNotExist:
+        return Response({'error': 'Questionnaire not added'}, status=status.HTTP_404_NOT_FOUND)
+
+
+@api_view(['GET'])
+def get_period_prediction(request, user_id):
+    if request.method == 'GET':
+        try:
+            questionnaire = Questionnaire.objects.get(user_id=user_id)
+            serializer = QuestionnaireSerializer(questionnaire)
+            predicted_date = get_period_date(serializer.data)
+            return Response(predicted_date, status=status.HTTP_200_OK)
+        except Questionnaire.DoesNotExist:
+            return Response({'error': 'not able to predict'}, status=status.HTTP_404_NOT_FOUND)

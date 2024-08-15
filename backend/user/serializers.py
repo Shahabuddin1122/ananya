@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from user.models import User, SuperUser
+from user.models import User, SuperUser, HealthCondition, Questionnaire, PeriodHistory, PeriodPrediction
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -11,7 +11,7 @@ class UserSerializer(serializers.ModelSerializer):
 
 class SuperUserSerializer(serializers.ModelSerializer):
     user = UserSerializer()
-    managed_users = UserSerializer(many=True,required=False)
+    managed_users = UserSerializer(many=True, required=False)
 
     class Meta:
         model = SuperUser
@@ -41,3 +41,60 @@ class SuperUserSerializer(serializers.ModelSerializer):
             superuser.managed_users.add(managed_user)
 
         return superuser
+
+
+class HealthConditionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = HealthCondition
+        fields = '__all__'
+
+
+class QuestionnaireSerializer(serializers.ModelSerializer):
+    health_condition = HealthConditionSerializer()
+
+    class Meta:
+        model = Questionnaire
+        fields = [
+            'is_period_regular',
+            'days_between_period',
+            'length_of_period',
+            'last_period_start',
+            'take_birth_control',
+            'health_condition',
+            'user',
+        ]
+
+    def create(self, validated_data):
+        health_condition_data = validated_data.pop('health_condition')
+        health_condition = HealthCondition.objects.create(**health_condition_data)
+        questionnaire = Questionnaire.objects.create(health_condition=health_condition, **validated_data)
+        return questionnaire
+
+    def update(self, instance, validated_data):
+        health_condition_data = validated_data.pop('health_condition')
+        health_condition = instance.health_condition
+
+        instance.is_period_regular = validated_data.get('is_period_regular', instance.is_period_regular)
+        instance.days_between_period = validated_data.get('days_between_period', instance.days_between_period)
+        instance.length_of_period = validated_data.get('length_of_period', instance.length_of_period)
+        instance.last_period_start = validated_data.get('last_period_start', instance.last_period_start)
+        instance.take_birth_control = validated_data.get('take_birth_control', instance.take_birth_control)
+        instance.save()
+
+        for attr, value in health_condition_data.items():
+            setattr(health_condition, attr, value)
+        health_condition.save()
+
+        return instance
+
+
+class PeriodHistorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PeriodHistory
+        fields = '__all__'
+
+
+class PeriodPredictionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PeriodPrediction
+        fields = '__all__'
