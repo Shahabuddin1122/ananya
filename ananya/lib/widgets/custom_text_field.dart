@@ -5,14 +5,19 @@ import 'package:flutter/services.dart';
 
 class CustomTextField extends StatefulWidget {
   final String text;
-  const CustomTextField({required this.text, super.key});
+  final TextEditingController controller;
+
+  const CustomTextField({
+    required this.text,
+    required this.controller,
+    super.key,
+  });
 
   @override
   State<CustomTextField> createState() => _CustomTextFieldState();
 }
 
 class _CustomTextFieldState extends State<CustomTextField> {
-  TextEditingController _controller = TextEditingController();
   bool _obscureText = true;
   String? _warningText;
 
@@ -26,7 +31,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
 
     if (selectedDate != null) {
       setState(() {
-        _controller.text = "${selectedDate.toLocal()}".split(' ')[0];
+        widget.controller.text = "${selectedDate.toLocal()}".split(' ')[0];
       });
     }
   }
@@ -56,7 +61,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
               ),
             ),
             child: TextField(
-              controller: _controller,
+              controller: widget.controller,
               style: const TextStyle(
                 color: Colors.black,
               ),

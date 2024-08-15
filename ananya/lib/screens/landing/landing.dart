@@ -3,6 +3,7 @@ import 'package:ananya/utils/constants.dart';
 import 'package:ananya/utils/custom_theme.dart';
 import 'package:ananya/widgets/user_sidebar.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Landing extends StatefulWidget {
   const Landing({super.key});
@@ -14,6 +15,20 @@ class Landing extends StatefulWidget {
 class _LandingState extends State<Landing> {
   int _selectedIndex = 0;
   final bool _isLoggedIn = false;
+  late Future<bool> numberPresent;
+
+  @override
+  void initState() {
+    super.initState();
+    numberPresent = getInfo();
+  }
+
+  Future<bool> getInfo() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? number = prefs.getString('userNumber');
+    print("number: $number");
+    return number != null;
+  }
 
   void _onItemTapped(int index) {
     setState(() {
@@ -47,14 +62,20 @@ class _LandingState extends State<Landing> {
         backgroundColor: Colors.transparent,
         appBar: AppBar(
           actions: [
-            _isLoggedIn
-                ? IconButton(
+            FutureBuilder<bool>(
+              future: numberPresent,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Container();
+                } else if (snapshot.hasData && snapshot.data == true) {
+                  return IconButton(
                     icon: const Icon(
                       Icons.notifications,
                     ),
                     onPressed: () {},
-                  )
-                : Padding(
+                  );
+                } else {
+                  return Padding(
                     padding: Theme.of(context).largemainPadding,
                     child: ElevatedButton(
                       style: ButtonStyle(
@@ -76,7 +97,10 @@ class _LandingState extends State<Landing> {
                         ),
                       ),
                     ),
-                  ),
+                  );
+                }
+              },
+            ),
           ],
         ),
         body: bodyWidget,

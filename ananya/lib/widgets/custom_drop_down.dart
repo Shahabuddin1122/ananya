@@ -4,8 +4,14 @@ import 'package:flutter/material.dart';
 class CustomDropdown extends StatefulWidget {
   final String header;
   final List<String> options;
-  const CustomDropdown(
-      {required this.options, required this.header, super.key});
+  final ValueChanged<String?>? onChanged; // Callback for selected value
+
+  const CustomDropdown({
+    required this.options,
+    required this.header,
+    this.onChanged, // Optional parameter to handle changes
+    super.key,
+  });
 
   @override
   _CustomDropdownState createState() => _CustomDropdownState();
@@ -67,6 +73,10 @@ class _CustomDropdownState extends State<CustomDropdown> {
                   setState(() {
                     _selectedValue = newValue;
                   });
+                  if (widget.onChanged != null) {
+                    widget
+                        .onChanged!(newValue); // Notify parent of value change
+                  }
                 },
                 hint: Text("Choose a ${widget.header}"),
               ),
