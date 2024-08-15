@@ -1,8 +1,10 @@
+import 'dart:convert';
+
+import 'package:ananya/utils/api_sattings.dart';
 import 'package:ananya/utils/constants.dart';
 import 'package:ananya/utils/custom_theme.dart';
 import 'package:ananya/widgets/custom_drop_down.dart';
 import 'package:ananya/widgets/custom_text_field.dart';
-import 'package:ananya/widgets/input_box.dart';
 import 'package:flutter/material.dart';
 
 class SignUp extends StatefulWidget {
@@ -13,6 +15,16 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUpState extends State<SignUp> {
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController dobController = TextEditingController();
+  final TextEditingController phoneController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  String? selectedDistrict;
+  String? selectedProject;
+
+  ApiSettings api = ApiSettings(endPoint: 'user/signup');
+
   final List<String> district = [
     "Dhaka",
     "Khulna",
@@ -22,6 +34,78 @@ class _SignUpState extends State<SignUp> {
     "WaterAid",
     "Brac",
   ];
+  void check() async {
+    if (nameController.text.isEmpty) {
+      _showErrorMessage("Name is required.");
+      return;
+    }
+    if (dobController.text.isEmpty) {
+      _showErrorMessage("Date of Birth is required.");
+      return;
+    }
+    if (phoneController.text.isEmpty) {
+      _showErrorMessage("Phone Number is required.");
+      return;
+    }
+    if (emailController.text.isEmpty) {
+      _showErrorMessage("Email is required.");
+      return;
+    }
+    if (passwordController.text.isEmpty) {
+      _showErrorMessage("Password is required.");
+      return;
+    }
+    if (selectedDistrict == null || selectedDistrict!.isEmpty) {
+      _showErrorMessage("District is required.");
+      return;
+    }
+    if (selectedProject == null || selectedProject!.isEmpty) {
+      _showErrorMessage("Project is required.");
+      return;
+    }
+
+    Map<String, dynamic> data = {
+      'name': nameController.text,
+      'email': emailController.text,
+      'date_of_birth': dobController.text,
+      'phone': phoneController.text,
+      'password': passwordController.text,
+      'district': selectedDistrict,
+      'project': selectedProject,
+      'is_superuser': false,
+    };
+
+    try {
+      final response = await api.postMethod(json.encode(data));
+      if (response.statusCode == 201) {
+        print('Data posted successfully: $response');
+        Navigator.pushNamed(context, '/signin');
+      } else {
+        print('Failed to post data. Status code: ${response.statusCode}');
+        print('Response body: $response');
+      }
+    } catch (e) {
+      print('Error occurred: $e');
+    }
+  }
+
+  void _showErrorMessage(String message) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Error'),
+        content: Text(message),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const Text('OK'),
+          ),
+        ],
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,26 +139,45 @@ class _SignUpState extends State<SignUp> {
                 ),
                 Column(
                   children: [
-                    CustomTextField(text: "Name"),
-                    CustomTextField(text: "Date of Birth"),
-                    CustomTextField(text: "Phone Number"),
-                    CustomTextField(text: "Email"),
-                    CustomTextField(text: 'Password'),
+                    CustomTextField(
+                      text: "Name",
+                      controller: nameController,
+                    ),
+                    CustomTextField(
+                      text: "Date of Birth",
+                      controller: dobController,
+                    ),
+                    CustomTextField(
+                      text: "Phone Number",
+                      controller: phoneController,
+                    ),
+                    CustomTextField(
+                      text: "Email",
+                      controller: emailController,
+                    ),
+                    CustomTextField(
+                      text: 'Password',
+                      controller: passwordController,
+                    ),
                     CustomDropdown(
                       header: 'District',
                       options: district,
+                      onChanged: (value) {
+                        selectedDistrict = value;
+                      },
                     ),
                     CustomDropdown(
                       header: 'Project',
                       options: projects,
+                      onChanged: (value) {
+                        selectedProject = value;
+                      },
                     ),
                     const SizedBox(
                       height: 20,
                     ),
                     ElevatedButton(
-                      onPressed: () {
-                        Navigator.pushNamed(context, '/unlock-process4');
-                      },
+                      onPressed: check,
                       style: const ButtonStyle(
                         backgroundColor: WidgetStatePropertyAll(ACCENT),
                         minimumSize:
@@ -96,13 +199,18 @@ class _SignUpState extends State<SignUp> {
                     const SizedBox(
                       height: 20,
                     ),
-                    const Text(
-                      "Already have an account? Click here for login",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Colors.indigo,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/signin');
+                      },
+                      child: const Text(
+                        "Already have an account? Click here for login",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Colors.indigo,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     )
                   ],

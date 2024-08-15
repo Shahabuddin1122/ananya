@@ -95,6 +95,8 @@ class PeriodHistorySerializer(serializers.ModelSerializer):
 
 
 class PeriodPredictionSerializer(serializers.ModelSerializer):
+    user = UserSerializer()
+
     class Meta:
         model = PeriodPrediction
-        fields = '__all__'
+        fields = ['period_start_from', 'period_start_to', 'user']

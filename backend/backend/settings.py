@@ -29,7 +29,6 @@ SECRET_KEY = 'django-insecure-#@_)p%qz+ny=kds*9k^$oy0e&-2z8%&cd&y8hv!jln15!)@vxj
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
 
 # Application definition
 INSTALLED_APPS = [
@@ -45,6 +44,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -85,6 +85,10 @@ DATABASES = {
         'PORT': env('DATABASE_PORT'),
     }
 }
+
+ALLOWED_HOSTS = ['*']
+
+CORS_ORIGIN_ALLOW_ALL = True
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
