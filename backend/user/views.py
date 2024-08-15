@@ -46,7 +46,7 @@ def user_login(request):
                 if user.is_superuser:
                     superuser = SuperUser.objects.get(user_id=user.id)
                     serializer = SuperUserSerializer(superuser)
-                    return Response(serializer.data, status=status.HTTP_201_CREATED)
+                    return Response(serializer.data, status=status.HTTP_200_OK)
                 else:
                     serializer = UserSerializer(user)
                     return Response(serializer.data, status=status.HTTP_200_OK)
@@ -151,9 +151,8 @@ def get_user_period_questionnaire(request, user_id):
 def get_period_prediction(request, user_id):
     if request.method == 'GET':
         try:
-            questionnaire = Questionnaire.objects.get(user_id=user_id)
-            serializer = QuestionnaireSerializer(questionnaire)
-            predicted_date = get_period_date(serializer.data)
-            return Response(predicted_date, status=status.HTTP_200_OK)
+            period_prediction = PeriodPrediction.objects.get(user_id=user_id)
+            serializer = PeriodPredictionSerializer(period_prediction)
+            return Response(serializer.data, status=status.HTTP_200_OK)
         except Questionnaire.DoesNotExist:
             return Response({'error': 'not able to predict'}, status=status.HTTP_404_NOT_FOUND)
