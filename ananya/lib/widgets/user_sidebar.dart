@@ -27,7 +27,7 @@ class UserSidebar extends StatelessWidget {
             ),
             currentAccountPicture: CircleAvatar(
               child: ClipOval(
-                child: Image.asset('assets/images/hotline.png'),
+                child: Image.asset('assets/images/default_person.png'),
               ),
             ),
             decoration: const BoxDecoration(
@@ -66,6 +66,10 @@ class UserSidebar extends StatelessWidget {
           const ListTile(
             title: Text('GET HELP'),
           ),
+          ListTile(
+            title: const Text("PERIOD HISTORY"),
+            onTap: () => Navigator.pushNamed(context, '/history/indivisual'),
+          ),
           const Divider(
             height: 1,
             color: Color(0xFF405070),
@@ -91,10 +95,6 @@ class UserSidebar extends StatelessWidget {
                 ),
               ],
             ),
-          ),
-          ListTile(
-            title: const Text("PERIOD HISTORY"),
-            onTap: () => Navigator.pushNamed(context, '/history/indivisual'),
           ),
           ListTile(
             title: const Text("LOG OUT"),

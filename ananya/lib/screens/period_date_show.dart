@@ -1,9 +1,41 @@
 import 'package:ananya/utils/constants.dart';
 import 'package:ananya/utils/custom_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
-class PeriodDateShow extends StatelessWidget {
-  const PeriodDateShow({super.key});
+class PeriodDateShow extends StatefulWidget {
+  final Map<String, dynamic> data;
+  const PeriodDateShow({required this.data, super.key});
+
+  @override
+  State<PeriodDateShow> createState() => _PeriodDateShowState();
+}
+
+class _PeriodDateShowState extends State<PeriodDateShow> {
+  late String periodDate = getData();
+  @override
+  void initState() {
+    super.initState();
+    periodDate = getData();
+  }
+
+  String getData() {
+    DateFormat inputFormat = DateFormat('yyyy-MM-dd');
+    DateFormat outputFormat = DateFormat('MMM d');
+
+    String startDate = widget.data['period_start_from'];
+    String endDate = widget.data['period_start_to'];
+
+    String formattedStartDate =
+        outputFormat.format(inputFormat.parse(startDate));
+    String formattedEndDate = outputFormat.format(inputFormat.parse(endDate));
+
+    if (startDate == endDate) {
+      return formattedStartDate;
+    } else {
+      return "From $formattedStartDate to $formattedEndDate";
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,18 +55,18 @@ class PeriodDateShow extends StatelessWidget {
                   width: 100,
                 ),
                 const SizedBox(height: 20),
-                const Text.rich(
+                Text.rich(
                   TextSpan(
                     children: [
-                      TextSpan(
+                      const TextSpan(
                         text: 'Your next period will start around \n',
                         style: TextStyle(
                           fontSize: 32,
                         ),
                       ),
                       TextSpan(
-                        text: '26 July',
-                        style: TextStyle(
+                        text: periodDate,
+                        style: const TextStyle(
                           fontSize: 64,
                           fontWeight: FontWeight.bold,
                           color: PRIMARY_COLOR,
@@ -47,7 +79,7 @@ class PeriodDateShow extends StatelessWidget {
             ),
             ElevatedButton(
               onPressed: () {
-                Navigator.pushNamed(context, '/loading');
+                Navigator.pushNamed(context, '/');
               },
               style: const ButtonStyle(
                 backgroundColor: WidgetStatePropertyAll(ACCENT),

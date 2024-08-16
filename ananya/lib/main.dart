@@ -33,12 +33,16 @@ Future<void> main() async {
         '/choose-user': (context) => const ChooseUser(),
         '/unlock-process/1': (context) => const UnlockProcess1(),
         '/unlock-process/2': (context) => const UnlockProcess2(),
-        '/unlock-process/3': (context) => const UnlockProcess3(),
+        '/unlock-process/3': (context) => UnlockProcess3(),
         '/unlock-process/4': (context) => const UnlockProcess4(),
         '/unlock-process/5': (context) => const UnlockProcess5(),
         '/unlock-process/6': (context) => const UnlockProcess6(),
         '/loading': (context) => const Loading(),
-        '/period-date': (context) => const PeriodDateShow(),
+        '/period-date': (context) {
+          final args = ModalRoute.of(context)!.settings.arguments
+              as Map<String, dynamic>;
+          return PeriodDateShow(data: args);
+        },
         '/history/indivisual': (context) => const IndividualHistory(),
         '/history/cohort': (context) => const CohortHistory(),
       },

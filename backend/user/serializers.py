@@ -99,4 +99,4 @@ class PeriodPredictionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = PeriodPrediction
-        fields = ['period_start_from', 'period_start_to', 'user']
+        fields = ['period_start_from', 'period_start_to', 'days_between_period', 'length_of_period', 'anomalies', 'user']

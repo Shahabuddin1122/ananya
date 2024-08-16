@@ -8,7 +8,19 @@ import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class UnlockProcess3 extends StatelessWidget {
-  const UnlockProcess3({super.key});
+  UnlockProcess3({super.key});
+
+  final List<DateTime> redDates = [
+    DateTime.utc(2024, 8, 14),
+    DateTime.utc(2024, 8, 15),
+    DateTime.utc(2024, 8, 16),
+  ];
+
+  final List<DateTime> greenDates = [
+    DateTime.utc(2024, 8, 20),
+    DateTime.utc(2024, 8, 21),
+    DateTime.utc(2024, 8, 22),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +55,10 @@ class UnlockProcess3 extends StatelessWidget {
                   ),
                   Container(
                     color: Colors.white,
-                    child: const Calender(),
+                    child: Calender(
+                      menstrual: redDates,
+                      ovulation: greenDates,
+                    ),
                   ),
                   const SizedBox(
                     height: 20,

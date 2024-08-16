@@ -49,4 +49,7 @@ class PeriodHistory(models.Model):
 class PeriodPrediction(models.Model):
     period_start_from = models.DateField()
     period_start_to = models.DateField()
+    length_of_period = models.IntegerField()
+    days_between_period = models.IntegerField(default=28)
+    anomalies = models.TextField()
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='period_predictions')

@@ -40,19 +40,13 @@ class _LandingState extends State<Landing> {
     Widget bodyWidget;
     switch (_selectedIndex) {
       case 0:
-        bodyWidget = Home(
-          get_data: _isLoggedIn,
-        );
+        bodyWidget = Home();
         break;
       case 1:
-        bodyWidget = Home(
-          get_data: _isLoggedIn,
-        );
+        bodyWidget = Home();
         break;
       default:
-        bodyWidget = Home(
-          get_data: _isLoggedIn,
-        );
+        bodyWidget = Home();
     }
     return Container(
       color: Colors.white,
