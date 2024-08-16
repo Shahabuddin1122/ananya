@@ -35,4 +35,5 @@ def get_period_date(question_info):
     return {
         "period_start_from": next_period_date_from.strftime('%Y-%m-%d'),
         "period_start_to": next_period_date_to.strftime('%Y-%m-%d'),
+        "anomalies": 'Regular',
     }

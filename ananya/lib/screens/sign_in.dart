@@ -53,8 +53,10 @@ class _SignInState extends State<SignIn> {
         isLoading = false;
       });
       if (response.statusCode == 200) {
-        print('Data posted successfully: $response');
+        final Map<String, dynamic> responseData = json.decode(response.body);
+        final int userId = responseData['id'];
         await prefs.setString('userNumber', phoneController.text);
+        await prefs.setString('userId', userId.toString());
         Navigator.pushNamed(context, '/');
       } else {
         print('Failed to post data. Status code: ${response.statusCode}');

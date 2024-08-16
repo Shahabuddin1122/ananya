@@ -121,6 +121,9 @@ def add_period_info(request, user_id):
             period_prediction_data = {
                 'period_start_from': predicted_date.get('period_start_from'),
                 'period_start_to': predicted_date.get('period_start_to'),
+                'anomalies': predicted_date.get('anomalies'),
+                'days_between_period': questionnaire.days_between_period,
+                'length_of_period': questionnaire.length_of_period,
                 'user': user
             }
             period_prediction = PeriodPrediction.objects.create(**period_prediction_data)

@@ -3,36 +3,32 @@ import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class Calender extends StatelessWidget {
-  const Calender({super.key});
+  final List<DateTime> menstrual, ovulation;
+  const Calender({required this.menstrual, required this.ovulation, super.key});
 
   @override
   Widget build(BuildContext context) {
     DateTime focusedDay = DateTime.now();
 
-    // Define the dates you want to mark
-    final List<DateTime> redDates = [
-      DateTime.utc(2024, 8, 14),
-      DateTime.utc(2024, 8, 15),
-      DateTime.utc(2024, 8, 16),
-    ];
-
-    final List<DateTime> greenDates = [
-      DateTime.utc(2024, 8, 20),
-      DateTime.utc(2024, 8, 21),
-      DateTime.utc(2024, 8, 22),
-    ];
-
     return TableCalendar(
-      firstDay: DateTime.utc(2010, 10, 16),
-      lastDay: DateTime.utc(2030, 3, 14),
+      firstDay: DateTime.utc(2020, 10, 16),
+      lastDay: DateTime.utc(2025, 3, 14),
       focusedDay: focusedDay,
       headerStyle: const HeaderStyle(
         formatButtonVisible: false,
         titleCentered: true,
       ),
+      // calendarStyle: const CalendarStyle(
+      //   todayDecoration: BoxDecoration(),
+      //   todayTextStyle: TextStyle(color: Colors.black),
+      //   defaultTextStyle: TextStyle(color: Colors.black),
+      // ),
       calendarBuilders: CalendarBuilders(
         defaultBuilder: (context, day, focusedDay) {
-          if (redDates.contains(day)) {
+          DateTime normalizedDay = DateTime(day.year, day.month, day.day);
+
+          if (menstrual
+              .any((d) => DateTime(d.year, d.month, d.day) == normalizedDay)) {
             return Container(
               decoration: const BoxDecoration(
                 color: PRIMARY_COLOR,
@@ -48,7 +44,8 @@ class Calender extends StatelessWidget {
                 style: const TextStyle(color: Colors.white),
               ),
             );
-          } else if (greenDates.contains(day)) {
+          } else if (ovulation
+              .any((d) => DateTime(d.year, d.month, d.day) == normalizedDay)) {
             return Container(
               decoration: const BoxDecoration(
                 color: SECONDARY_COLOR,
