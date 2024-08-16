@@ -74,8 +74,7 @@ class _CustomDropdownState extends State<CustomDropdown> {
                     _selectedValue = newValue;
                   });
                   if (widget.onChanged != null) {
-                    widget
-                        .onChanged!(newValue); // Notify parent of value change
+                    widget.onChanged!(newValue);
                   }
                 },
                 hint: Text("Choose a ${widget.header}"),

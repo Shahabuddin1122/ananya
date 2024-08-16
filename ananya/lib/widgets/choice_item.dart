@@ -3,16 +3,20 @@ import 'package:flutter/material.dart';
 
 class ChoiceItem extends StatelessWidget {
   final String text;
-  const ChoiceItem({required this.text, super.key});
+  final ValueChanged<String>? onSelected;
+
+  const ChoiceItem({
+    required this.text,
+    this.onSelected,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: Theme.of(context).smallSubSectionDividerPadding,
       child: GestureDetector(
-        onTap: () {
-          Navigator.pushNamed(context, '/unlock-process2');
-        },
+        onTap: () => onSelected!(text),
         child: Container(
           width: double.infinity,
           padding: const EdgeInsets.only(

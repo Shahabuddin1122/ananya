@@ -1,8 +1,10 @@
+import 'package:ananya/models/period_state_questionnaire.dart';
 import 'package:ananya/utils/constants.dart';
 import 'package:ananya/utils/custom_theme.dart';
 import 'package:ananya/widgets/choice_item.dart';
 import 'package:ananya/widgets/custom_app_bar_with_progress.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class UnlockProcess5 extends StatelessWidget {
   const UnlockProcess5({super.key});
@@ -17,10 +19,10 @@ class UnlockProcess5 extends StatelessWidget {
       body: SingleChildScrollView(
         child: Padding(
           padding: Theme.of(context).largemainPadding,
-          child: const Column(
+          child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text.rich(
+              const Text.rich(
                 TextSpan(
                   children: [
                     TextSpan(
@@ -46,20 +48,28 @@ class UnlockProcess5 extends StatelessWidget {
                   ],
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
-              Text(
+              const Text(
                 "We are asking because some type of birth control measures can potentially impact yout menstrual cycle.",
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               ChoiceItem(
                 text: 'Yes',
+                onSelected: (choice) {
+                  context.read<PeriodState>().updateBirthControl(true);
+                  Navigator.pushNamed(context, '/unlock-process/6');
+                },
               ),
               ChoiceItem(
                 text: 'No',
+                onSelected: (choice) {
+                  context.read<PeriodState>().updateBirthControl(false);
+                  Navigator.pushNamed(context, '/unlock-process/6');
+                },
               ),
             ],
           ),

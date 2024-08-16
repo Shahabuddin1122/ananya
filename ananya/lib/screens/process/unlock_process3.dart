@@ -1,5 +1,6 @@
 import 'package:ananya/utils/constants.dart';
 import 'package:ananya/utils/custom_theme.dart';
+import 'package:ananya/widgets/calender.dart';
 import 'package:ananya/widgets/custom_app_bar_with_progress.dart';
 import 'package:ananya/widgets/dynamic_calender.dart';
 import 'package:ananya/widgets/input_box.dart';
@@ -42,7 +43,7 @@ class UnlockProcess3 extends StatelessWidget {
                   ),
                   Container(
                     color: Colors.white,
-                    child: const DynamicCalender(),
+                    child: const Calender(),
                   ),
                   const SizedBox(
                     height: 20,
@@ -125,7 +126,7 @@ class UnlockProcess3 extends StatelessWidget {
                   ),
                   ElevatedButton(
                     onPressed: () {
-                      Navigator.pushNamed(context, '/unlock-process4');
+                      Navigator.pushNamed(context, '/unlock-process/4');
                     },
                     style: const ButtonStyle(
                       backgroundColor: WidgetStatePropertyAll(ACCENT),

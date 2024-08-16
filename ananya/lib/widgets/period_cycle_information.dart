@@ -1,4 +1,5 @@
 import 'package:ananya/utils/constants.dart';
+import 'package:ananya/widgets/calender.dart';
 import 'package:ananya/widgets/dynamic_calender.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -153,7 +154,7 @@ class PeriodCycleInformation extends StatelessWidget {
           ),
           child: Column(
             children: [
-              const DynamicCalender(),
+              const Calender(),
               const SizedBox(
                 height: 20,
               ),

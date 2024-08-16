@@ -1,12 +1,19 @@
+import 'package:ananya/models/period_state_questionnaire.dart';
 import 'package:ananya/utils/constants.dart';
 import 'package:ananya/utils/custom_theme.dart';
 import 'package:ananya/widgets/choice_item.dart';
 import 'package:ananya/widgets/custom_app_bar_with_progress.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-class UnlockProcess1 extends StatelessWidget {
+class UnlockProcess1 extends StatefulWidget {
   const UnlockProcess1({super.key});
 
+  @override
+  State<UnlockProcess1> createState() => _UnlockProcess1State();
+}
+
+class _UnlockProcess1State extends State<UnlockProcess1> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -17,10 +24,10 @@ class UnlockProcess1 extends StatelessWidget {
       body: SingleChildScrollView(
         child: Padding(
           padding: Theme.of(context).largemainPadding,
-          child: const Column(
+          child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text.rich(
+              const Text.rich(
                 TextSpan(
                   children: [
                     TextSpan(
@@ -46,22 +53,36 @@ class UnlockProcess1 extends StatelessWidget {
                   ],
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
-              Text(
+              const Text(
                 "Regular means that the gap between your periods is around the same number of days each month",
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               ChoiceItem(
                 text: 'Yes',
+                onSelected: (choice) {
+                  context.read<PeriodState>().updatePeriodRegularity(true);
+                  Navigator.pushNamed(context, '/unlock-process/2');
+                },
               ),
               ChoiceItem(
                 text: 'No',
+                onSelected: (choice) {
+                  context.read<PeriodState>().updatePeriodRegularity(false);
+                  Navigator.pushNamed(context, '/unlock-process/2');
+                },
               ),
-              ChoiceItem(text: 'I don\'t Know')
+              ChoiceItem(
+                text: 'I don\'t Know',
+                onSelected: (choice) {
+                  context.read<PeriodState>().updatePeriodRegularity(false);
+                  Navigator.pushNamed(context, '/unlock-process/2');
+                },
+              )
             ],
           ),
         ),
