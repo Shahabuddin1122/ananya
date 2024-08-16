@@ -4,7 +4,13 @@ import 'package:flutter/material.dart';
 
 class InputBox extends StatelessWidget {
   final String text;
-  const InputBox({required this.text, super.key});
+  final TextEditingController controller;
+
+  const InputBox({
+    required this.text,
+    required this.controller,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +33,7 @@ class InputBox extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             TextField(
+              controller: controller,
               style: const TextStyle(
                 color: Colors.black,
               ),

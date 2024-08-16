@@ -1,5 +1,7 @@
+import 'package:ananya/models/period_state_questionnaire.dart';
 import 'package:ananya/utils/custom_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ChoiceItemWithRadioIcon extends StatelessWidget {
   final String text;
@@ -9,8 +11,13 @@ class ChoiceItemWithRadioIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final periodState = context.watch<PeriodState>();
+    final isSelected = periodState.healthCondition[text] ?? false;
+
     return GestureDetector(
-      onTap: () {},
+      onTap: () {
+        periodState.updateHealthCondition(text, !isSelected);
+      },
       child: Container(
         margin: Theme.of(context).smallSubSectionDividerPadding,
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
@@ -31,8 +38,10 @@ class ChoiceItemWithRadioIcon extends StatelessWidget {
             ),
             Radio(
               value: true,
-              groupValue: true,
-              onChanged: (value) {},
+              groupValue: isSelected,
+              onChanged: (value) {
+                periodState.updateHealthCondition(text, value ?? false);
+              },
             ),
           ],
         ),

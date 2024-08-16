@@ -1,5 +1,6 @@
 import 'package:ananya/utils/constants.dart';
 import 'package:ananya/utils/custom_theme.dart';
+import 'package:ananya/widgets/calender.dart';
 import 'package:ananya/widgets/custom_app_bar_with_progress.dart';
 import 'package:ananya/widgets/dynamic_calender.dart';
 import 'package:flutter/material.dart';
@@ -49,13 +50,13 @@ class UnlockProcess4 extends StatelessWidget {
                 const SizedBox(
                   height: 20,
                 ),
-                const DynamicCalender(),
+                const DynamicCalendar(),
                 const SizedBox(
                   height: 100,
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    Navigator.pushNamed(context, '/unlock-process5');
+                    Navigator.pushNamed(context, '/unlock-process/5');
                   },
                   style: const ButtonStyle(
                     backgroundColor: WidgetStatePropertyAll(Colors.white),
@@ -80,7 +81,7 @@ class UnlockProcess4 extends StatelessWidget {
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    Navigator.pushNamed(context, '/');
+                    Navigator.pushNamed(context, '/unlock-process/5');
                   },
                   style: const ButtonStyle(
                     backgroundColor: WidgetStatePropertyAll(ACCENT),

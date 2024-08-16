@@ -1,12 +1,27 @@
+import 'package:ananya/models/period_state_questionnaire.dart';
 import 'package:ananya/utils/constants.dart';
 import 'package:ananya/utils/custom_theme.dart';
-import 'package:ananya/widgets/choice_item.dart';
 import 'package:ananya/widgets/choice_item_with_radio_icon.dart';
 import 'package:ananya/widgets/custom_app_bar_with_progress.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class UnlockProcess6 extends StatelessWidget {
   const UnlockProcess6({super.key});
+
+  void _printPeriodData(BuildContext context) {
+    final periodState = context.read<PeriodState>();
+
+    print('Is Period Regular: ${periodState.isPeriodRegular}');
+    print('Days Between Period: ${periodState.daysBetweenPeriod}');
+    print('Length of Period: ${periodState.lengthOfPeriod}');
+    print('Last Period Start: ${periodState.lastPeriodStart}');
+    print('Take Birth Control: ${periodState.takeBirthControl}');
+    periodState.healthCondition.forEach((condition, value) {
+      print('$condition: $value');
+    });
+    Navigator.pushNamed(context, '/');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -68,9 +83,7 @@ class UnlockProcess6 extends StatelessWidget {
                 height: 30,
               ),
               ElevatedButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, '/period-date');
-                },
+                onPressed: () => _printPeriodData(context),
                 style: const ButtonStyle(
                   backgroundColor: WidgetStatePropertyAll(ACCENT),
                   minimumSize:

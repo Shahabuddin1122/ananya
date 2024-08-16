@@ -26,7 +26,6 @@ class _LandingState extends State<Landing> {
   Future<bool> getInfo() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? number = prefs.getString('userNumber');
-    print("number: $number");
     return number != null;
   }
 

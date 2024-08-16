@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:ananya/screens/loading.dart';
 import 'package:ananya/utils/api_sattings.dart';
 import 'package:ananya/utils/constants.dart';
 import 'package:ananya/utils/custom_theme.dart';
@@ -17,8 +18,10 @@ class SignIn extends StatefulWidget {
 class _SignInState extends State<SignIn> {
   final TextEditingController phoneController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  bool isLoading = false;
 
   ApiSettings api = ApiSettings(endPoint: 'user/login');
+
   void check() async {
     SharedPreferences prefs;
     try {
@@ -35,15 +38,20 @@ class _SignInState extends State<SignIn> {
       _showErrorMessage("Phone Number is required.");
       return;
     }
+    setState(() {
+      isLoading = true;
+    });
 
     Map<String, dynamic> data = {
       'phone': phoneController.text,
       'password': passwordController.text,
     };
-    print(data);
 
     try {
       final response = await api.postMethod(json.encode(data));
+      setState(() {
+        isLoading = false;
+      });
       if (response.statusCode == 200) {
         print('Data posted successfully: $response');
         await prefs.setString('userNumber', phoneController.text);
@@ -53,6 +61,9 @@ class _SignInState extends State<SignIn> {
         print('Response body: $response');
       }
     } catch (e) {
+      setState(() {
+        isLoading = false;
+      });
       print('Error occurred: $e');
     }
   }
@@ -78,74 +89,87 @@ class _SignInState extends State<SignIn> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 255, 235, 239),
-      body: SingleChildScrollView(
-        child: Container(
-          width: double.infinity,
-          padding: Theme.of(context).largemainPadding,
-          // color: PRIMARY_COLOR.withOpacity(0.2),
-          child: Center(
-            child: Column(
-              children: [
-                Image.asset(
-                  'assets/images/logo.png',
-                  fit: BoxFit.cover,
-                  width: 200,
-                ),
-                const Text(
-                  textAlign: TextAlign.center,
-                  "Login with your mobile number and password",
-                  style: TextStyle(
-                    fontSize: 32,
-                    color: ACCENT,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(
-                  height: 50,
-                ),
-                Column(
-                  children: [
-                    CustomTextField(
-                      text: "Phone Number",
-                      controller: phoneController,
-                    ),
-                    CustomTextField(
-                      text: 'Password',
-                      controller: passwordController,
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    ElevatedButton(
-                      onPressed: check,
-                      style: const ButtonStyle(
-                        backgroundColor: WidgetStatePropertyAll(ACCENT),
-                        minimumSize:
-                            WidgetStatePropertyAll(Size(double.infinity, 20)),
-                        shadowColor: WidgetStatePropertyAll(Colors.black),
-                        side: WidgetStatePropertyAll(
-                          BorderSide(
-                            width: 1,
+      backgroundColor: const Color.fromARGB(255, 255, 235, 239),
+      body: Center(
+        child: isLoading
+            ? const CircularProgressIndicator()
+            : SingleChildScrollView(
+                child: Container(
+                  width: double.infinity,
+                  padding: Theme.of(context).largemainPadding,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Image.asset(
+                        'assets/images/logo.png',
+                        fit: BoxFit.cover,
+                        width: 200,
+                      ),
+                      const Text(
+                        textAlign: TextAlign.center,
+                        "Login with your mobile number and password",
+                        style: TextStyle(
+                          fontSize: 32,
+                          color: ACCENT,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 50,
+                      ),
+                      CustomTextField(
+                        text: "Phone Number",
+                        controller: phoneController,
+                      ),
+                      CustomTextField(
+                        text: 'Password',
+                        controller: passwordController,
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      ElevatedButton(
+                        onPressed: check,
+                        style: const ButtonStyle(
+                          backgroundColor: WidgetStatePropertyAll(ACCENT),
+                          minimumSize:
+                              WidgetStatePropertyAll(Size(double.infinity, 20)),
+                          shadowColor: WidgetStatePropertyAll(Colors.black),
+                          side: WidgetStatePropertyAll(
+                            BorderSide(
+                              width: 1,
+                            ),
+                          ),
+                        ),
+                        child: const Text(
+                          "Log in",
+                          style: TextStyle(
+                            color: Colors.white,
                           ),
                         ),
                       ),
-                      child: const Text(
-                        "Log in",
-                        style: TextStyle(
-                          color: Colors.white,
+                      const SizedBox(
+                        height: 30,
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pushNamed(context, '/signup');
+                        },
+                        child: const Text(
+                          "Don't have an account? Create a new account.",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.indigo,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
-                    ),
-                    const SizedBox(
-                      height: 30,
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        Navigator.pushNamed(context, '/signup');
-                      },
-                      child: const Text(
-                        "Don't have an account? Create a new account.",
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      const Text(
+                        "Forget Password? Set a new password.",
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           color: Colors.indigo,
@@ -153,28 +177,13 @@ class _SignInState extends State<SignIn> {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    const Text(
-                      "Forget Password? Set a new password.",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Colors.indigo,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    )
-                  ],
-                )
-              ],
-            ),
-          ),
-        ),
+                      const SizedBox(
+                        height: 10,
+                      )
+                    ],
+                  ),
+                ),
+              ),
       ),
     );
   }

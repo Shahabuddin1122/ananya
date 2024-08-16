@@ -1,11 +1,40 @@
+import 'package:ananya/models/period_state_questionnaire.dart';
 import 'package:ananya/utils/constants.dart';
 import 'package:ananya/utils/custom_theme.dart';
 import 'package:ananya/widgets/custom_app_bar_with_progress.dart';
 import 'package:ananya/widgets/input_box.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-class UnlockProcess2 extends StatelessWidget {
+class UnlockProcess2 extends StatefulWidget {
   const UnlockProcess2({super.key});
+
+  @override
+  State<UnlockProcess2> createState() => _UnlockProcess2State();
+}
+
+class _UnlockProcess2State extends State<UnlockProcess2> {
+  final TextEditingController _daysBetweenPeriodController =
+      TextEditingController();
+  final TextEditingController _lengthOfPeriodController =
+      TextEditingController();
+
+  void _onContinuePressed(BuildContext context) {
+    final periodState = context.read<PeriodState>();
+
+    final int? daysBetweenPeriod =
+        int.tryParse(_daysBetweenPeriodController.text);
+    final int? lengthOfPeriod = int.tryParse(_lengthOfPeriodController.text);
+
+    if (daysBetweenPeriod != null) {
+      periodState.updateDaysBetweenPeriod(daysBetweenPeriod);
+    }
+    if (lengthOfPeriod != null) {
+      periodState.updateLengthOfPeriod(lengthOfPeriod);
+    }
+
+    Navigator.pushNamed(context, '/unlock-process/3');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -69,18 +98,20 @@ class UnlockProcess2 extends StatelessWidget {
               const SizedBox(
                 height: 10,
               ),
-              const InputBox(
+              InputBox(
                 text: 'Number of days between period e.g 27 days',
+                controller: _daysBetweenPeriodController,
               ),
-              const InputBox(
+              InputBox(
                 text: 'Length of your period e.g 6 days...',
+                controller: _lengthOfPeriodController,
               ),
               const SizedBox(
                 height: 50,
               ),
               ElevatedButton(
                 onPressed: () {
-                  Navigator.pushNamed(context, '/unlock-process3');
+                  Navigator.pushNamed(context, '/unlock-process/3');
                 },
                 style: const ButtonStyle(
                   backgroundColor: WidgetStatePropertyAll(Colors.white),
@@ -104,9 +135,7 @@ class UnlockProcess2 extends StatelessWidget {
                 height: 10,
               ),
               ElevatedButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, '/unlock-process3');
-                },
+                onPressed: () => _onContinuePressed(context),
                 style: const ButtonStyle(
                   backgroundColor: WidgetStatePropertyAll(ACCENT),
                   minimumSize:

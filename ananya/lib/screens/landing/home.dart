@@ -4,6 +4,7 @@ import 'package:ananya/widgets/period_cycle_information.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Home extends StatefulWidget {
   final bool get_data;
@@ -14,6 +15,20 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  late Future<bool> numberPresent;
+
+  @override
+  void initState() {
+    super.initState();
+    numberPresent = getInfo();
+  }
+
+  Future<bool> getInfo() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? number = prefs.getString('userNumber');
+    return number != null;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(

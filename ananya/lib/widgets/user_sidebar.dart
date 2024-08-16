@@ -1,5 +1,6 @@
 ﻿import 'package:ananya/utils/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class UserSidebar extends StatelessWidget {
   const UserSidebar({super.key});
@@ -94,6 +95,14 @@ class UserSidebar extends StatelessWidget {
           ListTile(
             title: const Text("PERIOD HISTORY"),
             onTap: () => Navigator.pushNamed(context, '/history/indivisual'),
+          ),
+          ListTile(
+            title: const Text("LOG OUT"),
+            onTap: () async {
+              SharedPreferences prefs = await SharedPreferences.getInstance();
+              await prefs.remove('userNumber');
+              Navigator.pushNamed(context, '/signin');
+            },
           ),
         ],
       ),
