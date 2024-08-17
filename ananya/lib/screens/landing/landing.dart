@@ -1,4 +1,4 @@
-import 'package:ananya/screens/landing/home.dart';
+import 'package:ananya/screens/landing/user_home.dart';
 import 'package:ananya/utils/constants.dart';
 import 'package:ananya/utils/custom_theme.dart';
 import 'package:ananya/widgets/user_sidebar.dart';
@@ -40,13 +40,13 @@ class _LandingState extends State<Landing> {
     Widget bodyWidget;
     switch (_selectedIndex) {
       case 0:
-        bodyWidget = Home();
+        bodyWidget = UserHome();
         break;
       case 1:
-        bodyWidget = Home();
+        bodyWidget = UserHome();
         break;
       default:
-        bodyWidget = Home();
+        bodyWidget = UserHome();
     }
     return Container(
       color: Colors.white,

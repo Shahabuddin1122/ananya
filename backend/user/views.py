@@ -4,7 +4,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 
-from .models import User, SuperUser, Questionnaire, PeriodHistory, PeriodPrediction
+from .models import User, SuperUser, Questionnaire, PeriodHistory, PeriodPrediction, HealthCondition
 from .serializers import UserSerializer, SuperUserSerializer, QuestionnaireSerializer, PeriodHistorySerializer, \
     PeriodPredictionSerializer
 from .utils import *
@@ -188,3 +188,50 @@ def get_period_history(request, user_id):
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+
+@api_view(['PUT'])
+def log_new_period(request, user_id):
+    if request.method == 'PUT':
+        try:
+            most_recent_period = PeriodHistory.objects.filter(user_id=user_id).order_by('-period_start').first()
+
+            if not most_recent_period:
+                return Response({'error': 'No period history found for the user'}, status=status.HTTP_404_NOT_FOUND)
+
+            updated_last_period_start = request.data.get('last_period_start')
+            if updated_last_period_start:
+                most_recent_period.period_start = updated_last_period_start
+                most_recent_period.save()
+
+            questionnaire = Questionnaire.objects.get(user_id=user_id)
+            health_condition_data = request.data.get('health_condition')
+
+            if health_condition_data:
+                # Update or create the HealthCondition instance
+                health_condition, _ = HealthCondition.objects.get_or_create(
+                    id=questionnaire.health_condition.id,
+                    defaults=health_condition_data
+                )
+                # Update fields of the existing HealthCondition instance
+                for attr, value in health_condition_data.items():
+                    setattr(health_condition, attr, value)
+                health_condition.save()
+
+                questionnaire.health_condition = health_condition
+                questionnaire.save()
+
+            serializer = QuestionnaireSerializer(questionnaire)
+            predicted_date = get_period_date(serializer.data)
+
+            period_prediction, created = PeriodPrediction.objects.get_or_create(user_id=user_id)
+            period_prediction.period_start_to = predicted_date.get('period_start_to')
+            period_prediction.period_start_from = predicted_date.get('period_start_from')
+            period_prediction.anomalies = predicted_date.get('anomalies')
+            period_prediction.save()
+            period_prediction_serializer = PeriodPredictionSerializer(period_prediction)
+            return Response(period_prediction_serializer.data, status=status.HTTP_201_CREATED)
+
+        except Questionnaire.DoesNotExist:
+            return Response({'error': 'Questionnaire not found'}, status=status.HTTP_404_NOT_FOUND)
+
+    return Response({'error': 'Invalid request method'}, status=status.HTTP_405_METHOD_NOT_ALLOWED)

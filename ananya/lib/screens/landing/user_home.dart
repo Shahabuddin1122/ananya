@@ -10,14 +10,14 @@ import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class Home extends StatefulWidget {
-  const Home({super.key});
+class UserHome extends StatefulWidget {
+  const UserHome({super.key});
 
   @override
-  State<Home> createState() => _HomeState();
+  State<UserHome> createState() => _UserHomeState();
 }
 
-class _HomeState extends State<Home> {
+class _UserHomeState extends State<UserHome> {
   late Future<bool> numberPresent;
   bool get_data = false;
   Future<Map<String, dynamic>>? _get_data;
