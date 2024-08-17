@@ -3,12 +3,14 @@ from user.models import PeriodHistory
 
 
 def get_period_date(question_info):
-    last_period_start = datetime.strptime(question_info['last_period_start'], '%Y-%m-%d')
-    days_between_period = question_info['days_between_period']
-    period_history = PeriodHistory.objects.filter(user_id=question_info['user'])
+    period_history = PeriodHistory.objects.filter(user_id=question_info['user']).order_by('-period_start')
 
     if not period_history.exists():
         return None
+
+    most_recent_period = period_history.first()
+    last_period_start = most_recent_period.period_start
+    days_between_period = most_recent_period.cycle_length
 
     total_period = sum([data.cycle_length for data in period_history])
     number = period_history.count()
@@ -33,7 +35,7 @@ def get_period_date(question_info):
             next_period_date_to += timedelta(days=5)
 
     return {
-        "period_start_from": next_period_date_from.strftime('%Y-%m-%d'),
-        "period_start_to": next_period_date_to.strftime('%Y-%m-%d'),
+        "period_start_from": next_period_date_from,
+        "period_start_to": next_period_date_to,
         "anomalies": 'Regular',
     }

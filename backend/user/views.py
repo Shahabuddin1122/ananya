@@ -1,3 +1,5 @@
+from datetime import date
+
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
@@ -111,12 +113,24 @@ def add_period_info(request, user_id):
         period_history_data = {
             'period_start': questionnaire.last_period_start,
             'cycle_length': questionnaire.days_between_period,
-            'anomalies': 'no anomalies',
+            'anomalies': 'Regular',
             'user': user
         }
         PeriodHistory.objects.create(**period_history_data)
 
         predicted_date = get_period_date(serializer.data)
+        while predicted_date and predicted_date.get('period_start_from') < date.today():
+
+            period_history_data = {
+                'period_start': predicted_date.get('period_start_from'),
+                'cycle_length': questionnaire.days_between_period,
+                'anomalies': predicted_date.get('anomalies', 'no anomalies'),
+                'user': user
+            }
+            PeriodHistory.objects.create(**period_history_data)
+
+            predicted_date = get_period_date(serializer.data)
+
         if predicted_date:
             period_prediction_data = {
                 'period_start_from': predicted_date.get('period_start_from'),
@@ -157,5 +171,20 @@ def get_period_prediction(request, user_id):
             period_prediction = PeriodPrediction.objects.get(user_id=user_id)
             serializer = PeriodPredictionSerializer(period_prediction)
             return Response(serializer.data, status=status.HTTP_200_OK)
-        except Questionnaire.DoesNotExist:
+        except PeriodPrediction.DoesNotExist:
             return Response({'error': 'not able to predict'}, status=status.HTTP_404_NOT_FOUND)
+
+
+@api_view(['GET'])
+def get_period_history(request, user_id):
+    if request.method == 'GET':
+        try:
+            period_history = PeriodHistory.objects.filter(user_id=user_id).order_by('-period_start')
+            if not period_history.exists():
+                return Response({'error': 'No period history found'}, status=status.HTTP_404_NOT_FOUND)
+
+            serializer = PeriodHistorySerializer(period_history, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
