@@ -4,7 +4,7 @@ class PeriodState with ChangeNotifier {
   bool isPeriodRegular = true;
   int daysBetweenPeriod = 28;
   int lengthOfPeriod = 5;
-  String lastPeriodStart = "2024-08-01";
+  String lastPeriodStart = DateTime.now().toString();
   bool takeBirthControl = false;
 
   Map<String, bool> healthCondition = {

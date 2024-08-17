@@ -11,5 +11,6 @@ urlpatterns = [
     path('get-user-period-questionnaire/<int:user_id>', views.get_user_period_questionnaire,
          name='get_user_period_questionnaire'),
     path('get-prediction-period/<int:user_id>', views.get_period_prediction, name='get_period_date'),
+    path('log-new-period/<int:user_id>', views.log_new_period, name='log_new_period'),
     path('get-period-history/<int:user_id>', views.get_period_history, name='get_period_history'),
 ]
