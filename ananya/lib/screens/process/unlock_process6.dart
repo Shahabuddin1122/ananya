@@ -8,11 +8,13 @@ import 'package:ananya/utils/custom_theme.dart';
 import 'package:ananya/widgets/choice_item_with_radio_icon.dart';
 import 'package:ananya/widgets/custom_app_bar_with_progress.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class UnlockProcess6 extends StatefulWidget {
-  const UnlockProcess6({super.key});
+  final bool update_period;
+  const UnlockProcess6({required this.update_period, super.key});
 
   @override
   State<UnlockProcess6> createState() => _UnlockProcess6State();
@@ -25,8 +27,10 @@ class _UnlockProcess6State extends State<UnlockProcess6> {
       isLoading = true;
     });
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    String URL =
+        widget.update_period ? 'user/log-new-period/' : 'user/add-period-info/';
     String? id = prefs.getString('userId');
-    ApiSettings api = ApiSettings(endPoint: 'user/add-period-info/$id');
+    ApiSettings api = ApiSettings(endPoint: '$URL$id');
     final periodState = context.read<PeriodState>();
     Map<String, dynamic> data = {
       "is_period_regular": periodState.isPeriodRegular,
@@ -50,7 +54,12 @@ class _UnlockProcess6State extends State<UnlockProcess6> {
     };
 
     try {
-      final response = await api.postMethod(json.encode(data));
+      Response response;
+      if (widget.update_period) {
+        response = await api.putMethod(json.encode(data));
+      } else {
+        response = await api.postMethod(json.encode(data));
+      }
       setState(() {
         isLoading = false;
       });

@@ -61,14 +61,22 @@ class UnlockProcess5 extends StatelessWidget {
                 text: 'Yes',
                 onSelected: (choice) {
                   context.read<PeriodState>().updateBirthControl(true);
-                  Navigator.pushNamed(context, '/unlock-process/6');
+                  Navigator.pushNamed(
+                    context,
+                    '/unlock-process/6',
+                    arguments: false,
+                  );
                 },
               ),
               ChoiceItem(
                 text: 'No',
                 onSelected: (choice) {
                   context.read<PeriodState>().updateBirthControl(false);
-                  Navigator.pushNamed(context, '/unlock-process/6');
+                  Navigator.pushNamed(
+                    context,
+                    '/unlock-process/6',
+                    arguments: false,
+                  );
                 },
               ),
             ],

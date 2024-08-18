@@ -34,9 +34,15 @@ Future<void> main() async {
         '/unlock-process/1': (context) => const UnlockProcess1(),
         '/unlock-process/2': (context) => const UnlockProcess2(),
         '/unlock-process/3': (context) => UnlockProcess3(),
-        '/unlock-process/4': (context) => const UnlockProcess4(),
+        '/unlock-process/4': (context) {
+          final args = ModalRoute.of(context)!.settings.arguments as bool;
+          return UnlockProcess4(update_period: args);
+        },
         '/unlock-process/5': (context) => const UnlockProcess5(),
-        '/unlock-process/6': (context) => const UnlockProcess6(),
+        '/unlock-process/6': (context) {
+          final args = ModalRoute.of(context)!.settings.arguments as bool;
+          return UnlockProcess6(update_period: args);
+        },
         '/loading': (context) => const Loading(),
         '/period-date': (context) {
           final args = ModalRoute.of(context)!.settings.arguments
