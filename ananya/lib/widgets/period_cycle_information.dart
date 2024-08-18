@@ -258,7 +258,7 @@ class _PeriodCycleInformationState extends State<PeriodCycleInformation> {
         ),
         ElevatedButton(
           onPressed: () {
-            Navigator.pushNamed(context, '/unlock-process/4');
+            Navigator.pushNamed(context, '/unlock-process/4', arguments: true);
           },
           style: const ButtonStyle(
             backgroundColor: WidgetStatePropertyAll(SECONDARY_COLOR),
@@ -277,7 +277,7 @@ class _PeriodCycleInformationState extends State<PeriodCycleInformation> {
         ),
         ElevatedButton(
           onPressed: () {
-            Navigator.pushNamed(context, '/unlock-process/3');
+            Navigator.pushNamed(context, '/unlock-process/1');
           },
           style: const ButtonStyle(
             backgroundColor: WidgetStatePropertyAll(ACCENT),

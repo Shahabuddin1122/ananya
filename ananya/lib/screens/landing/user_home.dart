@@ -61,9 +61,9 @@ class _UserHomeState extends State<UserHome> {
     int daysUntilEnd = endDateTime.difference(currentDate).inDays;
 
     if (startDate == endDate) {
-      return "${daysUntilStart.abs()} DAYS";
+      return "${daysUntilStart.abs() + 1} DAYS";
     } else {
-      return "${daysUntilStart.abs()} - ${daysUntilEnd.abs()} DAYS";
+      return "${daysUntilStart.abs() + 1} - ${daysUntilEnd.abs() + 1} DAYS";
     }
   }
 

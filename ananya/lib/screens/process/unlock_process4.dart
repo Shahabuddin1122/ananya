@@ -8,7 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class UnlockProcess4 extends StatelessWidget {
-  const UnlockProcess4({super.key});
+  final bool update_period;
+  const UnlockProcess4({required this.update_period, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +59,12 @@ class UnlockProcess4 extends StatelessWidget {
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    Navigator.pushNamed(context, '/unlock-process/5');
+                    if (update_period) {
+                      Navigator.pushNamed(context, '/unlock-process/6',
+                          arguments: update_period);
+                    } else {
+                      Navigator.pushNamed(context, '/unlock-process/5');
+                    }
                   },
                   style: const ButtonStyle(
                     backgroundColor: WidgetStatePropertyAll(Colors.white),
@@ -83,7 +89,12 @@ class UnlockProcess4 extends StatelessWidget {
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    Navigator.pushNamed(context, '/unlock-process/6');
+                    if (update_period) {
+                      Navigator.pushNamed(context, '/unlock-process/6',
+                          arguments: update_period);
+                    } else {
+                      Navigator.pushNamed(context, '/unlock-process/5');
+                    }
                   },
                   style: const ButtonStyle(
                     backgroundColor: WidgetStatePropertyAll(ACCENT),
