@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:ananya/utils/api_sattings.dart';
 import 'package:ananya/utils/constants.dart';
 import 'package:ananya/utils/custom_theme.dart';
+import 'package:ananya/widgets/advance_info.dart';
 import 'package:ananya/widgets/period_cycle_information.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -52,6 +53,26 @@ class _UserHomeState extends State<UserHome> {
     while (true) {
       yield await getPeriodData();
       await Future.delayed(Duration(seconds: 1));
+    }
+  }
+
+  Stream<Map<String, dynamic>> getAdvanceInfoStream() async* {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? id = prefs.getString('userId');
+    ApiSettings api =
+        ApiSettings(endPoint: 'user/advance-period-information/$id');
+
+    try {
+      final response = await api.getMethod();
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> responseData = json.decode(response.body);
+        yield responseData;
+      } else {
+        yield {};
+      }
+    } catch (e) {
+      yield {};
     }
   }
 
@@ -220,346 +241,15 @@ class _UserHomeState extends State<UserHome> {
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: StreamBuilder<Map<String, dynamic>>(
-                  stream: getPeriodDataStream(),
+                  stream: getAdvanceInfoStream(),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return const Center(child: CircularProgressIndicator());
                     } else if (snapshot.hasError) {
                       return const Center(child: Text('Error loading data'));
-                    } else if (snapshot.hasData && snapshot.data!.isNotEmpty) {
-                      return Row(
-                        children: [
-                          Container(
-                            width: 150,
-                            height: 150,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: Colors.white,
-                              border: Border.all(
-                                color: Colors.black,
-                                width: 1,
-                              ),
-                            ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Container(
-                                  width: double.infinity,
-                                  height: 65,
-                                  padding: Theme.of(context).insideCardPadding,
-                                  decoration: const BoxDecoration(
-                                    color: PRIMARY_COLOR,
-                                    borderRadius: BorderRadius.vertical(
-                                      top: Radius.circular(10),
-                                    ),
-                                  ),
-                                  child: const Text(
-                                    "Your next \ncycle is on",
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: Theme.of(context).insideCardPadding,
-                                  child: const Text(
-                                    "26 Jul",
-                                    style: TextStyle(
-                                      color: ACCENT,
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 20,
-                          ),
-                          Container(
-                            width: 130,
-                            height: 150,
-                            decoration: const BoxDecoration(
-                              color: Color(0xFF405070),
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(10),
-                              ),
-                            ),
-                            child: Row(
-                              children: [
-                                const Expanded(
-                                  child: Padding(
-                                    padding: EdgeInsets.only(left: 10.0),
-                                    child: Text(
-                                      'Check out our curated fertility diet',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Flexible(
-                                  child: Image.asset(
-                                    'assets/images/hand_spoon.png',
-                                    width: 70,
-                                    fit: BoxFit.contain,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 20,
-                          ),
-                          Container(
-                            width: 150,
-                            height: 150,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: Colors.white,
-                              border: Border.all(
-                                color: Colors.black,
-                                width: 1,
-                              ),
-                            ),
-                            child: Column(
-                              children: [
-                                Container(
-                                  width: double.infinity,
-                                  height: 65,
-                                  padding: Theme.of(context).insideCardPadding,
-                                  decoration: const BoxDecoration(
-                                    color: SECONDARY_COLOR,
-                                    borderRadius: BorderRadius.vertical(
-                                      top: Radius.circular(10),
-                                    ),
-                                  ),
-                                  child: const Text(
-                                    "Cycle \nvariations",
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: Theme.of(context).insideCardPadding,
-                                  child: const Text(
-                                    "Unlocked after 3rd cycle logged",
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 20,
-                          ),
-                          Container(
-                            width: 160,
-                            height: 150,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(10),
-                              border: Border.all(
-                                color: Colors.black,
-                                width: 1,
-                              ),
-                            ),
-                            child: Column(
-                              children: [
-                                Container(
-                                  width: double.infinity,
-                                  height: 65,
-                                  padding: Theme.of(context).insideCardPadding,
-                                  decoration: const BoxDecoration(
-                                    color: PRIMARY_COLOR,
-                                    borderRadius: BorderRadius.vertical(
-                                      top: Radius.circular(10),
-                                    ),
-                                  ),
-                                  child: const Text(
-                                    "Average cycle interval",
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                                Expanded(
-                                  child: Padding(
-                                    padding:
-                                        Theme.of(context).insideCardPadding,
-                                    child: const Text(
-                                      "Unlocked after calibrating period prediction",
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      );
                     } else {
-                      return Row(
-                        children: [
-                          Container(
-                            width: 130,
-                            height: 150,
-                            padding: Theme.of(context).insideCardPadding,
-                            decoration: const BoxDecoration(
-                                color: Colors.black,
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(10),
-                                )),
-                            child: const Text(
-                              'Want to predict when your next period will happen?',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 20,
-                          ),
-                          Container(
-                            width: 130,
-                            height: 150,
-                            decoration: const BoxDecoration(
-                              color: Color(0xFF405070),
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(10),
-                              ),
-                            ),
-                            child: Row(
-                              children: [
-                                const Expanded(
-                                  child: Padding(
-                                    padding: EdgeInsets.only(left: 10.0),
-                                    child: Text(
-                                      'Check out our curated fertility diet',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Flexible(
-                                  child: Image.asset(
-                                    'assets/images/hand_spoon.png',
-                                    width: 70,
-                                    fit: BoxFit.contain,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 20,
-                          ),
-                          Container(
-                            width: 150,
-                            height: 150,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: Colors.white,
-                              border: Border.all(
-                                color: Colors.black,
-                                width: 1,
-                              ),
-                            ),
-                            child: Column(
-                              children: [
-                                Container(
-                                  width: double.infinity,
-                                  height: 65,
-                                  padding: Theme.of(context).insideCardPadding,
-                                  decoration: const BoxDecoration(
-                                    color: Colors.black,
-                                    borderRadius: BorderRadius.vertical(
-                                      top: Radius.circular(10),
-                                    ),
-                                  ),
-                                  child: const Text(
-                                    "Cycle \nvariations",
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: Theme.of(context).insideCardPadding,
-                                  child: const Text(
-                                    "Unlocked after 3rd cycle logged",
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 20,
-                          ),
-                          Container(
-                            width: 160,
-                            height: 150,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(10),
-                              border: Border.all(
-                                color: Colors.black,
-                                width: 1,
-                              ),
-                            ),
-                            child: Column(
-                              children: [
-                                Container(
-                                  width: double.infinity,
-                                  height: 65,
-                                  padding: Theme.of(context).insideCardPadding,
-                                  decoration: const BoxDecoration(
-                                    color: Colors.black,
-                                    borderRadius: BorderRadius.vertical(
-                                      top: Radius.circular(10),
-                                    ),
-                                  ),
-                                  child: const Text(
-                                    "Average cycle interval",
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                                Expanded(
-                                  child: Padding(
-                                    padding:
-                                        Theme.of(context).insideCardPadding,
-                                    child: const Text(
-                                      "Unlocked after calibrating period prediction",
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
+                      return AdvanceInfo(
+                        data: snapshot.data!,
                       );
                     }
                   },
