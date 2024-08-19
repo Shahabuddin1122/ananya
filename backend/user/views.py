@@ -235,3 +235,61 @@ def log_new_period(request, user_id):
             return Response({'error': 'Questionnaire not found'}, status=status.HTTP_404_NOT_FOUND)
 
     return Response({'error': 'Invalid request method'}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
+
+@api_view(['PUT'])
+def period_confirmation(request, user_id):
+    if request.method == 'PUT':
+        # add period history
+        period_date = datetime.strptime(request.data.get('period_date'), '%Y-%m-%d').date()
+        period_data = PeriodPrediction.objects.get(user_id=user_id)
+        serializer = PeriodPredictionSerializer(period_data)
+        period_history = PeriodHistory.objects.filter(user_id=user_id).order_by('-period_start').first()
+        cycle = (period_date - period_history.period_start).days
+        user = User.objects.get(id=user_id)
+        period_history_data = {
+            'period_start': period_date,
+            'cycle_length': cycle,
+            'anomalies': 'Regular' if 25 <= cycle <= 30 else 'Irregular',
+            'user': user
+        }
+        PeriodHistory.objects.create(**period_history_data)
+
+        questionnaire = Questionnaire.objects.get(user_id=user_id)
+        questionnaire_serializer = QuestionnaireSerializer(questionnaire)
+        # delete previous prediction
+        PeriodPrediction.objects.filter(user_id=user_id).delete()
+        # add new prediction
+        period_prediction = get_period_date(questionnaire_serializer.data)
+        period_prediction_data = {
+            'period_start_from': period_prediction.get('period_start_from'),
+            'period_start_to': period_prediction.get('period_start_to'),
+            'anomalies': period_prediction.get('anomalies'),
+            'days_between_period': cycle,
+            'length_of_period': questionnaire.length_of_period,
+            'user': user
+        }
+        new_period_prediction = PeriodPrediction.objects.create(**period_prediction_data)
+        serializer = PeriodPredictionSerializer(new_period_prediction)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    return Response({'error': 'Invalid request method'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+from datetime import timedelta
+
+
+@api_view(['GET'])
+def update_period_information(request, user_id):
+    try:
+        period_data = PeriodPrediction.objects.get(user_id=user_id)
+        period_data.period_start_from += timedelta(days=1)
+        period_data.period_start_to += timedelta(days=1)
+        period_data.save()
+
+        serializer = PeriodPredictionSerializer(period_data)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    except PeriodPrediction.DoesNotExist:
+        return Response({'error': 'PeriodPrediction data not found for this user'}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)

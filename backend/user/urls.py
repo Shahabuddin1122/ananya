@@ -13,4 +13,6 @@ urlpatterns = [
     path('get-prediction-period/<int:user_id>', views.get_period_prediction, name='get_period_date'),
     path('log-new-period/<int:user_id>', views.log_new_period, name='log_new_period'),
     path('get-period-history/<int:user_id>', views.get_period_history, name='get_period_history'),
+    path('confim-period/<int:user_id>', views.period_confirmation, name='period_confirmation'),
+    path('update-period-information/<int:user_id>', views.update_period_information, name='update_period_information'),
 ]
