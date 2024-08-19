@@ -112,7 +112,8 @@ def add_period_info(request, user_id):
 
         period_history_data = {
             'period_start': questionnaire.last_period_start,
-            'cycle_length': questionnaire.days_between_period,
+            'cycle_length': questionnaire.length_of_period,
+            'days_between_period': questionnaire.days_between_period,
             'anomalies': 'Regular',
             'user': user
         }
@@ -120,11 +121,11 @@ def add_period_info(request, user_id):
 
         predicted_date = get_period_date(serializer.data)
         while predicted_date and predicted_date.get('period_start_from') < date.today():
-
             period_history_data = {
                 'period_start': predicted_date.get('period_start_from'),
-                'cycle_length': questionnaire.days_between_period,
-                'anomalies': predicted_date.get('anomalies', 'no anomalies'),
+                'cycle_length': predicted_date.get('length_of_period'),
+                'days_between_period': predicted_date.get('days_between_period'),
+                'anomalies': predicted_date.get('anomalies', 'Regular'),
                 'user': user
             }
             PeriodHistory.objects.create(**period_history_data)
@@ -136,8 +137,8 @@ def add_period_info(request, user_id):
                 'period_start_from': predicted_date.get('period_start_from'),
                 'period_start_to': predicted_date.get('period_start_to'),
                 'anomalies': predicted_date.get('anomalies'),
-                'days_between_period': questionnaire.days_between_period,
-                'length_of_period': questionnaire.length_of_period,
+                'days_between_period': predicted_date.get('days_between_period'),
+                'length_of_period': predicted_date.get('length_of_period'),
                 'user': user
             }
             period_prediction = PeriodPrediction.objects.create(**period_prediction_data)
@@ -207,12 +208,10 @@ def log_new_period(request, user_id):
             health_condition_data = request.data.get('health_condition')
 
             if health_condition_data:
-                # Update or create the HealthCondition instance
                 health_condition, _ = HealthCondition.objects.get_or_create(
                     id=questionnaire.health_condition.id,
                     defaults=health_condition_data
                 )
-                # Update fields of the existing HealthCondition instance
                 for attr, value in health_condition_data.items():
                     setattr(health_condition, attr, value)
                 health_condition.save()
@@ -227,6 +226,8 @@ def log_new_period(request, user_id):
             period_prediction.period_start_to = predicted_date.get('period_start_to')
             period_prediction.period_start_from = predicted_date.get('period_start_from')
             period_prediction.anomalies = predicted_date.get('anomalies')
+            period_prediction.days_between_period = predicted_date.get('days_between_period')
+            period_prediction.length_of_period = predicted_date.get('length_of_period')
             period_prediction.save()
             period_prediction_serializer = PeriodPredictionSerializer(period_prediction)
             return Response(period_prediction_serializer.data, status=status.HTTP_201_CREATED)
@@ -248,7 +249,8 @@ def period_confirmation(request, user_id):
         user = User.objects.get(id=user_id)
         period_history_data = {
             'period_start': period_date,
-            'cycle_length': cycle,
+            'days_between_period': cycle,
+            'cycle_length': cycle/4,
             'anomalies': 'Regular' if 25 <= cycle <= 30 else 'Irregular',
             'user': user
         }
@@ -265,16 +267,13 @@ def period_confirmation(request, user_id):
             'period_start_to': period_prediction.get('period_start_to'),
             'anomalies': period_prediction.get('anomalies'),
             'days_between_period': cycle,
-            'length_of_period': questionnaire.length_of_period,
+            'length_of_period': period_prediction.get('length_of_period'),
             'user': user
         }
         new_period_prediction = PeriodPrediction.objects.create(**period_prediction_data)
         serializer = PeriodPredictionSerializer(new_period_prediction)
         return Response(serializer.data, status=status.HTTP_200_OK)
     return Response({'error': 'Invalid request method'}, status=status.HTTP_400_BAD_REQUEST)
-
-
-from datetime import timedelta
 
 
 @api_view(['GET'])
