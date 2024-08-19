@@ -42,6 +42,7 @@ class Questionnaire(models.Model):
 class PeriodHistory(models.Model):
     period_start = models.DateField()
     cycle_length = models.IntegerField()
+    days_between_period = models.IntegerField(default=28)
     anomalies = models.TextField()
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='period_history')
 
