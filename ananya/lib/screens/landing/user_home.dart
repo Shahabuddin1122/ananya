@@ -4,6 +4,7 @@ import 'package:ananya/utils/api_sattings.dart';
 import 'package:ananya/utils/constants.dart';
 import 'package:ananya/utils/custom_theme.dart';
 import 'package:ananya/widgets/period_cycle_information.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg/svg.dart';
@@ -67,6 +68,32 @@ class _UserHomeState extends State<UserHome> {
     }
   }
 
+  void _showConfirmationDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Period Start Today'),
+          content: const Text('Your period starts today. Please confirm.'),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Discard'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: const Text('Confirm'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -93,6 +120,20 @@ class _UserHomeState extends State<UserHome> {
                   } else if (snapshot.hasError) {
                     return const Center(child: Text('Error loading data'));
                   } else if (snapshot.hasData && snapshot.data!.isNotEmpty) {
+                    DateFormat inputFormat = DateFormat('yyyy-MM-dd');
+                    DateTime startDateTime =
+                        inputFormat.parse(snapshot.data!['period_start_from']);
+                    DateTime currentDate = DateTime.now();
+
+                    int daysUntilStart =
+                        startDateTime.difference(currentDate).inDays + 1;
+
+                    if (daysUntilStart == 0) {
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        _showConfirmationDialog(context);
+                      });
+                    }
+
                     return Stack(
                       alignment: Alignment.center,
                       children: [
@@ -118,6 +159,10 @@ class _UserHomeState extends State<UserHome> {
                                   fontWeight: FontWeight.bold,
                                   color: Colors.white,
                                 ),
+                                recognizer: TapGestureRecognizer()
+                                  ..onTap = () {
+                                    _showConfirmationDialog(context);
+                                  },
                               ),
                             ]),
                           ),
