@@ -119,7 +119,7 @@ def add_period_info(request, user_id):
         }
         PeriodHistory.objects.create(**period_history_data)
 
-        predicted_date = get_period_date(serializer.data)
+        predicted_date = get_period_date(user_id, questionnaire.last_period_start)
         while predicted_date and predicted_date.get('period_start_from') < date.today():
             period_history_data = {
                 'period_start': predicted_date.get('period_start_from'),
@@ -130,7 +130,7 @@ def add_period_info(request, user_id):
             }
             PeriodHistory.objects.create(**period_history_data)
 
-            predicted_date = get_period_date(serializer.data)
+            predicted_date = get_period_date(user_id, predicted_date.get('period_start_from'))
 
         if predicted_date:
             period_prediction_data = {
@@ -219,8 +219,7 @@ def log_new_period(request, user_id):
                 questionnaire.health_condition = health_condition
                 questionnaire.save()
 
-            serializer = QuestionnaireSerializer(questionnaire)
-            predicted_date = get_period_date(serializer.data)
+            predicted_date = get_period_date(user_id, updated_last_period_start)
 
             period_prediction, created = PeriodPrediction.objects.get_or_create(user_id=user_id)
             period_prediction.period_start_to = predicted_date.get('period_start_to')
@@ -250,18 +249,16 @@ def period_confirmation(request, user_id):
         period_history_data = {
             'period_start': period_date,
             'days_between_period': cycle,
-            'cycle_length': cycle/4,
+            'cycle_length': cycle / 4,
             'anomalies': 'Regular' if 25 <= cycle <= 30 else 'Irregular',
             'user': user
         }
         PeriodHistory.objects.create(**period_history_data)
 
-        questionnaire = Questionnaire.objects.get(user_id=user_id)
-        questionnaire_serializer = QuestionnaireSerializer(questionnaire)
         # delete previous prediction
         PeriodPrediction.objects.filter(user_id=user_id).delete()
         # add new prediction
-        period_prediction = get_period_date(questionnaire_serializer.data)
+        period_prediction = get_period_date(user_id, period_date)
         period_prediction_data = {
             'period_start_from': period_prediction.get('period_start_from'),
             'period_start_to': period_prediction.get('period_start_to'),
@@ -291,3 +288,27 @@ def update_period_information(request, user_id):
         return Response({'error': 'PeriodPrediction data not found for this user'}, status=status.HTTP_404_NOT_FOUND)
     except Exception as e:
         return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+def advance_period_information(request, user_id):
+    if request.method == 'GET':
+        period_history = (PeriodHistory.objects
+                          .filter(user_id=user_id)
+                          .order_by('-period_start'))
+        previous_period = PeriodPrediction.objects.filter(user_id=user_id)
+        most_recent_period = previous_period.first()
+        last_period_start = most_recent_period.period_start_from
+        period_date = get_period_date(user_id, last_period_start)
+        total_period = sum([data.days_between_period for data in period_history])
+        total_period_length = sum([data.cycle_length for data in period_history])
+        number = period_history.count()
+        average_period_cycle = int(total_period / number)
+        average_period_length = int(total_period_length / number)
+        data = {
+            "next_cycle": period_date.get('period_start_from'),
+            "average_period_cycle": average_period_cycle,
+            "average_period_length": average_period_length,
+        }
+        return Response(data, status=status.HTTP_200_OK)
+    return Response({'error': 'Invalid request method'}, status=status.HTTP_400_BAD_REQUEST)
