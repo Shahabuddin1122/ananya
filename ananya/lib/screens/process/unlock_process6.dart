@@ -65,7 +65,6 @@ class _UnlockProcess6State extends State<UnlockProcess6> {
       });
       if (response.statusCode == 201) {
         final Map<String, dynamic> responseData = json.decode(response.body);
-        print('Data posted successfully: ${responseData}');
         Navigator.pushNamed(
           context,
           '/period-date',

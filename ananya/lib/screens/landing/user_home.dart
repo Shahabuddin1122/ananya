@@ -48,6 +48,13 @@ class _UserHomeState extends State<UserHome> {
     }
   }
 
+  Stream<Map<String, dynamic>> getPeriodDataStream() async* {
+    while (true) {
+      yield await getPeriodData();
+      await Future.delayed(Duration(seconds: 1));
+    }
+  }
+
   String _formatPeriodDate(Map<String, dynamic>? data) {
     DateFormat inputFormat = DateFormat('yyyy-MM-dd');
 
@@ -78,13 +85,28 @@ class _UserHomeState extends State<UserHome> {
           actions: <Widget>[
             TextButton(
               child: const Text('Discard'),
-              onPressed: () {
+              onPressed: () async {
+                SharedPreferences prefs = await SharedPreferences.getInstance();
+                String? id = prefs.getString('userId');
+                await ApiSettings(
+                        endPoint: 'user/update-period-information/$id')
+                    .getMethod();
+
                 Navigator.of(context).pop();
               },
             ),
             TextButton(
               child: const Text('Confirm'),
-              onPressed: () {
+              onPressed: () async {
+                SharedPreferences prefs = await SharedPreferences.getInstance();
+                String? id = prefs.getString('userId');
+                Map<String, String> data = {
+                  "period_date": DateFormat('yyyy-MM-dd').format(DateTime.now())
+                };
+                final response =
+                    await ApiSettings(endPoint: 'user/confim-period/$id')
+                        .putMethod(json.encode(data));
+                print(response.statusCode);
                 Navigator.of(context).pop();
               },
             ),
@@ -112,8 +134,8 @@ class _UserHomeState extends State<UserHome> {
               const SizedBox(
                 height: 20,
               ),
-              FutureBuilder<Map<String, dynamic>>(
-                future: _get_data,
+              StreamBuilder<Map<String, dynamic>>(
+                stream: getPeriodDataStream(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(child: CircularProgressIndicator());
@@ -197,8 +219,8 @@ class _UserHomeState extends State<UserHome> {
               ),
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
-                child: FutureBuilder<Map<String, dynamic>>(
-                  future: _get_data,
+                child: StreamBuilder<Map<String, dynamic>>(
+                  stream: getPeriodDataStream(),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return const Center(child: CircularProgressIndicator());
@@ -546,8 +568,8 @@ class _UserHomeState extends State<UserHome> {
               const SizedBox(
                 height: 30,
               ),
-              FutureBuilder<Map<String, dynamic>>(
-                future: _get_data,
+              StreamBuilder<Map<String, dynamic>>(
+                stream: getPeriodDataStream(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(child: CircularProgressIndicator());

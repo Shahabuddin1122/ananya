@@ -53,7 +53,6 @@ class _PeriodCycleInformationState extends State<PeriodCycleInformation> {
       'menstrual_days': menstrualDays,
     };
 
-    print(periodData);
     return periodData;
   }
 

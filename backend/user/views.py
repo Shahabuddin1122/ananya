@@ -242,8 +242,7 @@ def period_confirmation(request, user_id):
     if request.method == 'PUT':
         # add period history
         period_date = datetime.strptime(request.data.get('period_date'), '%Y-%m-%d').date()
-        period_data = PeriodPrediction.objects.get(user_id=user_id)
-        serializer = PeriodPredictionSerializer(period_data)
+
         period_history = PeriodHistory.objects.filter(user_id=user_id).order_by('-period_start').first()
         cycle = (period_date - period_history.period_start).days
         user = User.objects.get(id=user_id)
