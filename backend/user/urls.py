@@ -15,4 +15,5 @@ urlpatterns = [
     path('get-period-history/<int:user_id>', views.get_period_history, name='get_period_history'),
     path('confim-period/<int:user_id>', views.period_confirmation, name='period_confirmation'),
     path('update-period-information/<int:user_id>', views.update_period_information, name='update_period_information'),
+    path('advance-period-information/<int:user_id>', views.advance_period_information, name='advance_period_information'),
 ]
