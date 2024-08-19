@@ -1,8 +1,10 @@
+import 'package:ananya/utils/api_sattings.dart';
 import 'package:ananya/utils/constants.dart';
 import 'package:ananya/utils/custom_theme.dart';
 import 'package:ananya/widgets/circle_image.dart';
 import 'package:ananya/widgets/history_component.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CohortHistory extends StatefulWidget {
   const CohortHistory({super.key});
@@ -13,6 +15,17 @@ class CohortHistory extends StatefulWidget {
 
 class _CohortHistoryState extends State<CohortHistory> {
   int _selectedIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  void get_all_history_data() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? id = prefs.getString('userId');
+    ApiSettings api = await ApiSettings(endPoint: 'user/get-period-history/');
+  }
 
   void _onItemTapped(int index) {
     setState(() {

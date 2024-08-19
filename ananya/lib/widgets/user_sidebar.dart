@@ -63,9 +63,6 @@ class UserSidebar extends StatelessWidget {
             title: const Text("VISIT SHOP"),
             onTap: () => Navigator.pushNamed(context, '/visit-shop'),
           ),
-          const ListTile(
-            title: Text('GET HELP'),
-          ),
           ListTile(
             title: const Text("PERIOD HISTORY"),
             onTap: () => Navigator.pushNamed(context, '/history/indivisual'),
@@ -95,6 +92,9 @@ class UserSidebar extends StatelessWidget {
                 ),
               ],
             ),
+          ),
+          const ListTile(
+            title: Text('GET HELP'),
           ),
           ListTile(
             title: const Text("LOG OUT"),
