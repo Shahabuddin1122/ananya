@@ -2,18 +2,19 @@ import 'package:flutter/material.dart';
 
 class CircleImage extends StatefulWidget {
   final String image;
-  const CircleImage({required this.image, super.key});
+  bool isHighlighted;
+  CircleImage({required this.isHighlighted, required this.image, super.key});
 
   @override
   _CircleImageState createState() => _CircleImageState();
 }
 
 class _CircleImageState extends State<CircleImage> {
-  bool _isHighlighted = false;
+  bool _isHighlighted = true;
 
   void _toggleHighlight() {
     setState(() {
-      _isHighlighted = !_isHighlighted;
+      widget.isHighlighted = !widget.isHighlighted;
     });
   }
 
@@ -32,8 +33,8 @@ class _CircleImageState extends State<CircleImage> {
         child: ClipOval(
           child: ColorFiltered(
             colorFilter: ColorFilter.mode(
-              _isHighlighted ? Colors.transparent : Colors.grey,
-              _isHighlighted ? BlendMode.dst : BlendMode.saturation,
+              widget.isHighlighted ? Colors.transparent : Colors.grey,
+              widget.isHighlighted ? BlendMode.dst : BlendMode.saturation,
             ),
             child: Image.asset(
               widget.image,

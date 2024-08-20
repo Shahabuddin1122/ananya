@@ -323,7 +323,9 @@ def advance_period_information(request, user_id):
 
 
 @api_view(['GET'])
-def get_all_cohorts(request, super_user):
+def get_all_cohorts(request, superuser_id):
     if request.method == 'GET':
-        return Response('success', status=status.HTTP_200_OK)
+        superuser = SuperUser.objects.get(user_id=superuser_id)
+        serializer = SuperUserSerializer(superuser)
+        return Response(serializer.data, status=status.HTTP_200_OK)
     return Response({'error': 'Invalid request method'}, status=status.HTTP_400_BAD_REQUEST)

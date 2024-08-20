@@ -134,7 +134,9 @@ class _UserSidebarState extends State<UserSidebar> {
             onTap: () async {
               SharedPreferences prefs = await SharedPreferences.getInstance();
               await prefs.remove('userNumber');
+              await prefs.remove('userId');
               await prefs.remove('is_superuser');
+              await prefs.remove('cohort-user');
               Navigator.pushNamed(context, '/signin');
             },
           ),

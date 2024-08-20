@@ -18,7 +18,7 @@ class CustomTextField extends StatefulWidget {
 }
 
 class _CustomTextFieldState extends State<CustomTextField> {
-  bool _obscureText = false;
+  bool _obscureText = true;
   String? _warningText;
 
   Future<void> _selectDate(BuildContext context) async {
