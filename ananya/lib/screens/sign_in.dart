@@ -54,10 +54,15 @@ class _SignInState extends State<SignIn> {
       });
       if (response.statusCode == 200) {
         final Map<String, dynamic> responseData = json.decode(response.body);
-        final int userId = responseData['id'];
+        final Map<String, dynamic> user = responseData['user'];
         await prefs.setString('userNumber', phoneController.text);
-        await prefs.setString('userId', userId.toString());
-        await prefs.setBool('is_superuser', responseData['is_superuser']);
+        await prefs.setString('userId', user['id'].toString());
+        await prefs.setBool('is_superuser', user['is_superuser']);
+        if (responseData['managed_users'].isNotEmpty) {
+          await prefs.setString(
+              "cohort-user", responseData['managed_users'][0].toString());
+        }
+
         Navigator.pushNamed(context, '/');
       } else {
         print('Failed to post data. Status code: ${response.statusCode}');

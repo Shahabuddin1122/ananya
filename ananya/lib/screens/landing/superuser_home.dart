@@ -38,6 +38,7 @@ class _SuperuserHomeState extends State<SuperuserHome> {
   Future<Map<String, dynamic>> getPeriodData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? id = prefs.getString('cohort-user');
+    print(id);
     ApiSettings api = ApiSettings(endPoint: 'user/get-prediction-period/$id');
 
     try {

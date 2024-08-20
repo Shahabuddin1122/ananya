@@ -117,7 +117,8 @@ class _IndividualHistoryState extends State<IndividualHistory> {
                             return HistoryComponent(
                               month: monthName,
                               day: history['period_start'].split('-')[2],
-                              monthcycle: history['cycle_length'].toString(),
+                              monthcycle:
+                                  history['days_between_period'].toString(),
                               anomalies:
                                   history['anomalies'] == 'Regular' ? 1 : 2,
                             );

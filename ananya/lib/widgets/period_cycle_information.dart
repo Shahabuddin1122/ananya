@@ -81,7 +81,7 @@ class _PeriodCycleInformationState extends State<PeriodCycleInformation> {
             children: widget.cohort!['managed_users'].map<Widget>((user) {
               return CircleImage(
                 image: 'assets/images/default_person.png',
-                isHighlighted: false,
+                isHighlighted: true,
               );
             }).toList(),
           ),

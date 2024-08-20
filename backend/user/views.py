@@ -49,18 +49,26 @@ def user_login(request):
                     "user": serializer.data,
                     "managed_users": []
                 }
-                if serializer.data['is_superuser']:
+
+                if user.is_superuser:
                     superuser = SuperUser.objects.get(user=user)
                     managed_users = superuser.managed_users.all()
-                    managed_users_data = [managed_user.id for managed_user in managed_users]
-                    data["managed_users"] = managed_users_data
+
+                    for managed_user in managed_users:
+                        # Check if a PeriodPrediction exists for this managed_user
+                        if PeriodPrediction.objects.filter(user_id=managed_user.id).exists():
+                            data["managed_users"].append(managed_user.id)
 
                     return Response(data, status=status.HTTP_200_OK)
+
                 return Response(data, status=status.HTTP_200_OK)
             else:
                 return Response({"error": "Invalid credentials"}, status=status.HTTP_401_UNAUTHORIZED)
+
         except User.DoesNotExist:
             return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
+        except SuperUser.DoesNotExist:
+            return Response({"error": "Superuser not found"}, status=status.HTTP_404_NOT_FOUND)
 
 
 @api_view(['POST'])
