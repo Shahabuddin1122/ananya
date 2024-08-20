@@ -29,7 +29,13 @@ class _UnlockProcess6State extends State<UnlockProcess6> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String URL =
         widget.update_period ? 'user/log-new-period/' : 'user/add-period-info/';
-    String? id = prefs.getString('userId');
+    String? id;
+    String? cohortId = prefs.getString('cohort-user');
+    if (cohortId != null && cohortId.isNotEmpty) {
+      id = cohortId;
+    } else {
+      id = prefs.getString('userId');
+    }
     ApiSettings api = ApiSettings(endPoint: '$URL$id');
     final periodState = context.read<PeriodState>();
     Map<String, dynamic> data = {

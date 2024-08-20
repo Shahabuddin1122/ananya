@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:ananya/screens/loading.dart';
 import 'package:ananya/utils/api_sattings.dart';
 import 'package:ananya/utils/constants.dart';
 import 'package:ananya/utils/custom_theme.dart';
@@ -8,21 +7,20 @@ import 'package:ananya/widgets/custom_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class SignIn extends StatefulWidget {
-  const SignIn({super.key});
+class AddAUser extends StatefulWidget {
+  const AddAUser({super.key});
 
   @override
-  State<SignIn> createState() => _SignInState();
+  State<AddAUser> createState() => _AddAUserState();
 }
 
-class _SignInState extends State<SignIn> {
+class _AddAUserState extends State<AddAUser> {
+  final TextEditingController usernameController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
   bool isLoading = false;
 
-  ApiSettings api = ApiSettings(endPoint: 'user/login');
-
-  void check() async {
+  void addUser() async {
     SharedPreferences prefs;
     try {
       prefs = await SharedPreferences.getInstance();
@@ -30,8 +28,8 @@ class _SignInState extends State<SignIn> {
       print('Failed to load SharedPreferences: $e');
       return;
     }
-    if (passwordController.text.isEmpty) {
-      _showErrorMessage("Password is required.");
+    if (usernameController.text.isEmpty) {
+      _showErrorMessage("Username is required.");
       return;
     }
     if (phoneController.text.isEmpty) {
@@ -41,27 +39,36 @@ class _SignInState extends State<SignIn> {
     setState(() {
       isLoading = true;
     });
-
+    String? id = prefs.getString('userId');
+    ApiSettings api = ApiSettings(endPoint: 'user/add-user/$id');
     Map<String, dynamic> data = {
-      'phone': phoneController.text,
-      'password': passwordController.text,
+      "name": usernameController.text,
+      "phone": phoneController.text,
+      "email": emailController.text,
     };
-
     try {
       final response = await api.postMethod(json.encode(data));
       setState(() {
         isLoading = false;
       });
-      if (response.statusCode == 200) {
-        final Map<String, dynamic> responseData = json.decode(response.body);
-        final int userId = responseData['id'];
-        await prefs.setString('userNumber', phoneController.text);
-        await prefs.setString('userId', userId.toString());
-        await prefs.setBool('is_superuser', responseData['is_superuser']);
+      if (response.statusCode == 201) {
+        json.decode(response.body);
         Navigator.pushNamed(context, '/');
       } else {
         print('Failed to post data. Status code: ${response.statusCode}');
         print('Response body: $response');
+        final Map<String, dynamic> responseMap = jsonDecode(response.body);
+        if (responseMap.containsKey('phone') &&
+            responseMap['phone'] is List &&
+            responseMap['phone'].isNotEmpty) {
+          _showErrorMessage(responseMap['phone'][0]);
+        } else if (responseMap.containsKey('email') &&
+            responseMap['email'] is List &&
+            responseMap['email'].isNotEmpty) {
+          _showErrorMessage(responseMap['email'][0]);
+        } else {
+          _showErrorMessage(responseMap['error']);
+        }
       }
     } catch (e) {
       setState(() {
@@ -93,9 +100,12 @@ class _SignInState extends State<SignIn> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 255, 235, 239),
+      appBar: AppBar(
+        title: const Text("Add a user"),
+      ),
       body: Center(
         child: isLoading
-            ? const CircularProgressIndicator()
+            ? CircularProgressIndicator()
             : SingleChildScrollView(
                 child: Container(
                   width: double.infinity,
@@ -110,7 +120,7 @@ class _SignInState extends State<SignIn> {
                       ),
                       const Text(
                         textAlign: TextAlign.center,
-                        "Login with your mobile number and password",
+                        "Add a user",
                         style: TextStyle(
                           fontSize: 32,
                           color: ACCENT,
@@ -121,18 +131,22 @@ class _SignInState extends State<SignIn> {
                         height: 50,
                       ),
                       CustomTextField(
-                        text: "Phone Number",
+                        text: "Username",
+                        controller: usernameController,
+                      ),
+                      CustomTextField(
+                        text: 'Phone Number',
                         controller: phoneController,
                       ),
                       CustomTextField(
-                        text: 'Password',
-                        controller: passwordController,
+                        text: 'Email',
+                        controller: emailController,
                       ),
                       const SizedBox(
                         height: 20,
                       ),
                       ElevatedButton(
-                        onPressed: check,
+                        onPressed: addUser,
                         style: const ButtonStyle(
                           backgroundColor: WidgetStatePropertyAll(ACCENT),
                           minimumSize:
@@ -145,44 +159,12 @@ class _SignInState extends State<SignIn> {
                           ),
                         ),
                         child: const Text(
-                          "Log in",
+                          "Add",
                           style: TextStyle(
                             color: Colors.white,
                           ),
                         ),
                       ),
-                      const SizedBox(
-                        height: 30,
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          Navigator.pushNamed(context, '/signup');
-                        },
-                        child: const Text(
-                          "Don't have an account? Create a new account.",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: Colors.indigo,
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      const Text(
-                        "Forget Password? Set a new password.",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Colors.indigo,
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      )
                     ],
                   ),
                 ),

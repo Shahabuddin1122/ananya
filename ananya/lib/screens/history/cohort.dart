@@ -45,7 +45,7 @@ class _CohortHistoryState extends State<CohortHistory> {
             child: SingleChildScrollView(
               child: Padding(
                 padding: Theme.of(context).largemainPadding,
-                child: const Column(
+                child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Wrap(
@@ -55,16 +55,18 @@ class _CohortHistoryState extends State<CohortHistory> {
                       children: [
                         CircleImage(
                           image: "assets/images/me.png",
+                          isHighlighted: false,
                         ),
                         CircleImage(
                           image: "assets/images/default_person.png",
+                          isHighlighted: true,
                         ),
                       ],
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 20,
                     ),
-                    Text(
+                    const Text(
                       "2022",
                       style: TextStyle(
                         fontSize: 12,
@@ -72,10 +74,10 @@ class _CohortHistoryState extends State<CohortHistory> {
                         color: ACCENT,
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
-                    Wrap(
+                    const Wrap(
                       direction: Axis.horizontal,
                       spacing: 15.0,
                       runSpacing: 15.0,
@@ -106,10 +108,10 @@ class _CohortHistoryState extends State<CohortHistory> {
                         ),
                       ],
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 20,
                     ),
-                    Text(
+                    const Text(
                       "2021",
                       style: TextStyle(
                         fontSize: 12,
@@ -117,10 +119,10 @@ class _CohortHistoryState extends State<CohortHistory> {
                         color: ACCENT,
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
-                    Wrap(
+                    const Wrap(
                       direction: Axis.horizontal,
                       spacing: 10.0,
                       runSpacing: 10.0,

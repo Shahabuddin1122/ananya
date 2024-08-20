@@ -1,3 +1,4 @@
+import 'package:ananya/screens/landing/superuser_home.dart';
 import 'package:ananya/screens/landing/user_home.dart';
 import 'package:ananya/utils/constants.dart';
 import 'package:ananya/utils/custom_theme.dart';
@@ -14,7 +15,6 @@ class Landing extends StatefulWidget {
 
 class _LandingState extends State<Landing> {
   int _selectedIndex = 0;
-  final bool _isLoggedIn = false;
   late Future<bool> numberPresent;
 
   @override
@@ -29,25 +29,44 @@ class _LandingState extends State<Landing> {
     return number != null;
   }
 
+  Future<bool> isSuperuser() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool? isSuperuser = prefs.getBool('is_superuser');
+    return isSuperuser ?? false;
+  }
+
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
   }
 
-  @override
-  Widget build(BuildContext context) {
-    Widget bodyWidget;
+  Widget _getBodyWidget() {
     switch (_selectedIndex) {
       case 0:
-        bodyWidget = UserHome();
-        break;
+        return FutureBuilder<bool>(
+          future: isSuperuser(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(child: CircularProgressIndicator());
+            } else if (snapshot.hasData && snapshot.data == true) {
+              return const SuperuserHome();
+            } else {
+              return const UserHome();
+            }
+          },
+        );
       case 1:
-        bodyWidget = UserHome();
-        break;
+        return UserHome(); // Replace with the appropriate widget for "Knowledge Nexus"
+      case 2:
+        return UserHome(); // Replace with the appropriate widget for "Shop"
       default:
-        bodyWidget = UserHome();
+        return UserHome();
     }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
       color: Colors.white,
       child: Scaffold(
@@ -62,9 +81,7 @@ class _LandingState extends State<Landing> {
                   return Container();
                 } else if (snapshot.hasData && snapshot.data == true) {
                   return IconButton(
-                    icon: const Icon(
-                      Icons.notifications,
-                    ),
+                    icon: const Icon(Icons.notifications),
                     onPressed: () {},
                   );
                 } else {
@@ -72,9 +89,9 @@ class _LandingState extends State<Landing> {
                     padding: Theme.of(context).largemainPadding,
                     child: ElevatedButton(
                       style: ButtonStyle(
-                        backgroundColor: const WidgetStatePropertyAll(ACCENT),
-                        minimumSize: const WidgetStatePropertyAll(Size(50, 20)),
-                        shape: WidgetStateProperty.all(
+                        backgroundColor: MaterialStateProperty.all(ACCENT),
+                        minimumSize: MaterialStateProperty.all(Size(50, 20)),
+                        shape: MaterialStateProperty.all(
                           RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(5),
                           ),
@@ -85,9 +102,7 @@ class _LandingState extends State<Landing> {
                       },
                       child: const Text(
                         'Log in',
-                        style: TextStyle(
-                          fontSize: 12,
-                        ),
+                        style: TextStyle(fontSize: 12),
                       ),
                     ),
                   );
@@ -96,7 +111,7 @@ class _LandingState extends State<Landing> {
             ),
           ],
         ),
-        body: bodyWidget,
+        body: _getBodyWidget(),
         bottomNavigationBar: BottomNavigationBar(
           backgroundColor: Colors.grey[100],
           currentIndex: _selectedIndex,

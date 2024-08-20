@@ -18,7 +18,6 @@ class AdvanceInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(data);
     return Row(
       children: [
         Container(
@@ -33,42 +32,51 @@ class AdvanceInfo extends StatelessWidget {
             ),
           ),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Container(
-                width: double.infinity,
-                height: 65,
-                padding: Theme.of(context).insideCardPadding,
-                decoration: BoxDecoration(
-                  color: data.isNotEmpty ? PRIMARY_COLOR : Colors.black,
-                  borderRadius: const BorderRadius.vertical(
-                    top: Radius.circular(10),
-                  ),
-                ),
-                child: Text(
-                  data.isNotEmpty
-                      ? "Your next \ncycle is on"
-                      : 'Want to predict when your next period will happen?',
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              Center(
-                child: Padding(
+              Expanded(
+                child: Container(
+                  width: double.infinity,
                   padding: Theme.of(context).insideCardPadding,
-                  child: Text(
-                    data.isNotEmpty ? getDate(data["next_cycle"]) : "",
-                    style: TextStyle(
-                      color: ACCENT,
-                      fontSize: data.isNotEmpty ? 20 : 12,
-                      fontWeight: FontWeight.bold,
+                  decoration: BoxDecoration(
+                    color: data.isNotEmpty ? PRIMARY_COLOR : Colors.black,
+                    borderRadius: BorderRadius.vertical(
+                      top: const Radius.circular(10),
+                      bottom: data.isEmpty
+                          ? const Radius.circular(10)
+                          : const Radius.circular(0),
+                    ),
+                  ),
+                  child: Center(
+                    child: Text(
+                      data.isNotEmpty
+                          ? "Your next \ncycle is on"
+                          : 'Want to predict when your next period will happen?',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      textAlign: TextAlign.start,
                     ),
                   ),
                 ),
               ),
-              const SizedBox(height: 10),
+              if (data.isNotEmpty) ...[
+                Center(
+                  child: Padding(
+                    padding: Theme.of(context).insideCardPadding,
+                    child: Text(
+                      getDate(data["next_cycle"]),
+                      style: const TextStyle(
+                        color: ACCENT,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 10),
+              ],
             ],
           ),
         ),

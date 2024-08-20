@@ -14,16 +14,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
+import 'package:rxdart/rxdart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class UserHome extends StatefulWidget {
-  const UserHome({super.key});
+class SuperuserHome extends StatefulWidget {
+  const SuperuserHome({super.key});
 
   @override
-  State<UserHome> createState() => _UserHomeState();
+  State<SuperuserHome> createState() => _SuperuserHomeState();
 }
 
-class _UserHomeState extends State<UserHome> {
+class _SuperuserHomeState extends State<SuperuserHome> {
   late Future<bool> numberPresent;
   bool get_data = false;
   Future<Map<String, dynamic>>? _get_data;
@@ -36,7 +37,7 @@ class _UserHomeState extends State<UserHome> {
 
   Future<Map<String, dynamic>> getPeriodData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? id = prefs.getString('userId');
+    String? id = prefs.getString('cohort-user');
     ApiSettings api = ApiSettings(endPoint: 'user/get-prediction-period/$id');
 
     try {
@@ -62,7 +63,7 @@ class _UserHomeState extends State<UserHome> {
 
   Stream<Map<String, dynamic>> getAdvanceInfoStream() async* {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? id = prefs.getString('userId');
+    String? id = prefs.getString('cohort-user');
     ApiSettings api =
         ApiSettings(endPoint: 'user/advance-period-information/$id');
 
@@ -100,6 +101,38 @@ class _UserHomeState extends State<UserHome> {
     }
   }
 
+  Stream<Map<String, dynamic>> getAllCohort() async* {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? id = prefs.getString('userId');
+    ApiSettings api = ApiSettings(endPoint: 'user/get-cohort/$id');
+
+    try {
+      final response = await api.getMethod();
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> responseData = json.decode(response.body);
+        yield responseData;
+      } else {
+        yield {};
+      }
+    } catch (e) {
+      yield {};
+    }
+  }
+
+  Stream<Map<String, dynamic>> getCombinedStream() {
+    return Rx.zip2(
+      getPeriodDataStream(),
+      getAllCohort(),
+      (periodData, cohortData) {
+        return {
+          'periodData': periodData,
+          'cohortData': cohortData,
+        };
+      },
+    );
+  }
+
   void _showConfirmationDialog(BuildContext context) {
     showDialog(
       context: context,
@@ -112,7 +145,7 @@ class _UserHomeState extends State<UserHome> {
               child: const Text('Discard'),
               onPressed: () async {
                 SharedPreferences prefs = await SharedPreferences.getInstance();
-                String? id = prefs.getString('userId');
+                String? id = prefs.getString('cohort-user');
                 await ApiSettings(
                         endPoint: 'user/update-period-information/$id')
                     .getMethod();
@@ -263,14 +296,19 @@ class _UserHomeState extends State<UserHome> {
                 height: 30,
               ),
               StreamBuilder<Map<String, dynamic>>(
-                stream: getPeriodDataStream(),
+                stream: getCombinedStream(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(child: CircularProgressIndicator());
                   } else if (snapshot.hasError) {
                     return const Center(child: Text('Error loading data'));
-                  } else if (snapshot.hasData && snapshot.data!.isNotEmpty) {
-                    return PeriodCycleInformation(data: snapshot.data!);
+                  } else if (snapshot.hasData &&
+                      snapshot.data!['periodData']!.isNotEmpty &&
+                      snapshot.data!['cohortData']!.isNotEmpty) {
+                    return PeriodCycleInformation(
+                      data: snapshot.data!['periodData'],
+                      cohort: snapshot.data!['cohortData'],
+                    );
                   } else {
                     return Padding(
                       padding: const EdgeInsets.all(16.0),
@@ -286,7 +324,7 @@ class _UserHomeState extends State<UserHome> {
                           ),
                           ElevatedButton(
                             onPressed: () {
-                              Navigator.pushNamed(context, '/unlock-process/1');
+                              Navigator.pushNamed(context, '/choose-user');
                             },
                             child: const Text('UNLOCK PERIOD PREDICTION'),
                           ),

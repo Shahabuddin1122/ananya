@@ -1,11 +1,13 @@
 import 'package:ananya/utils/constants.dart';
 import 'package:ananya/widgets/calender.dart';
+import 'package:ananya/widgets/circle_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class PeriodCycleInformation extends StatefulWidget {
   final Map<String, dynamic> data;
-  const PeriodCycleInformation({required this.data, super.key});
+  final Map<String, dynamic>? cohort;
+  const PeriodCycleInformation({this.cohort, required this.data, super.key});
 
   @override
   State<PeriodCycleInformation> createState() => _PeriodCycleInformationState();
@@ -70,6 +72,20 @@ class _PeriodCycleInformationState extends State<PeriodCycleInformation> {
             color: ACCENT,
           ),
         ),
+        if (widget.cohort != null) ...[
+          const SizedBox(height: 15),
+          Wrap(
+            direction: Axis.horizontal,
+            spacing: 15,
+            runSpacing: 15,
+            children: widget.cohort!['managed_users'].map<Widget>((user) {
+              return CircleImage(
+                image: 'assets/images/default_person.png',
+                isHighlighted: false,
+              );
+            }).toList(),
+          ),
+        ],
         const SizedBox(
           height: 15,
         ),
