@@ -92,7 +92,13 @@ class _UserSidebarState extends State<UserSidebar> {
           ),
           ListTile(
             title: const Text("PERIOD HISTORY"),
-            onTap: () => Navigator.pushNamed(context, '/history/individual'),
+            onTap: () {
+              if (_isSuperuser) {
+                Navigator.pushNamed(context, '/history/cohort');
+              } else {
+                Navigator.pushNamed(context, '/history/indivisual');
+              }
+            },
           ),
           const Divider(
             height: 1,
@@ -128,6 +134,7 @@ class _UserSidebarState extends State<UserSidebar> {
             onTap: () async {
               SharedPreferences prefs = await SharedPreferences.getInstance();
               await prefs.remove('userNumber');
+              await prefs.remove('is_superuser');
               Navigator.pushNamed(context, '/signin');
             },
           ),

@@ -1,7 +1,6 @@
 import 'package:ananya/utils/constants.dart';
 import 'package:ananya/utils/custom_theme.dart';
 import 'package:ananya/widgets/custom_app_bar_with_progress.dart';
-import 'package:ananya/widgets/input_box.dart';
 import 'package:ananya/widgets/user_picture_name.dart';
 import 'package:flutter/material.dart';
 

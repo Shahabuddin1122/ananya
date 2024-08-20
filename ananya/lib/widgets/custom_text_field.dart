@@ -18,7 +18,7 @@ class CustomTextField extends StatefulWidget {
 }
 
 class _CustomTextFieldState extends State<CustomTextField> {
-  bool _obscureText = true;
+  bool _obscureText = false;
   String? _warningText;
 
   Future<void> _selectDate(BuildContext context) async {
@@ -75,8 +75,8 @@ class _CustomTextFieldState extends State<CustomTextField> {
                     ? IconButton(
                         icon: Icon(
                           _obscureText
-                              ? Icons.visibility_off
-                              : Icons.visibility,
+                              ? Icons.visibility
+                              : Icons.visibility_off,
                           color: ACCENT,
                         ),
                         onPressed: () {

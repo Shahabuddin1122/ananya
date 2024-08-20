@@ -1,4 +1,5 @@
 import 'package:ananya/models/period_state_questionnaire.dart';
+import 'package:ananya/screens/add_a_user.dart';
 import 'package:ananya/screens/choose_user.dart';
 import 'package:ananya/screens/history/cohort.dart';
 import 'package:ananya/screens/history/individual.dart';
@@ -30,6 +31,7 @@ Future<void> main() async {
         '/': (context) => const Landing(),
         '/signin': (context) => const SignIn(),
         '/signup': (context) => const SignUp(),
+        '/add-user': (context) => const AddAUser(),
         '/choose-user': (context) => const ChooseUser(),
         '/unlock-process/1': (context) => const UnlockProcess1(),
         '/unlock-process/2': (context) => const UnlockProcess2(),

@@ -27,7 +27,6 @@ def user_signup(request):
 def super_user_signup(request):
     if request.method == 'POST':
         if request.data['user']:
-            # Handling SuperUser creation
             superuser_data = request.data
             serializer = SuperUserSerializer(data=superuser_data)
             if serializer.is_valid():
@@ -54,32 +53,46 @@ def user_login(request):
 
 
 @api_view(['POST'])
-def add_user_in_superuser(request):
-    if request.method == 'POST':
-        superuser_id = request.data.get('superuser_id')
+def add_user_in_superuser(request, superuser_id):
+    try:
+        superuser = SuperUser.objects.get(user_id=superuser_id)
+    except SuperUser.DoesNotExist:
+        return Response({"error": "SuperUser not found"}, status=status.HTTP_404_NOT_FOUND)
 
-        try:
-            superuser = SuperUser.objects.get(id=superuser_id)
-        except SuperUser.DoesNotExist:
-            return Response({"error": "SuperUser not found"}, status=status.HTTP_404_NOT_FOUND)
+    user_data = request.data
 
-        user_data = request.data.get('user')
+    email = user_data.get('phone')
+    if not email:
+        return Response({"error": "Email is required"}, status=status.HTTP_400_BAD_REQUEST)
 
-        user = User.objects.filter(email=user_data.get('email')).first()
+    user = User.objects.filter(email=email).first()
 
-        if user:
+    if user:
+        superuser.managed_users.add(user)
+        superuser_serializer = SuperUserSerializer(superuser)
+        return Response(superuser_serializer, status=status.HTTP_200_OK)
+    else:
+        # Prepare data for new user
+        user_data = {
+            'email': email,
+            'name': user_data.get('name'),
+            'phone': user_data.get('phone'),
+            'password': superuser.user.password,
+            'is_superuser': False,
+            'date_of_birth': user_data.get('date_of_birth', superuser.user.date_of_birth),
+            'district': user_data.get('district', superuser.user.district),
+            'project': user_data.get('project', superuser.user.project),
+        }
+        user_serializer = UserSerializer(data=user_data)
+        if user_serializer.is_valid():
+            user = user_serializer.save()
+
             superuser.managed_users.add(user)
-            return Response({"message": "Existing user added to SuperUser successfully"}, status=status.HTTP_200_OK)
-        else:
-            user_serializer = UserSerializer(data=user_data)
-            if user_serializer.is_valid():
-                user = user_serializer.save()
+            superuser_serializer = SuperUserSerializer(superuser)
+            return Response(superuser_serializer.data,
+                            status=status.HTTP_201_CREATED)
 
-                superuser.managed_users.add(user)
-                return Response({"message": "New user created and added to SuperUser successfully"},
-                                status=status.HTTP_201_CREATED)
-
-            return Response(user_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response(user_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['GET'])
@@ -306,4 +319,11 @@ def advance_period_information(request, user_id):
             "average_period_length": average_period_length,
         }
         return Response(data, status=status.HTTP_200_OK)
+    return Response({'error': 'Invalid request method'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+def get_all_cohorts(request, super_user):
+    if request.method == 'GET':
+        return Response('success', status=status.HTTP_200_OK)
     return Response({'error': 'Invalid request method'}, status=status.HTTP_400_BAD_REQUEST)
