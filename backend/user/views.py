@@ -4,7 +4,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 
-from .models import User, SuperUser, Questionnaire, PeriodHistory, PeriodPrediction, HealthCondition
+from .models import User, SuperUser, PeriodPrediction, HealthCondition
 from .serializers import UserSerializer, SuperUserSerializer, QuestionnaireSerializer, PeriodHistorySerializer, \
     PeriodPredictionSerializer
 from .utils import *
@@ -45,11 +45,30 @@ def user_login(request):
             user = User.objects.get(phone=phone)
             if user.password == password:
                 serializer = UserSerializer(user)
-                return Response(serializer.data, status=status.HTTP_200_OK)
+                data = {
+                    "user": serializer.data,
+                    "managed_users": []
+                }
+
+                if user.is_superuser:
+                    superuser = SuperUser.objects.get(user=user)
+                    managed_users = superuser.managed_users.all()
+
+                    for managed_user in managed_users:
+                        # Check if a PeriodPrediction exists for this managed_user
+                        if PeriodPrediction.objects.filter(user_id=managed_user.id).exists():
+                            data["managed_users"].append(managed_user.id)
+
+                    return Response(data, status=status.HTTP_200_OK)
+
+                return Response(data, status=status.HTTP_200_OK)
             else:
                 return Response({"error": "Invalid credentials"}, status=status.HTTP_401_UNAUTHORIZED)
+
         except User.DoesNotExist:
             return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
+        except SuperUser.DoesNotExist:
+            return Response({"error": "Superuser not found"}, status=status.HTTP_404_NOT_FOUND)
 
 
 @api_view(['POST'])
