@@ -212,7 +212,7 @@ class AdvanceInfo extends StatelessWidget {
                     padding: Theme.of(context).insideCardPadding,
                     child: Text(
                       data.isNotEmpty
-                          ? "${data['average_period_length']} days"
+                          ? "${data['average_period_cycle']} days"
                           : "Unlocked after 3rd cycle logged",
                       style: TextStyle(
                         color: Colors.black,
