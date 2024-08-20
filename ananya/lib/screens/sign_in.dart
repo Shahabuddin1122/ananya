@@ -57,6 +57,7 @@ class _SignInState extends State<SignIn> {
         final int userId = responseData['id'];
         await prefs.setString('userNumber', phoneController.text);
         await prefs.setString('userId', userId.toString());
+        await prefs.setBool('is_superuser', responseData['is_superuser']);
         Navigator.pushNamed(context, '/');
       } else {
         print('Failed to post data. Status code: ${response.statusCode}');

@@ -1,9 +1,29 @@
-﻿import 'package:ananya/utils/constants.dart';
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class UserSidebar extends StatelessWidget {
+class UserSidebar extends StatefulWidget {
   const UserSidebar({super.key});
+
+  @override
+  State<UserSidebar> createState() => _UserSidebarState();
+}
+
+class _UserSidebarState extends State<UserSidebar> {
+  bool _isSuperuser = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkSuperuserStatus();
+  }
+
+  Future<void> _checkSuperuserStatus() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool? isSuperuser = prefs.getBool('is_superuser');
+    setState(() {
+      _isSuperuser = isSuperuser ?? false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,6 +69,13 @@ class UserSidebar extends StatelessWidget {
               Navigator.pushNamed(context, '/new-period');
             },
           ),
+          if (_isSuperuser)
+            ListTile(
+              title: const Text("ADD A USER"),
+              onTap: () {
+                Navigator.pushNamed(context, '/add-user');
+              },
+            ),
           ListTile(
             title: const Text("CHAT WITH ANANYA"),
             onTap: () {
@@ -65,7 +92,7 @@ class UserSidebar extends StatelessWidget {
           ),
           ListTile(
             title: const Text("PERIOD HISTORY"),
-            onTap: () => Navigator.pushNamed(context, '/history/indivisual'),
+            onTap: () => Navigator.pushNamed(context, '/history/individual'),
           ),
           const Divider(
             height: 1,

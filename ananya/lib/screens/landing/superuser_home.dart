@@ -16,14 +16,14 @@ import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class UserHome extends StatefulWidget {
-  const UserHome({super.key});
+class SuperuserHome extends StatefulWidget {
+  const SuperuserHome({super.key});
 
   @override
-  State<UserHome> createState() => _UserHomeState();
+  State<SuperuserHome> createState() => _SuperuserHomeState();
 }
 
-class _UserHomeState extends State<UserHome> {
+class _SuperuserHomeState extends State<SuperuserHome> {
   late Future<bool> numberPresent;
   bool get_data = false;
   Future<Map<String, dynamic>>? _get_data;
@@ -286,7 +286,7 @@ class _UserHomeState extends State<UserHome> {
                           ),
                           ElevatedButton(
                             onPressed: () {
-                              Navigator.pushNamed(context, '/unlock-process/1');
+                              Navigator.pushNamed(context, '/choose-user');
                             },
                             child: const Text('UNLOCK PERIOD PREDICTION'),
                           ),

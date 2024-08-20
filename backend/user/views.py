@@ -45,13 +45,8 @@ def user_login(request):
         try:
             user = User.objects.get(phone=phone)
             if user.password == password:
-                if user.is_superuser:
-                    superuser = SuperUser.objects.get(user_id=user.id)
-                    serializer = SuperUserSerializer(superuser)
-                    return Response(serializer.data, status=status.HTTP_200_OK)
-                else:
-                    serializer = UserSerializer(user)
-                    return Response(serializer.data, status=status.HTTP_200_OK)
+                serializer = UserSerializer(user)
+                return Response(serializer.data, status=status.HTTP_200_OK)
             else:
                 return Response({"error": "Invalid credentials"}, status=status.HTTP_401_UNAUTHORIZED)
         except User.DoesNotExist:

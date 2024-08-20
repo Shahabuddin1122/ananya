@@ -8,30 +8,35 @@ class UserPictureName extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: Theme.of(context).smallSubSectionDividerPadding,
-      child: Row(
-        children: [
-          ClipOval(
-            child: Image.asset(
-              image,
-              width: 45,
-              height: 45,
-              fit: BoxFit.cover,
+    return GestureDetector(
+      onTap: () {
+        Navigator.pushNamed(context, '/unlock-process/1');
+      },
+      child: Padding(
+        padding: Theme.of(context).smallSubSectionDividerPadding,
+        child: Row(
+          children: [
+            ClipOval(
+              child: Image.asset(
+                image,
+                width: 45,
+                height: 45,
+                fit: BoxFit.cover,
+              ),
             ),
-          ),
-          const SizedBox(
-            width: 20,
-          ),
-          Text(
-            name,
-            style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              color: ACCENT,
+            const SizedBox(
+              width: 20,
             ),
-          ),
-        ],
+            Text(
+              name,
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: ACCENT,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
