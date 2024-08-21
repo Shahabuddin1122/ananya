@@ -5,6 +5,7 @@ import 'package:ananya/widgets/circle_image.dart';
 import 'package:ananya/widgets/history_component.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert';
 
 class CohortHistory extends StatefulWidget {
   const CohortHistory({super.key});
@@ -15,16 +16,80 @@ class CohortHistory extends StatefulWidget {
 
 class _CohortHistoryState extends State<CohortHistory> {
   int _selectedIndex = 0;
+  late Future<String?> selectedUser = getSelectedUser();
 
   @override
   void initState() {
     super.initState();
+    selectedUser = getSelectedUser();
   }
 
-  void get_all_history_data() async {
+  Future<String?> getSelectedUser() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? id = prefs.getString('cohort-user');
+    print(id);
+    return id;
+  }
+
+  final List<String> monthNames = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec"
+  ];
+
+  Future<Map<String, List<dynamic>>> getAllHistoryData() async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? id = prefs.getString('cohort-user');
+      final response =
+          await ApiSettings(endPoint: 'user/get-period-history/$id')
+              .getMethod();
+      if (response.statusCode == 200) {
+        List<dynamic> historyData = json.decode(response.body);
+
+        Map<String, List<dynamic>> groupedData = {};
+        for (var history in historyData) {
+          String year = history['period_start'].split('-')[0];
+          if (!groupedData.containsKey(year)) {
+            groupedData[year] = [];
+          }
+          groupedData[year]!.add(history);
+        }
+        return groupedData;
+      }
+      return {};
+    } catch (e) {
+      print("Error $e");
+      return {};
+    }
+  }
+
+  Future<Map<String, dynamic>> getAllCohort() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? id = prefs.getString('userId');
-    ApiSettings api = await ApiSettings(endPoint: 'user/get-period-history/');
+    ApiSettings api = ApiSettings(endPoint: 'user/get-cohort-user/$id');
+
+    try {
+      final response = await api.getMethod();
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> responseData = json.decode(response.body);
+        return responseData;
+      } else {
+        return {};
+      }
+    } catch (e) {
+      return {};
+    }
   }
 
   void _onItemTapped(int index) {
@@ -37,132 +102,109 @@ class _CohortHistoryState extends State<CohortHistory> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('COHORT PERIOD HISTORY'),
+        title: const Text('YOUR PERIOD HISTORY'),
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: SingleChildScrollView(
-              child: Padding(
-                padding: Theme.of(context).largemainPadding,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Wrap(
-                      direction: Axis.horizontal,
-                      spacing: 15,
-                      runSpacing: 10,
-                      children: [
-                        CircleImage(
-                          image: "assets/images/me.png",
-                          isHighlighted: false,
-                        ),
-                        CircleImage(
-                          image: "assets/images/default_person.png",
-                          isHighlighted: true,
-                        ),
-                      ],
+      body: FutureBuilder<String?>(
+        future: selectedUser,
+        builder: (context, selectedUserSnapshot) {
+          if (selectedUserSnapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          return FutureBuilder<Map<String, List<dynamic>>>(
+            future: getAllHistoryData(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              } else if (snapshot.hasError) {
+                return const Center(child: Text("Error loading data"));
+              } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                return const Center(child: Text("No history available"));
+              } else {
+                Map<String, List<dynamic>> groupedData = snapshot.data!;
+                return SingleChildScrollView(
+                  child: Padding(
+                    padding: Theme.of(context).largemainPadding,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: groupedData.entries.map((entry) {
+                        String year = entry.key;
+                        List<dynamic> historyList = entry.value;
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            FutureBuilder<Map<String, dynamic>>(
+                              future: getAllCohort(),
+                              builder: (context, cohortSnapshot) {
+                                if (cohortSnapshot.connectionState ==
+                                    ConnectionState.waiting) {
+                                  return const Center(
+                                      child: CircularProgressIndicator());
+                                } else if (cohortSnapshot.hasError) {
+                                  return const Center(
+                                      child: Text('Error loading data'));
+                                } else {
+                                  return Wrap(
+                                    direction: Axis.horizontal,
+                                    spacing: 15,
+                                    runSpacing: 15,
+                                    children: cohortSnapshot.data!['predicted']
+                                        .map<Widget>((user) {
+                                      return CircleImage(
+                                        image:
+                                            'assets/images/default_person.png',
+                                        isHighlighted:
+                                            selectedUserSnapshot.data ==
+                                                    user['id'].toString()
+                                                ? true
+                                                : false,
+                                        id: user['id'].toString(),
+                                      );
+                                    }).toList(),
+                                  );
+                                }
+                              },
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            Text(
+                              year,
+                              style: const TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold,
+                                color: ACCENT,
+                              ),
+                            ),
+                            const SizedBox(height: 10),
+                            Wrap(
+                              direction: Axis.horizontal,
+                              spacing: 15.0,
+                              runSpacing: 15.0,
+                              children: historyList.map((history) {
+                                int monthNumber = int.parse(
+                                    history['period_start'].split('-')[1]);
+                                String monthName = monthNames[monthNumber - 1];
+                                return HistoryComponent(
+                                  month: monthName,
+                                  day: history['period_start'].split('-')[2],
+                                  monthcycle:
+                                      history['days_between_period'].toString(),
+                                  anomalies:
+                                      history['anomalies'] == 'Regular' ? 1 : 2,
+                                );
+                              }).toList(),
+                            ),
+                            const SizedBox(height: 20),
+                          ],
+                        );
+                      }).toList(),
                     ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    const Text(
-                      "2022",
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold,
-                        color: ACCENT,
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    const Wrap(
-                      direction: Axis.horizontal,
-                      spacing: 15.0,
-                      runSpacing: 15.0,
-                      children: [
-                        HistoryComponent(
-                          month: 'JUN',
-                          day: '06',
-                          monthcycle: '28',
-                          anomalies: 1,
-                        ),
-                        HistoryComponent(
-                          month: 'APR',
-                          day: '01',
-                          monthcycle: '29',
-                          anomalies: 2,
-                        ),
-                        HistoryComponent(
-                          month: 'MAR',
-                          day: '03',
-                          monthcycle: '29',
-                          anomalies: 1,
-                        ),
-                        HistoryComponent(
-                          month: 'FEB',
-                          day: '03',
-                          monthcycle: '28',
-                          anomalies: 1,
-                        ),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    const Text(
-                      "2021",
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold,
-                        color: ACCENT,
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    const Wrap(
-                      direction: Axis.horizontal,
-                      spacing: 10.0,
-                      runSpacing: 10.0,
-                      children: [
-                        HistoryComponent(
-                          month: 'DEC',
-                          day: '06',
-                          monthcycle: '28',
-                          anomalies: 1,
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-          Padding(
-            padding: Theme.of(context).largemainPadding,
-            child: ElevatedButton(
-              onPressed: () {
-                Navigator.pushNamed(context, '/');
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: ACCENT,
-                minimumSize: const Size(double.infinity, 50),
-                shadowColor: Colors.black,
-                side: const BorderSide(
-                  width: 1,
-                ),
-              ),
-              child: const Text(
-                "Request Data Purge",
-                style: TextStyle(
-                  color: Colors.white,
-                ),
-              ),
-            ),
-          ),
-        ],
+                  ),
+                );
+              }
+            },
+          );
+        },
       ),
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Colors.grey[100],
@@ -199,6 +241,25 @@ class _CohortHistoryState extends State<CohortHistory> {
           ),
         ],
       ),
+      floatingActionButton: Padding(
+        padding: Theme.of(context).largemainPadding,
+        child: ElevatedButton(
+          onPressed: () {
+            Navigator.pushNamed(context, '/');
+          },
+          style: ElevatedButton.styleFrom(
+            backgroundColor: ACCENT,
+            minimumSize: const Size(double.infinity, 50),
+            shadowColor: Colors.black,
+            side: const BorderSide(width: 1),
+          ),
+          child: const Text(
+            "Request Data Purge",
+            style: TextStyle(color: Colors.white),
+          ),
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }

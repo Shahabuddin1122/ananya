@@ -1,18 +1,26 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CircleImage extends StatefulWidget {
   final String image;
   bool isHighlighted;
-  CircleImage({required this.isHighlighted, required this.image, super.key});
+  final String id;
+  CircleImage(
+      {required this.id,
+      required this.isHighlighted,
+      required this.image,
+      super.key});
 
   @override
   _CircleImageState createState() => _CircleImageState();
 }
 
 class _CircleImageState extends State<CircleImage> {
-  bool _isHighlighted = true;
-
-  void _toggleHighlight() {
+  void _toggleHighlight() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('cohort-user', widget.id);
     setState(() {
       widget.isHighlighted = !widget.isHighlighted;
     });

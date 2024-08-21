@@ -29,7 +29,7 @@ def get_period_date(user_id, last_period_start):
     else:
         next_period_date_from = last_period_start + timedelta(days=average_period_cycle - 5)
         next_period_date_to = last_period_start + timedelta(days=average_period_cycle + 5)
-        length_of_period = 15
+        length_of_period = 7
         health_condition = question_info.health_condition
         if health_condition == 'Polycystic Ovary Syndrome':
             next_period_date_from += timedelta(days=10)
@@ -37,7 +37,7 @@ def get_period_date(user_id, last_period_start):
             length_of_period = length_of_period + 5
         elif health_condition in ['Endometriosis', 'Fibroids']:
             next_period_date_to += timedelta(days=5)
-            length_of_period = length_of_period - 5
+            length_of_period = length_of_period + 2
         else:
             length_of_period = average_period_length
 

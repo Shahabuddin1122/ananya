@@ -130,6 +130,11 @@ def add_period_info(request, user_id):
     except User.DoesNotExist:
         return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
 
+    # Clear previous data
+    Questionnaire.objects.filter(user=user).delete()
+    PeriodHistory.objects.filter(user=user).delete()
+    PeriodPrediction.objects.filter(user=user).delete()
+
     data = request.data.copy()
     data['user'] = user.id
 
@@ -149,7 +154,8 @@ def add_period_info(request, user_id):
         predicted_date = get_period_date(user_id, questionnaire.last_period_start)
         while predicted_date and predicted_date.get('period_start_from') < date.today():
             period_history_data = {
-                'period_start': predicted_date.get('period_start_from'),
+                'period_start': predicted_date.get('period_start_from') + (predicted_date.get('period_start_to') -
+                                                                           predicted_date.get('period_start_from'))/2,
                 'cycle_length': predicted_date.get('length_of_period'),
                 'days_between_period': predicted_date.get('days_between_period'),
                 'anomalies': predicted_date.get('anomalies', 'Regular'),
@@ -221,8 +227,8 @@ def get_period_history(request, user_id):
 def log_new_period(request, user_id):
     if request.method == 'PUT':
         try:
-            most_recent_period = PeriodHistory.objects.filter(user_id=user_id).order_by('-period_start').first()
-
+            period_history = PeriodHistory.objects.filter(user_id=user_id).order_by('-period_start')
+            most_recent_period = period_history.first()
             if not most_recent_period:
                 return Response({'error': 'No period history found for the user'}, status=status.HTTP_404_NOT_FOUND)
 
@@ -246,7 +252,7 @@ def log_new_period(request, user_id):
                 questionnaire.health_condition = health_condition
                 questionnaire.save()
 
-            predicted_date = get_period_date(user_id, updated_last_period_start)
+            predicted_date = get_period_date(user_id, datetime.strptime(updated_last_period_start, "%Y-%m-%d").date())
 
             period_prediction, created = PeriodPrediction.objects.get_or_create(user_id=user_id)
             period_prediction.period_start_to = predicted_date.get('period_start_to')
@@ -325,7 +331,8 @@ def advance_period_information(request, user_id):
                           .order_by('-period_start'))
         previous_period = PeriodPrediction.objects.filter(user_id=user_id)
         most_recent_period = previous_period.first()
-        last_period_start = most_recent_period.period_start_from
+        last_period_start = most_recent_period.period_start_from + (most_recent_period.period_start_to -
+                                                                    most_recent_period.period_start_from)/2
         period_date = get_period_date(user_id, last_period_start)
         total_period = sum([data.days_between_period for data in period_history])
         total_period_length = sum([data.cycle_length for data in period_history])
@@ -333,7 +340,8 @@ def advance_period_information(request, user_id):
         average_period_cycle = int(total_period / number)
         average_period_length = int(total_period_length / number)
         data = {
-            "next_cycle": period_date.get('period_start_from'),
+            "next_cycle": period_date.get('period_start_from') + (period_date.get('period_start_to') -
+                                                                  period_date.get('period_start_from'))/2,
             "average_period_cycle": average_period_cycle,
             "average_period_length": average_period_length,
         }
@@ -342,9 +350,34 @@ def advance_period_information(request, user_id):
 
 
 @api_view(['GET'])
-def get_all_cohorts(request, superuser_id):
+def get_cohorts(request, superuser_id):
     if request.method == 'GET':
         superuser = SuperUser.objects.get(user_id=superuser_id)
         serializer = SuperUserSerializer(superuser)
         return Response(serializer.data, status=status.HTTP_200_OK)
+    return Response({'error': 'Invalid request method'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+def get_cohort_user(request, superuser_id):
+    try:
+        superuser = SuperUser.objects.get(user_id=superuser_id)
+    except SuperUser.DoesNotExist:
+        return Response({'error': 'SuperUser not found'}, status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET':
+        data = {
+            "predicted": [],
+            "not_predicted": [],
+        }
+
+        for user in superuser.managed_users.all():
+            try:
+                period_prediction = PeriodPrediction.objects.get(user=user)
+                data['predicted'].append(UserSerializer(user).data)
+            except PeriodPrediction.DoesNotExist:
+                data['not_predicted'].append(UserSerializer(user).data)
+
+        return Response(data, status=status.HTTP_200_OK)
+
     return Response({'error': 'Invalid request method'}, status=status.HTTP_400_BAD_REQUEST)

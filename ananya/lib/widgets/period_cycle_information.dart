@@ -3,6 +3,7 @@ import 'package:ananya/widgets/calender.dart';
 import 'package:ananya/widgets/circle_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class PeriodCycleInformation extends StatefulWidget {
   final Map<String, dynamic> data;
@@ -14,6 +15,20 @@ class PeriodCycleInformation extends StatefulWidget {
 }
 
 class _PeriodCycleInformationState extends State<PeriodCycleInformation> {
+  late Future<String?> selectedUser;
+
+  @override
+  void initState() {
+    super.initState();
+    selectedUser = getSelectedUser();
+  }
+
+  Future<String?> getSelectedUser() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? id = prefs.getString('cohort-user');
+    return id;
+  }
+
   Map<String, dynamic> getData() {
     DateFormat inputFormat = DateFormat('yyyy-MM-dd');
 
@@ -30,9 +45,9 @@ class _PeriodCycleInformationState extends State<PeriodCycleInformation> {
 
     // Calculate ovulation days
     List<DateTime> ovulationDays = [
-      ovulationDay.subtract(Duration(days: 1)),
+      ovulationDay.subtract(const Duration(days: 1)),
       ovulationDay,
-      ovulationDay.add(Duration(days: 1))
+      ovulationDay.add(const Duration(days: 1))
     ];
 
     // Calculate menstrual days
@@ -72,18 +87,31 @@ class _PeriodCycleInformationState extends State<PeriodCycleInformation> {
             color: ACCENT,
           ),
         ),
-        if (widget.cohort != null) ...[
+        if (widget.cohort != null && widget.cohort!['predicted'] != null) ...[
           const SizedBox(height: 15),
-          Wrap(
-            direction: Axis.horizontal,
-            spacing: 15,
-            runSpacing: 15,
-            children: widget.cohort!['managed_users'].map<Widget>((user) {
-              return CircleImage(
-                image: 'assets/images/default_person.png',
-                isHighlighted: true,
-              );
-            }).toList(),
+          FutureBuilder<String?>(
+            future: selectedUser,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const CircularProgressIndicator();
+              } else if (snapshot.hasError) {
+                return Text('Error: ${snapshot.error}');
+              } else {
+                String? selectedUserId = snapshot.data;
+                return Wrap(
+                  direction: Axis.horizontal,
+                  spacing: 15,
+                  runSpacing: 15,
+                  children: widget.cohort!['predicted'].map<Widget>((user) {
+                    return CircleImage(
+                      image: 'assets/images/default_person.png',
+                      isHighlighted: user['id'].toString() == selectedUserId,
+                      id: user['id'].toString(),
+                    );
+                  }).toList(),
+                );
+              }
+            },
           ),
         ],
         const SizedBox(
@@ -182,10 +210,14 @@ class _PeriodCycleInformationState extends State<PeriodCycleInformation> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Icon(
-                          Icons.arrow_upward,
+                        Icon(
+                          widget.data['anomalies'] == 'Regular'
+                              ? Icons.arrow_upward
+                              : Icons.arrow_downward,
                           size: 30,
-                          color: Colors.green,
+                          color: widget.data['anomalies'] == 'Regular'
+                              ? Colors.green
+                              : Colors.red,
                         ),
                         const SizedBox(
                           width: 10,

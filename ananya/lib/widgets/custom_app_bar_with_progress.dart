@@ -30,10 +30,18 @@ class CustomAppBarWithProgress extends StatelessWidget
           actions: [
             TextButton(
               onPressed: () {
-                Navigator.pushNamed(
-                  context,
-                  id + 1 == 7 ? '/' : '/unlock-process/${id + 1}',
-                );
+                if (id == 3) {
+                  Navigator.pushNamed(
+                    context,
+                    id + 1 == 7 ? '/' : '/unlock-process/${id + 1}',
+                    arguments: false,
+                  );
+                } else {
+                  Navigator.pushNamed(
+                    context,
+                    id + 1 == 7 ? '/' : '/unlock-process/${id + 1}',
+                  );
+                }
               },
               child: const Text(
                 'Skip',

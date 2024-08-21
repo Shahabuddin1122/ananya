@@ -96,46 +96,94 @@ class _UserHomeState extends State<UserHome> {
     if (startDate == endDate) {
       return "${daysUntilStart.abs() + 1} DAYS";
     } else {
-      return "${daysUntilStart.abs() + 1} - ${daysUntilEnd.abs() + 1} DAYS";
+      return '${daysUntilStart.abs() + 1} - ${daysUntilEnd.abs() + 1} \nDAYS';
     }
   }
 
   void _showConfirmationDialog(BuildContext context) {
+    bool isProcessing = false;
+
     showDialog(
       context: context,
+      barrierDismissible: !isProcessing,
       builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Period Start Today'),
-          content: const Text('Your period starts today. Please confirm.'),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('Discard'),
-              onPressed: () async {
-                SharedPreferences prefs = await SharedPreferences.getInstance();
-                String? id = prefs.getString('userId');
-                await ApiSettings(
-                        endPoint: 'user/update-period-information/$id')
-                    .getMethod();
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return Stack(
+              children: [
+                AlertDialog(
+                  title: const Text('Period Start Today'),
+                  content:
+                      const Text('Your period starts today. Please confirm.'),
+                  actions: <Widget>[
+                    TextButton(
+                      onPressed: isProcessing
+                          ? null
+                          : () async {
+                              setState(() {
+                                isProcessing = true;
+                              });
 
-                Navigator.of(context).pop();
-              },
-            ),
-            TextButton(
-              child: const Text('Confirm'),
-              onPressed: () async {
-                SharedPreferences prefs = await SharedPreferences.getInstance();
-                String? id = prefs.getString('userId');
-                Map<String, String> data = {
-                  "period_date": DateFormat('yyyy-MM-dd').format(DateTime.now())
-                };
-                final response =
-                    await ApiSettings(endPoint: 'user/confim-period/$id')
-                        .putMethod(json.encode(data));
-                print(response.statusCode);
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
+                              SharedPreferences prefs =
+                                  await SharedPreferences.getInstance();
+                              String? id = prefs.getString('userId');
+                              Map<String, String> data = {
+                                "period_date": DateFormat('yyyy-MM-dd')
+                                    .format(DateTime.now())
+                              };
+                              await ApiSettings(
+                                      endPoint: 'user/confim-period/$id')
+                                  .putMethod(json.encode(data));
+
+                              setState(() {
+                                isProcessing = false;
+                              });
+
+                              Navigator.of(context).pop();
+                            },
+                      child: const Text('Confirm'),
+                    ),
+                    TextButton(
+                      onPressed: isProcessing
+                          ? null
+                          : () async {
+                              setState(() {
+                                isProcessing = true;
+                              });
+
+                              SharedPreferences prefs =
+                                  await SharedPreferences.getInstance();
+                              String? id = prefs.getString('userId');
+                              await ApiSettings(
+                                      endPoint:
+                                          'user/update-period-information/$id')
+                                  .getMethod();
+
+                              setState(() {
+                                isProcessing = false;
+                              });
+
+                              Navigator.of(context).pop();
+                            },
+                      child: const Text('Postpone'),
+                    ),
+                    TextButton(
+                      onPressed: isProcessing
+                          ? null
+                          : () {
+                              Navigator.of(context).pop();
+                            },
+                      child: const Text('Discard'),
+                    ),
+                  ],
+                ),
+                if (isProcessing)
+                  const Center(
+                    child: CircularProgressIndicator(),
+                  ),
+              ],
+            );
+          },
         );
       },
     );
@@ -285,8 +333,21 @@ class _UserHomeState extends State<UserHome> {
                             height: 20,
                           ),
                           ElevatedButton(
-                            onPressed: () {
-                              Navigator.pushNamed(context, '/unlock-process/1');
+                            onPressed: () async {
+                              SharedPreferences prefs =
+                                  await SharedPreferences.getInstance();
+                              String? id = prefs.getString('userId');
+
+                              if (id == null) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text('You need to log in first.'),
+                                  ),
+                                );
+                              } else {
+                                Navigator.pushNamed(
+                                    context, '/unlock-process/1');
+                              }
                             },
                             child: const Text('UNLOCK PERIOD PREDICTION'),
                           ),
