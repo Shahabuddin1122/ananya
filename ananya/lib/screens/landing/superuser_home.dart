@@ -26,7 +26,6 @@ class SuperuserHome extends StatefulWidget {
 
 class _SuperuserHomeState extends State<SuperuserHome> {
   late Future<bool> numberPresent;
-  bool get_data = false;
   Future<Map<String, dynamic>>? _get_data;
 
   @override
@@ -38,7 +37,6 @@ class _SuperuserHomeState extends State<SuperuserHome> {
   Future<Map<String, dynamic>> getPeriodData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? id = prefs.getString('cohort-user');
-    print(id);
     ApiSettings api = ApiSettings(endPoint: 'user/get-prediction-period/$id');
 
     try {
@@ -58,7 +56,7 @@ class _SuperuserHomeState extends State<SuperuserHome> {
   Stream<Map<String, dynamic>> getPeriodDataStream() async* {
     while (true) {
       yield await getPeriodData();
-      await Future.delayed(Duration(seconds: 1));
+      await Future.delayed(const Duration(seconds: 1));
     }
   }
 
@@ -105,7 +103,7 @@ class _SuperuserHomeState extends State<SuperuserHome> {
   Stream<Map<String, dynamic>> getAllCohort() async* {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? id = prefs.getString('userId');
-    ApiSettings api = ApiSettings(endPoint: 'user/get-cohort/$id');
+    ApiSettings api = ApiSettings(endPoint: 'user/get-cohort-user/$id');
 
     try {
       final response = await api.getMethod();
@@ -135,41 +133,89 @@ class _SuperuserHomeState extends State<SuperuserHome> {
   }
 
   void _showConfirmationDialog(BuildContext context) {
+    bool isProcessing = false;
+
     showDialog(
       context: context,
+      barrierDismissible: !isProcessing,
       builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Period Start Today'),
-          content: const Text('Your period starts today. Please confirm.'),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('Discard'),
-              onPressed: () async {
-                SharedPreferences prefs = await SharedPreferences.getInstance();
-                String? id = prefs.getString('cohort-user');
-                await ApiSettings(
-                        endPoint: 'user/update-period-information/$id')
-                    .getMethod();
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return Stack(
+              children: [
+                AlertDialog(
+                  title: const Text('Period Start Today'),
+                  content:
+                      const Text('Your period starts today. Please confirm.'),
+                  actions: <Widget>[
+                    TextButton(
+                      onPressed: isProcessing
+                          ? null
+                          : () async {
+                              setState(() {
+                                isProcessing = true;
+                              });
 
-                Navigator.of(context).pop();
-              },
-            ),
-            TextButton(
-              child: const Text('Confirm'),
-              onPressed: () async {
-                SharedPreferences prefs = await SharedPreferences.getInstance();
-                String? id = prefs.getString('userId');
-                Map<String, String> data = {
-                  "period_date": DateFormat('yyyy-MM-dd').format(DateTime.now())
-                };
-                final response =
-                    await ApiSettings(endPoint: 'user/confim-period/$id')
-                        .putMethod(json.encode(data));
-                print(response.statusCode);
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
+                              SharedPreferences prefs =
+                                  await SharedPreferences.getInstance();
+                              String? id = prefs.getString('userId');
+                              Map<String, String> data = {
+                                "period_date": DateFormat('yyyy-MM-dd')
+                                    .format(DateTime.now())
+                              };
+                              await ApiSettings(
+                                      endPoint: 'user/confim-period/$id')
+                                  .putMethod(json.encode(data));
+
+                              setState(() {
+                                isProcessing = false;
+                              });
+
+                              Navigator.of(context).pop();
+                            },
+                      child: const Text('Confirm'),
+                    ),
+                    TextButton(
+                      onPressed: isProcessing
+                          ? null
+                          : () async {
+                              setState(() {
+                                isProcessing = true;
+                              });
+
+                              SharedPreferences prefs =
+                                  await SharedPreferences.getInstance();
+                              String? id = prefs.getString('userId');
+                              await ApiSettings(
+                                      endPoint:
+                                          'user/update-period-information/$id')
+                                  .getMethod();
+
+                              setState(() {
+                                isProcessing = false;
+                              });
+
+                              Navigator.of(context).pop();
+                            },
+                      child: const Text('Postpone'),
+                    ),
+                    TextButton(
+                      onPressed: isProcessing
+                          ? null
+                          : () {
+                              Navigator.of(context).pop();
+                            },
+                      child: const Text('Discard'),
+                    ),
+                  ],
+                ),
+                if (isProcessing)
+                  const Center(
+                    child: CircularProgressIndicator(),
+                  ),
+              ],
+            );
+          },
         );
       },
     );

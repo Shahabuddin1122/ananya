@@ -90,14 +90,13 @@ class _SignUpState extends State<SignUp> {
         print('Data posted successfully: $response');
         Navigator.pushNamed(context, '/signin');
       } else {
-        print('Failed to post data. Status code: ${response.statusCode}');
-        print('Response body: $response');
+        _showErrorMessage("Invalid Credentials");
       }
     } catch (e) {
       setState(() {
         isLoading = false;
       });
-      print('Error occurred: $e');
+      _showErrorMessage("Invalid Credentials");
     }
   }
 

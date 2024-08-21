@@ -65,13 +65,13 @@ class _SignInState extends State<SignIn> {
 
         Navigator.pushNamed(context, '/');
       } else {
-        print('Failed to post data. Status code: ${response.statusCode}');
-        print('Response body: $response');
+        _showErrorMessage("Invalid Credentials");
       }
     } catch (e) {
       setState(() {
         isLoading = false;
       });
+      _showErrorMessage("Invalid Credentials");
       print('Error occurred: $e');
     }
   }

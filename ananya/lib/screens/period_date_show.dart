@@ -33,7 +33,7 @@ class _PeriodDateShowState extends State<PeriodDateShow> {
     if (startDate == endDate) {
       return formattedStartDate;
     } else {
-      return "From $formattedStartDate to $formattedEndDate";
+      return "$formattedStartDate to $formattedEndDate";
     }
   }
 
