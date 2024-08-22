@@ -1,5 +1,6 @@
 import 'package:ananya/utils/custom_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class Help extends StatelessWidget {
   const Help({super.key});
@@ -21,24 +22,24 @@ class Help extends StatelessWidget {
           children: [
             Image.asset('assets/images/hotline.png'),
             const SizedBox(height: 10),
-            const Text(
-              'HELP',
-              style: TextStyle(
+            Text(
+              AppLocalizations.of(context)!.help,
+              style: const TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
               ),
             ),
             const SizedBox(height: 5),
-            const Text(
-              'CALL EMERGENCY HELPLINE',
+            Text(
+              AppLocalizations.of(context)!.call_emergency_helpline,
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 10),
             ElevatedButton(
               onPressed: () {},
-              child: const Text(
-                'CALL NOW',
-                style: TextStyle(
+              child: Text(
+                AppLocalizations.of(context)!.call_now,
+                style: const TextStyle(
                   fontSize: 12,
                 ),
               ),

@@ -6,6 +6,7 @@ import 'package:ananya/utils/custom_theme.dart';
 import 'package:ananya/widgets/custom_drop_down.dart';
 import 'package:ananya/widgets/custom_text_field.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({super.key});
@@ -104,14 +105,14 @@ class _SignUpState extends State<SignUp> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Error'),
+        title: Text(AppLocalizations.of(context)!.error),
         content: Text(message),
         actions: [
           TextButton(
             onPressed: () {
               Navigator.of(context).pop();
             },
-            child: const Text('OK'),
+            child: Text(AppLocalizations.of(context)!.ok),
           ),
         ],
       ),
@@ -139,10 +140,10 @@ class _SignUpState extends State<SignUp> {
                           fit: BoxFit.cover,
                           width: 200,
                         ),
-                        const Text(
+                        Text(
                           textAlign: TextAlign.center,
-                          "Create a new account",
-                          style: TextStyle(
+                          AppLocalizations.of(context)!.create_a_new_account,
+                          style: const TextStyle(
                             fontSize: 32,
                             color: ACCENT,
                             fontWeight: FontWeight.bold,
@@ -154,34 +155,34 @@ class _SignUpState extends State<SignUp> {
                         Column(
                           children: [
                             CustomTextField(
-                              text: "Name",
+                              text: AppLocalizations.of(context)!.name,
                               controller: nameController,
                             ),
                             CustomTextField(
-                              text: "Date of Birth",
+                              text: AppLocalizations.of(context)!.date_of_birth,
                               controller: dobController,
                             ),
                             CustomTextField(
-                              text: "Phone Number",
+                              text: AppLocalizations.of(context)!.phone_number,
                               controller: phoneController,
                             ),
                             CustomTextField(
-                              text: "Email",
+                              text: AppLocalizations.of(context)!.email,
                               controller: emailController,
                             ),
                             CustomTextField(
-                              text: 'Password',
+                              text: AppLocalizations.of(context)!.password,
                               controller: passwordController,
                             ),
                             CustomDropdown(
-                              header: 'District',
+                              header: AppLocalizations.of(context)!.district,
                               options: district,
                               onChanged: (value) {
                                 selectedDistrict = value;
                               },
                             ),
                             CustomDropdown(
-                              header: 'Project',
+                              header: AppLocalizations.of(context)!.project,
                               options: projects,
                               onChanged: (value) {
                                 selectedProject = value;
@@ -204,9 +205,10 @@ class _SignUpState extends State<SignUp> {
                                   ),
                                 ),
                               ),
-                              child: const Text(
-                                "Create New Account",
-                                style: TextStyle(
+                              child: Text(
+                                AppLocalizations.of(context)!
+                                    .create_a_new_account,
+                                style: const TextStyle(
                                   color: Colors.white,
                                 ),
                               ),
@@ -218,10 +220,11 @@ class _SignUpState extends State<SignUp> {
                               onPressed: () {
                                 Navigator.pushNamed(context, '/signin');
                               },
-                              child: const Text(
-                                "Already have an account? Click here for login",
+                              child: Text(
+                                AppLocalizations.of(context)!
+                                    .already_have_an_account_click_here_for_login,
                                 textAlign: TextAlign.center,
-                                style: TextStyle(
+                                style: const TextStyle(
                                   color: Colors.indigo,
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,

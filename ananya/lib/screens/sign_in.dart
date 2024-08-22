@@ -7,6 +7,7 @@ import 'package:ananya/utils/custom_theme.dart';
 import 'package:ananya/widgets/custom_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SignIn extends StatefulWidget {
   const SignIn({super.key});
@@ -113,10 +114,11 @@ class _SignInState extends State<SignIn> {
                         fit: BoxFit.cover,
                         width: 200,
                       ),
-                      const Text(
+                      Text(
                         textAlign: TextAlign.center,
-                        "Login with your mobile number and password",
-                        style: TextStyle(
+                        AppLocalizations.of(context)!
+                            .login_with_your_mobile_number_and_password,
+                        style: const TextStyle(
                           fontSize: 32,
                           color: ACCENT,
                           fontWeight: FontWeight.bold,
@@ -126,11 +128,11 @@ class _SignInState extends State<SignIn> {
                         height: 50,
                       ),
                       CustomTextField(
-                        text: "Phone Number",
+                        text: AppLocalizations.of(context)!.phone_number,
                         controller: phoneController,
                       ),
                       CustomTextField(
-                        text: 'Password',
+                        text: AppLocalizations.of(context)!.password,
                         controller: passwordController,
                       ),
                       const SizedBox(
@@ -149,9 +151,9 @@ class _SignInState extends State<SignIn> {
                             ),
                           ),
                         ),
-                        child: const Text(
-                          "Log in",
-                          style: TextStyle(
+                        child: Text(
+                          AppLocalizations.of(context)!.log_in,
+                          style: const TextStyle(
                             color: Colors.white,
                           ),
                         ),
@@ -163,10 +165,11 @@ class _SignInState extends State<SignIn> {
                         onPressed: () {
                           Navigator.pushNamed(context, '/signup');
                         },
-                        child: const Text(
-                          "Don't have an account? Create a new account.",
+                        child: Text(
+                          AppLocalizations.of(context)!
+                              .dont_have_an_account_create_a_new_account,
                           textAlign: TextAlign.center,
-                          style: TextStyle(
+                          style: const TextStyle(
                             color: Colors.indigo,
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
@@ -176,10 +179,11 @@ class _SignInState extends State<SignIn> {
                       const SizedBox(
                         height: 10,
                       ),
-                      const Text(
-                        "Forget Password? Set a new password.",
+                      Text(
+                        AppLocalizations.of(context)!
+                            .forget_password_set_a_new_password,
                         textAlign: TextAlign.center,
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: Colors.indigo,
                           fontSize: 16,
                           fontWeight: FontWeight.bold,

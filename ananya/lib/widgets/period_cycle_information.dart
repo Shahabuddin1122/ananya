@@ -4,6 +4,7 @@ import 'package:ananya/widgets/circle_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class PeriodCycleInformation extends StatefulWidget {
   final Map<String, dynamic> data;
@@ -92,9 +93,9 @@ class _PeriodCycleInformationState extends State<PeriodCycleInformation> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          "PREDICTION OF NEXT CYCLE",
-          style: TextStyle(
+        Text(
+          AppLocalizations.of(context)!.prediction_of_next_cycle,
+          style: const TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w900,
             color: ACCENT,
@@ -197,10 +198,10 @@ class _PeriodCycleInformationState extends State<PeriodCycleInformation> {
                         top: Radius.circular(10),
                       ),
                     ),
-                    child: const Text(
-                      'Menstrual Health Status',
+                    child: Text(
+                      AppLocalizations.of(context)!.menstrual_health_status,
                       textAlign: TextAlign.center,
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: Colors.white,
                         fontSize: 16,
                       ),
@@ -275,7 +276,7 @@ class _PeriodCycleInformationState extends State<PeriodCycleInformation> {
                       const SizedBox(
                         width: 10,
                       ),
-                      const Text("Menstruation")
+                      Text(AppLocalizations.of(context)!.menstruation)
                     ],
                   ),
                   const SizedBox(
@@ -291,7 +292,7 @@ class _PeriodCycleInformationState extends State<PeriodCycleInformation> {
                       const SizedBox(
                         width: 10,
                       ),
-                      const Text("Ovulation")
+                      Text(AppLocalizations.of(context)!.ovulation)
                     ],
                   ),
                 ],
@@ -323,9 +324,9 @@ class _PeriodCycleInformationState extends State<PeriodCycleInformation> {
             minimumSize: WidgetStatePropertyAll(Size(double.infinity, 20)),
             shadowColor: WidgetStatePropertyAll(Colors.black),
           ),
-          child: const Text(
-            "LOG NEW PERIOD",
-            style: TextStyle(
+          child: Text(
+            AppLocalizations.of(context)!.log_new_period,
+            style: const TextStyle(
               color: Colors.white,
             ),
           ),
@@ -351,9 +352,9 @@ class _PeriodCycleInformationState extends State<PeriodCycleInformation> {
             minimumSize: WidgetStatePropertyAll(Size(double.infinity, 20)),
             shadowColor: WidgetStatePropertyAll(Colors.black),
           ),
-          child: const Text(
-            "RE-CALIBRATE PREDICTION",
-            style: TextStyle(
+          child: Text(
+            AppLocalizations.of(context)!.re_calibrate_prediction,
+            style: const TextStyle(
               color: Colors.white,
             ),
           ),

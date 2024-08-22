@@ -5,6 +5,7 @@ import 'package:ananya/utils/custom_theme.dart';
 import 'package:ananya/widgets/user_sidebar.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class Landing extends StatefulWidget {
   const Landing({super.key});
@@ -101,8 +102,8 @@ class _LandingState extends State<Landing> {
                       onPressed: () {
                         Navigator.pushNamed(context, '/signin');
                       },
-                      child: const Text(
-                        'Log in',
+                      child: Text(
+                        AppLocalizations.of(context)!.log_in,
                         style: TextStyle(fontSize: 12),
                       ),
                     ),

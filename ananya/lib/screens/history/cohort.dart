@@ -6,6 +6,7 @@ import 'package:ananya/widgets/history_component.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CohortHistory extends StatefulWidget {
   const CohortHistory({super.key});
@@ -115,7 +116,7 @@ class _CohortHistoryState extends State<CohortHistory> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('YOUR PERIOD HISTORY'),
+        title: Text(AppLocalizations.of(context)!.cohort_period_history),
       ),
       body: FutureBuilder<String?>(
         future: selectedUser,
@@ -267,9 +268,9 @@ class _CohortHistoryState extends State<CohortHistory> {
             shadowColor: Colors.black,
             side: const BorderSide(width: 1),
           ),
-          child: const Text(
-            "Request Data Purge",
-            style: TextStyle(color: Colors.white),
+          child: Text(
+            AppLocalizations.of(context)!.request_data_purge,
+            style: const TextStyle(color: Colors.white),
           ),
         ),
       ),

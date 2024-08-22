@@ -2,6 +2,7 @@ import 'package:ananya/utils/constants.dart';
 import 'package:ananya/utils/custom_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CustomTextField extends StatefulWidget {
   final String text;
@@ -71,45 +72,55 @@ class _CustomTextFieldState extends State<CustomTextField> {
                   color: ACCENT,
                 ),
                 border: InputBorder.none,
-                suffixIcon: widget.text == "Password"
-                    ? IconButton(
-                        icon: Icon(
-                          _obscureText
-                              ? Icons.visibility
-                              : Icons.visibility_off,
-                          color: ACCENT,
-                        ),
-                        onPressed: () {
-                          setState(() {
-                            _obscureText = !_obscureText;
-                          });
-                        },
-                      )
-                    : null,
+                suffixIcon:
+                    (widget.text == "Password" || widget.text == "পাসওয়ার্ড")
+                        ? IconButton(
+                            icon: Icon(
+                              _obscureText
+                                  ? Icons.visibility
+                                  : Icons.visibility_off,
+                              color: ACCENT,
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                _obscureText = !_obscureText;
+                              });
+                            },
+                          )
+                        : null,
               ),
-              keyboardType: widget.text == "Phone Number"
+              keyboardType: (widget.text == "Phone Number" ||
+                      widget.text == "মোবাইল নম্বর")
                   ? TextInputType.number
                   : TextInputType.text,
-              inputFormatters: widget.text == "Phone Number"
+              inputFormatters: (widget.text == "Phone Number" ||
+                      widget.text == "মোবাইল নম্বর")
                   ? <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly]
                   : null,
-              obscureText: widget.text == "Password" ? _obscureText : false,
+              obscureText:
+                  (widget.text == "Password" || widget.text == "পাসওয়ার্ড")
+                      ? _obscureText
+                      : false,
               onChanged: (value) {
-                if (widget.text == "Password") {
+                if (widget.text == "Password" || widget.text == "পাসওয়ার্ড") {
                   setState(() {
-                    _warningText =
-                        value.length < 6 ? "Password is too short" : null;
+                    _warningText = value.length < 6
+                        ? AppLocalizations.of(context)!.password_is_too_short
+                        : null;
                   });
-                } else if (widget.text == "Phone Number") {
+                } else if (widget.text == "Phone Number" ||
+                    widget.text == "মোবাইল নম্বর") {
                   setState(() {
                     _warningText = _isValidPhoneNumber(value)
                         ? null
-                        : "Invalid Bangladeshi phone number";
+                        : AppLocalizations.of(context)!
+                            .invalid_bangladeshi_phone_number;
                   });
                 }
               },
               onTap: () {
-                if (widget.text == "Date of Birth") {
+                if (widget.text == "Date of Birth" ||
+                    widget.text == "জন্ম তারিখ") {
                   FocusScope.of(context).requestFocus(FocusNode());
                   _selectDate(context);
                 }
