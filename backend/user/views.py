@@ -117,9 +117,12 @@ def add_user_in_superuser(request, superuser_id):
 @api_view(['GET'])
 def get_user(request, user_id):
     if request.method == 'GET':
-        users = SuperUser.objects.get(id=user_id)
-        serializer = SuperUserSerializer(users)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        try:
+            users = User.objects.get(id=user_id)
+            serializer = UserSerializer(users)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except User.DoesNotExist:
+            return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
     return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
 
 
