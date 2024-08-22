@@ -318,7 +318,10 @@ class _UserHomeState extends State<UserHome> {
                   } else if (snapshot.hasError) {
                     return const Center(child: Text('Error loading data'));
                   } else if (snapshot.hasData && snapshot.data!.isNotEmpty) {
-                    return PeriodCycleInformation(data: snapshot.data!);
+                    return PeriodCycleInformation(
+                      data: snapshot.data!,
+                      issuperuser: false,
+                    );
                   } else {
                     return Padding(
                       padding: const EdgeInsets.all(16.0),

@@ -5,8 +5,15 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class UserPictureName extends StatelessWidget {
   final String name, image, id;
+  final bool grey, updateperiod;
+
   const UserPictureName(
-      {required this.id, required this.image, required this.name, super.key});
+      {required this.updateperiod,
+      required this.grey,
+      required this.id,
+      required this.image,
+      required this.name,
+      super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -14,32 +21,62 @@ class UserPictureName extends StatelessWidget {
       onTap: () async {
         SharedPreferences prefs = await SharedPreferences.getInstance();
         await prefs.setString("cohort-user", id);
-        Navigator.pushNamed(context, '/unlock-process/1');
+        if (!updateperiod) {
+          Navigator.pushNamed(context, '/unlock-process/1');
+        } else if (updateperiod) {
+          Navigator.pushNamed(
+            context,
+            '/unlock-process/4',
+            arguments: true,
+          );
+        }
       },
       child: Padding(
         padding: Theme.of(context).smallSubSectionDividerPadding,
         child: Row(
           children: [
             ClipOval(
-              child: Image.asset(
-                image,
-                width: 45,
-                height: 45,
-                fit: BoxFit.cover,
+              child: ImageFiltered(
+                imageFilter: ColorFilter.mode(
+                  grey ? Colors.grey : Colors.transparent,
+                  grey ? BlendMode.saturation : BlendMode.dst,
+                ),
+                child: Image.asset(
+                  image,
+                  width: 45,
+                  height: 45,
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
             const SizedBox(
               width: 20,
             ),
             Expanded(
-              child: Text(
-                name,
-                softWrap: true,
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: ACCENT,
-                ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    name,
+                    softWrap: true,
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: grey ? Colors.grey[400] : ACCENT,
+                    ),
+                  ),
+                  grey
+                      ? Text(
+                          'User period logged, tracking in progress',
+                          softWrap: true,
+                          style: TextStyle(
+                            fontSize: 10,
+                            fontWeight: FontWeight.bold,
+                            color: grey ? Colors.grey[400] : ACCENT,
+                          ),
+                        )
+                      : Container(),
+                ],
               ),
             ),
           ],

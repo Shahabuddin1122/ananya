@@ -32,7 +32,10 @@ Future<void> main() async {
         '/signin': (context) => const SignIn(),
         '/signup': (context) => const SignUp(),
         '/add-user': (context) => const AddAUser(),
-        '/choose-user': (context) => const ChooseUser(),
+        '/choose-user': (context) {
+          final args = ModalRoute.of(context)!.settings.arguments as bool;
+          return ChooseUser(updateperiod: args);
+        },
         '/unlock-process/1': (context) => const UnlockProcess1(),
         '/unlock-process/2': (context) => const UnlockProcess2(),
         '/unlock-process/3': (context) => UnlockProcess3(),

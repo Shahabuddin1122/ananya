@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:ananya/utils/api_sattings.dart';
@@ -25,58 +26,51 @@ class SuperuserHome extends StatefulWidget {
 }
 
 class _SuperuserHomeState extends State<SuperuserHome> {
-  late Future<bool> numberPresent;
-  Future<Map<String, dynamic>>? _get_data;
+  late StreamController<void> _updateStreamController;
+  late SharedPreferences _prefs;
 
   @override
   void initState() {
     super.initState();
-    _get_data = getPeriodData();
+    _updateStreamController = StreamController<void>.broadcast();
+    _initializePreferences();
+    _startPolling();
   }
 
-  Future<Map<String, dynamic>> getPeriodData() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? id = prefs.getString('cohort-user');
-    ApiSettings api = ApiSettings(endPoint: 'user/get-prediction-period/$id');
+  Future<void> _initializePreferences() async {
+    _prefs = await SharedPreferences.getInstance();
+  }
 
-    try {
-      final response = await api.getMethod();
-
-      if (response.statusCode == 200) {
-        final Map<String, dynamic> responseData = json.decode(response.body);
-        return responseData;
-      } else {
-        return {};
+  void _startPolling() {
+    Timer.periodic(const Duration(seconds: 5), (_) async {
+      final String? cohortUser = _prefs.getString('cohort-user');
+      if (cohortUser != null) {
+        _updateStreamController.add(null);
       }
-    } catch (e) {
-      return {};
-    }
+    });
   }
 
-  Stream<Map<String, dynamic>> getPeriodDataStream() async* {
+  Stream<Map<String, dynamic>> _fetchData(
+      String endpoint, bool superuser) async* {
     while (true) {
-      yield await getPeriodData();
-      await Future.delayed(const Duration(seconds: 1));
-    }
-  }
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? id = superuser
+          ? prefs.getString('cohort-user')
+          : prefs.getString('userId');
+      ApiSettings api = ApiSettings(endPoint: '$endpoint/$id');
 
-  Stream<Map<String, dynamic>> getAdvanceInfoStream() async* {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? id = prefs.getString('cohort-user');
-    ApiSettings api =
-        ApiSettings(endPoint: 'user/advance-period-information/$id');
-
-    try {
-      final response = await api.getMethod();
-
-      if (response.statusCode == 200) {
-        final Map<String, dynamic> responseData = json.decode(response.body);
-        yield responseData;
-      } else {
+      try {
+        final response = await api.getMethod();
+        if (response.statusCode == 200) {
+          yield json.decode(response.body);
+        } else {
+          yield {};
+        }
+      } catch (e) {
         yield {};
       }
-    } catch (e) {
-      yield {};
+
+      await _updateStreamController.stream.firstWhere((_) => true);
     }
   }
 
@@ -100,29 +94,10 @@ class _SuperuserHomeState extends State<SuperuserHome> {
     }
   }
 
-  Stream<Map<String, dynamic>> getAllCohort() async* {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? id = prefs.getString('userId');
-    ApiSettings api = ApiSettings(endPoint: 'user/get-cohort-user/$id');
-
-    try {
-      final response = await api.getMethod();
-
-      if (response.statusCode == 200) {
-        final Map<String, dynamic> responseData = json.decode(response.body);
-        yield responseData;
-      } else {
-        yield {};
-      }
-    } catch (e) {
-      yield {};
-    }
-  }
-
   Stream<Map<String, dynamic>> getCombinedStream() {
     return Rx.zip2(
-      getPeriodDataStream(),
-      getAllCohort(),
+      _fetchData('user/get-prediction-period', true),
+      _fetchData('user/get-cohort-user', false),
       (periodData, cohortData) {
         return {
           'periodData': periodData,
@@ -130,6 +105,12 @@ class _SuperuserHomeState extends State<SuperuserHome> {
         };
       },
     );
+  }
+
+  @override
+  void dispose() {
+    _updateStreamController.close();
+    super.dispose();
   }
 
   void _showConfirmationDialog(BuildContext context) {
@@ -240,7 +221,7 @@ class _SuperuserHomeState extends State<SuperuserHome> {
                 height: 20,
               ),
               StreamBuilder<Map<String, dynamic>>(
-                stream: getPeriodDataStream(),
+                stream: _fetchData('user/get-prediction-period', true),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(child: CircularProgressIndicator());
@@ -272,8 +253,15 @@ class _SuperuserHomeState extends State<SuperuserHome> {
                           child: Text.rich(
                             textAlign: TextAlign.center,
                             TextSpan(children: [
+                              TextSpan(
+                                text: snapshot.data!['user']['name'],
+                                style: const TextStyle(
+                                  fontSize: 20,
+                                  color: ACCENT,
+                                ),
+                              ),
                               const TextSpan(
-                                text: 'PERIOD IN\n',
+                                text: '\nPERIOD IN\n',
                                 style: TextStyle(
                                   fontSize: 20,
                                   color: ACCENT,
@@ -325,7 +313,7 @@ class _SuperuserHomeState extends State<SuperuserHome> {
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: StreamBuilder<Map<String, dynamic>>(
-                  stream: getAdvanceInfoStream(),
+                  stream: _fetchData('user/advance-period-information', true),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return const Center(child: CircularProgressIndicator());
@@ -355,6 +343,7 @@ class _SuperuserHomeState extends State<SuperuserHome> {
                     return PeriodCycleInformation(
                       data: snapshot.data!['periodData'],
                       cohort: snapshot.data!['cohortData'],
+                      issuperuser: true,
                     );
                   } else {
                     return Padding(
@@ -371,7 +360,11 @@ class _SuperuserHomeState extends State<SuperuserHome> {
                           ),
                           ElevatedButton(
                             onPressed: () {
-                              Navigator.pushNamed(context, '/choose-user');
+                              Navigator.pushNamed(
+                                context,
+                                '/choose-user',
+                                arguments: false,
+                              );
                             },
                             child: const Text('UNLOCK PERIOD PREDICTION'),
                           ),
