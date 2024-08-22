@@ -9,12 +9,13 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ChooseUser extends StatelessWidget {
-  const ChooseUser({super.key});
+  final bool updateperiod;
+  const ChooseUser({required this.updateperiod, super.key});
 
   Stream<Map<String, dynamic>> getCohort() async* {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? id = prefs.getString('userId');
-    ApiSettings api = ApiSettings(endPoint: 'user/get-cohort/$id');
+    ApiSettings api = ApiSettings(endPoint: 'user/get-cohort-user/$id');
 
     try {
       final response = await api.getMethod();
@@ -49,7 +50,8 @@ class ChooseUser extends StatelessWidget {
             } else if (snapshot.hasError) {
               return const Center(child: Text('Error loading data'));
             } else if (snapshot.hasData && snapshot.data!.isNotEmpty) {
-              List<dynamic> managedUsers = snapshot.data!['managed_users'];
+              List<dynamic> predictedUsers = snapshot.data!['predicted'];
+              List<dynamic> notPredictedUsers = snapshot.data!['not_predicted'];
               return ListView(
                 children: [
                   const Text.rich(
@@ -79,11 +81,22 @@ class ChooseUser extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  ...managedUsers.map((user) {
+                  ...predictedUsers.map((user) {
                     return UserPictureName(
                       image: 'assets/images/default_person.png',
                       name: user['name'],
                       id: user['id'].toString(),
+                      grey: false,
+                      updateperiod: updateperiod,
+                    );
+                  }).toList(),
+                  ...notPredictedUsers.map((user) {
+                    return UserPictureName(
+                      image: 'assets/images/default_person.png',
+                      name: user['name'],
+                      id: user['id'].toString(),
+                      grey: updateperiod ? true : false,
+                      updateperiod: updateperiod,
                     );
                   }).toList(),
                 ],

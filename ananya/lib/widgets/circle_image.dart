@@ -1,35 +1,21 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-class CircleImage extends StatefulWidget {
+class CircleImage extends StatelessWidget {
   final String image;
   bool isHighlighted;
   final String id;
+  final ValueChanged<String> onSelect;
   CircleImage(
       {required this.id,
       required this.isHighlighted,
       required this.image,
+      required this.onSelect,
       super.key});
-
-  @override
-  _CircleImageState createState() => _CircleImageState();
-}
-
-class _CircleImageState extends State<CircleImage> {
-  void _toggleHighlight() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString('cohort-user', widget.id);
-    setState(() {
-      widget.isHighlighted = !widget.isHighlighted;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: _toggleHighlight,
+      onTap: () => onSelect(id),
       child: Container(
         decoration: BoxDecoration(
           border: Border.all(
@@ -41,11 +27,11 @@ class _CircleImageState extends State<CircleImage> {
         child: ClipOval(
           child: ColorFiltered(
             colorFilter: ColorFilter.mode(
-              widget.isHighlighted ? Colors.transparent : Colors.grey,
-              widget.isHighlighted ? BlendMode.dst : BlendMode.saturation,
+              isHighlighted ? Colors.transparent : Colors.grey,
+              isHighlighted ? BlendMode.dst : BlendMode.saturation,
             ),
             child: Image.asset(
-              widget.image,
+              image,
               width: 45,
               height: 45,
               fit: BoxFit.cover,

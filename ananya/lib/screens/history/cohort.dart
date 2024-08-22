@@ -17,17 +17,30 @@ class CohortHistory extends StatefulWidget {
 class _CohortHistoryState extends State<CohortHistory> {
   int _selectedIndex = 0;
   late Future<String?> selectedUser = getSelectedUser();
+  String? selectedUserId;
 
   @override
   void initState() {
     super.initState();
     selectedUser = getSelectedUser();
+    getSelectedUser().then((id) {
+      setState(() {
+        selectedUserId = id;
+      });
+    });
+  }
+
+  void onSelectUser(String id) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('cohort-user', id);
+    setState(() {
+      selectedUserId = id;
+    });
   }
 
   Future<String?> getSelectedUser() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? id = prefs.getString('cohort-user');
-    print(id);
     return id;
   }
 
@@ -158,6 +171,7 @@ class _CohortHistoryState extends State<CohortHistory> {
                                                 ? true
                                                 : false,
                                         id: user['id'].toString(),
+                                        onSelect: onSelectUser,
                                       );
                                     }).toList(),
                                   );

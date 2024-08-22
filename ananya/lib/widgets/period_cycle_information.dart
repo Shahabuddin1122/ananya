@@ -8,25 +8,38 @@ import 'package:shared_preferences/shared_preferences.dart';
 class PeriodCycleInformation extends StatefulWidget {
   final Map<String, dynamic> data;
   final Map<String, dynamic>? cohort;
-  const PeriodCycleInformation({this.cohort, required this.data, super.key});
+  final bool issuperuser;
+  const PeriodCycleInformation(
+      {required this.issuperuser, this.cohort, required this.data, super.key});
 
   @override
   State<PeriodCycleInformation> createState() => _PeriodCycleInformationState();
 }
 
 class _PeriodCycleInformationState extends State<PeriodCycleInformation> {
-  late Future<String?> selectedUser;
+  String? selectedUserId;
 
   @override
   void initState() {
     super.initState();
-    selectedUser = getSelectedUser();
+    getSelectedUser().then((id) {
+      setState(() {
+        selectedUserId = id;
+      });
+    });
   }
 
   Future<String?> getSelectedUser() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? id = prefs.getString('cohort-user');
-    return id;
+    return prefs.getString('cohort-user');
+  }
+
+  void onSelectUser(String id) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('cohort-user', id);
+    setState(() {
+      selectedUserId = id;
+    });
   }
 
   Map<String, dynamic> getData() {
@@ -89,29 +102,18 @@ class _PeriodCycleInformationState extends State<PeriodCycleInformation> {
         ),
         if (widget.cohort != null && widget.cohort!['predicted'] != null) ...[
           const SizedBox(height: 15),
-          FutureBuilder<String?>(
-            future: selectedUser,
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const CircularProgressIndicator();
-              } else if (snapshot.hasError) {
-                return Text('Error: ${snapshot.error}');
-              } else {
-                String? selectedUserId = snapshot.data;
-                return Wrap(
-                  direction: Axis.horizontal,
-                  spacing: 15,
-                  runSpacing: 15,
-                  children: widget.cohort!['predicted'].map<Widget>((user) {
-                    return CircleImage(
-                      image: 'assets/images/default_person.png',
-                      isHighlighted: user['id'].toString() == selectedUserId,
-                      id: user['id'].toString(),
-                    );
-                  }).toList(),
-                );
-              }
-            },
+          Wrap(
+            direction: Axis.horizontal,
+            spacing: 15,
+            runSpacing: 15,
+            children: widget.cohort!['predicted'].map<Widget>((user) {
+              return CircleImage(
+                image: 'assets/images/default_person.png',
+                isHighlighted: user['id'].toString() == selectedUserId,
+                id: user['id'].toString(),
+                onSelect: onSelectUser,
+              );
+            }).toList(),
           ),
         ],
         const SizedBox(
@@ -305,7 +307,16 @@ class _PeriodCycleInformationState extends State<PeriodCycleInformation> {
         ),
         ElevatedButton(
           onPressed: () {
-            Navigator.pushNamed(context, '/unlock-process/4', arguments: true);
+            if (widget.issuperuser) {
+              Navigator.pushNamed(
+                context,
+                '/choose-user',
+                arguments: true,
+              );
+            } else {
+              Navigator.pushNamed(context, '/unlock-process/4',
+                  arguments: true);
+            }
           },
           style: const ButtonStyle(
             backgroundColor: WidgetStatePropertyAll(SECONDARY_COLOR),
@@ -324,7 +335,16 @@ class _PeriodCycleInformationState extends State<PeriodCycleInformation> {
         ),
         ElevatedButton(
           onPressed: () {
-            Navigator.pushNamed(context, '/unlock-process/1');
+            if (widget.issuperuser) {
+              Navigator.pushNamed(
+                context,
+                '/choose-user',
+                arguments: false,
+              );
+            } else {
+              Navigator.pushNamed(context, '/unlock-process/1',
+                  arguments: true);
+            }
           },
           style: const ButtonStyle(
             backgroundColor: WidgetStatePropertyAll(ACCENT),

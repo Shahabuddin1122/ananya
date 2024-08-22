@@ -355,6 +355,7 @@ class _SuperuserHomeState extends State<SuperuserHome> {
                     return PeriodCycleInformation(
                       data: snapshot.data!['periodData'],
                       cohort: snapshot.data!['cohortData'],
+                      issuperuser: true,
                     );
                   } else {
                     return Padding(
@@ -371,7 +372,11 @@ class _SuperuserHomeState extends State<SuperuserHome> {
                           ),
                           ElevatedButton(
                             onPressed: () {
-                              Navigator.pushNamed(context, '/choose-user');
+                              Navigator.pushNamed(
+                                context,
+                                '/choose-user',
+                                arguments: false,
+                              );
                             },
                             child: const Text('UNLOCK PERIOD PREDICTION'),
                           ),
