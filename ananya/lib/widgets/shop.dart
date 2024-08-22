@@ -1,6 +1,7 @@
 import 'package:ananya/utils/custom_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class Shop extends StatelessWidget {
   const Shop({super.key});
@@ -24,28 +25,28 @@ class Shop extends StatelessWidget {
               'assets/images/Sanitary Pads 1.svg',
             ),
             const SizedBox(height: 10),
-            const Text(
-              'SHOP',
-              style: TextStyle(
+            Text(
+              AppLocalizations.of(context)!.shop,
+              style: const TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
                 color: Colors.white,
               ),
             ),
             const SizedBox(height: 5),
-            const Text(
-              'FOR MENSTRUAL HEALTH PRODUCTS',
+            Text(
+              AppLocalizations.of(context)!.for_menstrual_health_products,
               textAlign: TextAlign.center,
-              style: TextStyle(
+              style: const TextStyle(
                 color: Colors.white,
               ),
             ),
             const SizedBox(height: 10),
             ElevatedButton(
               onPressed: () {},
-              child: const Text(
-                'VIEW PRODUCT',
-                style: TextStyle(
+              child: Text(
+                AppLocalizations.of(context)!.view_product,
+                style: const TextStyle(
                   fontSize: 12,
                 ),
               ),

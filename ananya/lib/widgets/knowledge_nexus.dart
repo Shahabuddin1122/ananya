@@ -1,6 +1,7 @@
 import 'package:ananya/utils/custom_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class KnowledgeNexus extends StatelessWidget {
   const KnowledgeNexus({super.key});
@@ -27,22 +28,22 @@ class KnowledgeNexus extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                "KNOWLEDGE \nNEXUS",
-                style: TextStyle(
+              Text(
+                AppLocalizations.of(context)!.knowledge_nexus,
+                style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              const Text(
-                "GET TO KNOW YOUR \nBODY BETTER",
+              Text(
+                AppLocalizations.of(context)!.get_to_know_your_body_better,
               ),
               const SizedBox(
                 height: 10,
               ),
               ElevatedButton(
                 onPressed: () {},
-                child: Text('GO TO NEXUS'),
+                child: Text(AppLocalizations.of(context)!.go_to_nexus),
               )
             ],
           )

@@ -2,6 +2,7 @@ import 'package:ananya/utils/constants.dart';
 import 'package:ananya/utils/custom_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AdvanceInfo extends StatelessWidget {
   final Map<String, dynamic> data;
@@ -50,8 +51,9 @@ class AdvanceInfo extends StatelessWidget {
                   child: Center(
                     child: Text(
                       data.isNotEmpty
-                          ? "Your next \ncycle is on"
-                          : 'Want to predict when your next period will happen?',
+                          ? AppLocalizations.of(context)!.your_next_cycle_is_on
+                          : AppLocalizations.of(context)!
+                              .want_to_predict_when_your_next_period_will_happen,
                       style: const TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
@@ -94,23 +96,35 @@ class AdvanceInfo extends StatelessWidget {
           ),
           child: Row(
             children: [
-              const Expanded(
+              Flexible(
+                flex: 1,
                 child: Padding(
-                  padding: EdgeInsets.only(left: 10.0),
+                  padding: const EdgeInsets.only(
+                    left: 10.0,
+                    top: 5,
+                    bottom: 5,
+                  ),
                   child: Text(
-                    'Check out our curated fertility diet',
-                    style: TextStyle(
+                    AppLocalizations.of(context)!
+                        .check_out_our_curated_fertility_diet,
+                    style: const TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
+                      fontSize: 12,
                     ),
                   ),
                 ),
               ),
               Flexible(
-                child: Image.asset(
-                  'assets/images/hand_spoon.png',
-                  width: 70,
-                  fit: BoxFit.contain,
+                flex: 1,
+                child: SizedBox(
+                  width: double.infinity,
+                  height: double.infinity,
+                  child: Image.asset(
+                    'assets/images/hand_spoon.png',
+                    width: 70,
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
             ],
@@ -143,9 +157,9 @@ class AdvanceInfo extends StatelessWidget {
                     top: Radius.circular(10),
                   ),
                 ),
-                child: const Text(
-                  "Cycle \nvariations",
-                  style: TextStyle(
+                child: Text(
+                  AppLocalizations.of(context)!.cycle_variations,
+                  style: const TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
                   ),
@@ -156,8 +170,9 @@ class AdvanceInfo extends StatelessWidget {
                   padding: Theme.of(context).insideCardPadding,
                   child: Text(
                     data.isNotEmpty
-                        ? "${data['average_period_length']} days"
-                        : "Unlocked after 3rd cycle logged",
+                        ? "${data['average_period_length']} ${AppLocalizations.of(context)!.days}"
+                        : AppLocalizations.of(context)!
+                            .unlocked_after_3rd_cycle_logged,
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: data.isNotEmpty ? 20 : 12,
@@ -198,9 +213,9 @@ class AdvanceInfo extends StatelessWidget {
                     top: Radius.circular(10),
                   ),
                 ),
-                child: const Text(
-                  "Average cycle interval",
-                  style: TextStyle(
+                child: Text(
+                  AppLocalizations.of(context)!.average_cycle_interval,
+                  style: const TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
                   ),
@@ -212,8 +227,9 @@ class AdvanceInfo extends StatelessWidget {
                     padding: Theme.of(context).insideCardPadding,
                     child: Text(
                       data.isNotEmpty
-                          ? "${data['average_period_cycle']} days"
-                          : "Unlocked after 3rd cycle logged",
+                          ? "${data['average_period_cycle']} ${AppLocalizations.of(context)!.days}"
+                          : AppLocalizations.of(context)!
+                              .unlocked_after_3rd_cycle_logged,
                       style: TextStyle(
                         color: Colors.black,
                         fontSize: data.isNotEmpty ? 20 : 12,

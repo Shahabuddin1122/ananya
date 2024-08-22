@@ -17,6 +17,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SuperuserHome extends StatefulWidget {
   const SuperuserHome({super.key});
@@ -88,9 +89,9 @@ class _SuperuserHomeState extends State<SuperuserHome> {
     int daysUntilEnd = endDateTime.difference(currentDate).inDays;
 
     if (startDate == endDate) {
-      return "${daysUntilStart.abs() + 1} DAYS";
+      return "${daysUntilStart.abs() + 1} ";
     } else {
-      return "${daysUntilStart.abs() + 1} - ${daysUntilEnd.abs() + 1} DAYS";
+      return "${daysUntilStart.abs() + 1} - ${daysUntilEnd.abs() + 1} ";
     }
   }
 
@@ -125,9 +126,9 @@ class _SuperuserHomeState extends State<SuperuserHome> {
             return Stack(
               children: [
                 AlertDialog(
-                  title: const Text('Period Start Today'),
-                  content:
-                      const Text('Your period starts today. Please confirm.'),
+                  title: Text(AppLocalizations.of(context)!.period_start_today),
+                  content: Text(AppLocalizations.of(context)!
+                      .your_period_starts_today_please_confirm),
                   actions: <Widget>[
                     TextButton(
                       onPressed: isProcessing
@@ -154,7 +155,7 @@ class _SuperuserHomeState extends State<SuperuserHome> {
 
                               Navigator.of(context).pop();
                             },
-                      child: const Text('Confirm'),
+                      child: Text(AppLocalizations.of(context)!.confirm),
                     ),
                     TextButton(
                       onPressed: isProcessing
@@ -178,7 +179,7 @@ class _SuperuserHomeState extends State<SuperuserHome> {
 
                               Navigator.of(context).pop();
                             },
-                      child: const Text('Postpone'),
+                      child: Text(AppLocalizations.of(context)!.postpone),
                     ),
                     TextButton(
                       onPressed: isProcessing
@@ -186,7 +187,7 @@ class _SuperuserHomeState extends State<SuperuserHome> {
                           : () {
                               Navigator.of(context).pop();
                             },
-                      child: const Text('Discard'),
+                      child: Text(AppLocalizations.of(context)!.discard),
                     ),
                   ],
                 ),
@@ -260,15 +261,17 @@ class _SuperuserHomeState extends State<SuperuserHome> {
                                   color: ACCENT,
                                 ),
                               ),
-                              const TextSpan(
-                                text: '\nPERIOD IN\n',
-                                style: TextStyle(
+                              TextSpan(
+                                text:
+                                    '\n${AppLocalizations.of(context)!.period_in}',
+                                style: const TextStyle(
                                   fontSize: 20,
                                   color: ACCENT,
                                 ),
                               ),
                               TextSpan(
-                                text: _formatPeriodDate(snapshot.data),
+                                text:
+                                    '${_formatPeriodDate(snapshot.data)} ${AppLocalizations.of(context)!.days}',
                                 style: const TextStyle(
                                   fontSize: 36,
                                   fontWeight: FontWeight.bold,
@@ -292,10 +295,10 @@ class _SuperuserHomeState extends State<SuperuserHome> {
                           child: SvgPicture.asset(
                               'assets/images/pink_ellipse.svg'),
                         ),
-                        const Positioned(
+                        Positioned(
                           child: Text(
-                            'Welcome \nto Ananya',
-                            style: TextStyle(
+                            AppLocalizations.of(context)!.welcome_to_ananye,
+                            style: const TextStyle(
                               fontSize: 36,
                               fontWeight: FontWeight.bold,
                               color: Colors.white,
@@ -366,7 +369,8 @@ class _SuperuserHomeState extends State<SuperuserHome> {
                                 arguments: false,
                               );
                             },
-                            child: const Text('UNLOCK PERIOD PREDICTION'),
+                            child: Text(AppLocalizations.of(context)!
+                                .unlock_period_prediction),
                           ),
                         ],
                       ),

@@ -1,15 +1,16 @@
 import 'package:ananya/utils/custom_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CustomDropdown extends StatefulWidget {
   final String header;
   final List<String> options;
-  final ValueChanged<String?>? onChanged; // Callback for selected value
+  final ValueChanged<String?>? onChanged;
 
   const CustomDropdown({
     required this.options,
     required this.header,
-    this.onChanged, // Optional parameter to handle changes
+    this.onChanged,
     super.key,
   });
 
@@ -77,7 +78,7 @@ class _CustomDropdownState extends State<CustomDropdown> {
                     widget.onChanged!(newValue);
                   }
                 },
-                hint: Text("Choose a ${widget.header}"),
+                hint: Text(AppLocalizations.of(context)!.choose_a),
               ),
             ),
           ),

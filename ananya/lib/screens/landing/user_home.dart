@@ -15,6 +15,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class UserHome extends StatefulWidget {
   const UserHome({super.key});
@@ -94,9 +95,9 @@ class _UserHomeState extends State<UserHome> {
     int daysUntilEnd = endDateTime.difference(currentDate).inDays;
 
     if (startDate == endDate) {
-      return "${daysUntilStart.abs() + 1} DAYS";
+      return "${daysUntilStart.abs() + 1} ";
     } else {
-      return '${daysUntilStart.abs() + 1} - ${daysUntilEnd.abs() + 1} \nDAYS';
+      return '${daysUntilStart.abs() + 1} - ${daysUntilEnd.abs() + 1} \n';
     }
   }
 
@@ -240,15 +241,16 @@ class _UserHomeState extends State<UserHome> {
                           child: Text.rich(
                             textAlign: TextAlign.center,
                             TextSpan(children: [
-                              const TextSpan(
-                                text: 'PERIOD IN\n',
-                                style: TextStyle(
+                              TextSpan(
+                                text: AppLocalizations.of(context)!.period_in,
+                                style: const TextStyle(
                                   fontSize: 20,
                                   color: ACCENT,
                                 ),
                               ),
                               TextSpan(
-                                text: _formatPeriodDate(snapshot.data),
+                                text:
+                                    "${_formatPeriodDate(snapshot.data)}${AppLocalizations.of(context)!.days}",
                                 style: const TextStyle(
                                   fontSize: 36,
                                   fontWeight: FontWeight.bold,
@@ -272,10 +274,10 @@ class _UserHomeState extends State<UserHome> {
                           child: SvgPicture.asset(
                               'assets/images/pink_ellipse.svg'),
                         ),
-                        const Positioned(
+                        Positioned(
                           child: Text(
-                            'Welcome \nto Ananya',
-                            style: TextStyle(
+                            AppLocalizations.of(context)!.welcome_to_ananye,
+                            style: const TextStyle(
                               fontSize: 36,
                               fontWeight: FontWeight.bold,
                               color: Colors.white,
@@ -343,8 +345,9 @@ class _UserHomeState extends State<UserHome> {
 
                               if (id == null) {
                                 ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text('You need to log in first.'),
+                                  SnackBar(
+                                    content: Text(AppLocalizations.of(context)!
+                                        .you_need_to_log_in_first),
                                   ),
                                 );
                               } else {
@@ -352,7 +355,8 @@ class _UserHomeState extends State<UserHome> {
                                     context, '/unlock-process/1');
                               }
                             },
-                            child: const Text('UNLOCK PERIOD PREDICTION'),
+                            child: Text(AppLocalizations.of(context)!
+                                .unlock_period_prediction),
                           ),
                         ],
                       ),

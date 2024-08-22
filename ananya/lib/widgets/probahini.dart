@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class Probahini extends StatelessWidget {
   const Probahini({super.key});
@@ -20,9 +21,10 @@ class Probahini extends StatelessWidget {
           Positioned(
             left: MediaQuery.of(context).size.width * 0.08,
             top: MediaQuery.of(context).size.height * 0.07,
-            child: const Text(
-              "Hi, I am Probahini,\nyour menstrual \ncompanion. Ask \nme anything...",
-              style: TextStyle(
+            child: Text(
+              AppLocalizations.of(context)!
+                  .hi_i_am_probahini_your_menstrual_companion_ask_me_anything,
+              style: const TextStyle(
                 fontSize: 11,
               ),
             ),
@@ -32,7 +34,7 @@ class Probahini extends StatelessWidget {
             left: MediaQuery.of(context).size.width * 0.07,
             child: ElevatedButton(
               onPressed: () {},
-              child: const Text('BEGIN CHAT'),
+              child: Text(AppLocalizations.of(context)!.begin_chat),
             ),
           ),
         ],
