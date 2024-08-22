@@ -89,9 +89,10 @@ class _LandingState extends State<Landing> {
                     padding: Theme.of(context).largemainPadding,
                     child: ElevatedButton(
                       style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all(ACCENT),
-                        minimumSize: MaterialStateProperty.all(Size(50, 20)),
-                        shape: MaterialStateProperty.all(
+                        backgroundColor: WidgetStateProperty.all(ACCENT),
+                        minimumSize:
+                            WidgetStateProperty.all(const Size(50, 20)),
+                        shape: WidgetStateProperty.all(
                           RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(5),
                           ),

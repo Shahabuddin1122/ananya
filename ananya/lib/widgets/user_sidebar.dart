@@ -1,5 +1,7 @@
-﻿import 'package:flutter/material.dart';
+﻿import 'package:ananya/main.dart';
+import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class UserSidebar extends StatefulWidget {
   const UserSidebar({super.key});
@@ -10,11 +12,13 @@ class UserSidebar extends StatefulWidget {
 
 class _UserSidebarState extends State<UserSidebar> {
   bool _isSuperuser = false;
+  Locale _currentLocale = const Locale('en');
 
   @override
   void initState() {
     super.initState();
     _checkSuperuserStatus();
+    _loadLocale();
   }
 
   Future<void> _checkSuperuserStatus() async {
@@ -23,6 +27,23 @@ class _UserSidebarState extends State<UserSidebar> {
     setState(() {
       _isSuperuser = isSuperuser ?? false;
     });
+  }
+
+  Future<void> _loadLocale() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? languageCode = prefs.getString('language_code');
+    setState(() {
+      _currentLocale = Locale(languageCode ?? 'en');
+    });
+  }
+
+  Future<void> _changeLanguage(String languageCode) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('language_code', languageCode);
+    setState(() {
+      _currentLocale = Locale(languageCode);
+    });
+    MyApp.setLocale(context, _currentLocale);
   }
 
   @override
@@ -55,43 +76,58 @@ class _UserSidebarState extends State<UserSidebar> {
             ),
           ),
           ListTile(
-            title: const Text(
-              "HOME",
-              style: TextStyle(
+            leading: const Icon(Icons.home),
+            title: Text(
+              AppLocalizations.of(context)!.home,
+              style: const TextStyle(
                 fontWeight: FontWeight.bold,
               ),
             ),
             onTap: () {},
           ),
           ListTile(
-            title: const Text("LOG NEW PERIOD"),
+            leading: const Icon(Icons.track_changes),
+            title: Text(
+              AppLocalizations.of(context)!.log_new_period,
+            ),
             onTap: () {
               Navigator.pushNamed(context, '/new-period');
             },
           ),
           if (_isSuperuser)
             ListTile(
-              title: const Text("ADD A USER"),
+              leading: const Icon(Icons.add),
+              title: Text(
+                AppLocalizations.of(context)!.add_a_user,
+              ),
               onTap: () {
                 Navigator.pushNamed(context, '/add-user');
               },
             ),
           ListTile(
-            title: const Text("CHAT WITH ANANYA"),
+            leading: const Icon(Icons.chat),
+            title: Text(
+              AppLocalizations.of(context)!.chat_with_ananya,
+            ),
             onTap: () {
               Navigator.pushNamed(context, '/chat');
             },
           ),
           ListTile(
-            title: const Text("KNOWLEDGE NEXUS"),
+            leading: const Icon(Icons.school),
+            title: Text(AppLocalizations.of(context)!.knowledge_nexus),
             onTap: () => Navigator.pushNamed(context, '/knowledge-nexus'),
           ),
           ListTile(
-            title: const Text("VISIT SHOP"),
+            leading: const Icon(Icons.shop),
+            title: Text(AppLocalizations.of(context)!.visit_shop),
             onTap: () => Navigator.pushNamed(context, '/visit-shop'),
           ),
           ListTile(
-            title: const Text("PERIOD HISTORY"),
+            leading: const Icon(Icons.history),
+            title: Text(
+              AppLocalizations.of(context)!.period_history,
+            ),
             onTap: () {
               if (_isSuperuser) {
                 Navigator.pushNamed(context, '/history/cohort');
@@ -104,33 +140,37 @@ class _UserSidebarState extends State<UserSidebar> {
             height: 1,
             color: Color(0xFF405070),
           ),
-          const ListTile(
+          ListTile(
+            leading: const Icon(Icons.g_translate),
             title: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('LANGUAGE'),
-                Row(
-                  children: [
-                    Text("BN"),
-                    SizedBox(
-                      width: 10,
+                Text(AppLocalizations.of(context)!.language),
+                PopupMenuButton<Locale>(
+                  onSelected: (Locale locale) {
+                    _changeLanguage(locale.languageCode);
+                  },
+                  itemBuilder: (context) => [
+                    const PopupMenuItem(
+                      value: Locale('bn', ''),
+                      child: Text("বাংলা"),
                     ),
-                    Text(
-                      "EN",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                      ),
+                    const PopupMenuItem(
+                      value: Locale('en', ''),
+                      child: Text("English"),
                     ),
                   ],
                 ),
               ],
             ),
           ),
-          const ListTile(
-            title: Text('GET HELP'),
+          ListTile(
+            leading: const Icon(Icons.help),
+            title: Text(AppLocalizations.of(context)!.get_help),
           ),
           ListTile(
-            title: const Text("LOG OUT"),
+            leading: const Icon(Icons.logout),
+            title: Text(AppLocalizations.of(context)!.log_out),
             onTap: () async {
               SharedPreferences prefs = await SharedPreferences.getInstance();
               await prefs.remove('userNumber');
