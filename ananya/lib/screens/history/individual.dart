@@ -5,6 +5,7 @@ import 'package:ananya/widgets/history_component.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class IndividualHistory extends StatefulWidget {
   const IndividualHistory({super.key});
@@ -63,6 +64,53 @@ class _IndividualHistoryState extends State<IndividualHistory> {
     }
   }
 
+  Future<void> requestDataPurge() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? id = prefs.getString('userId');
+    final response =
+        await ApiSettings(endPoint: 'user/request-data-purge/$id').getMethod();
+    if (response.statusCode == 200) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+            content:
+                Text(AppLocalizations.of(context)!.purge_request_successful)),
+      );
+      Navigator.pushNamed(context, '/');
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+            content: Text(AppLocalizations.of(context)!.purge_request_failed)),
+      );
+    }
+  }
+
+  void confirmPurge() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(AppLocalizations.of(context)!.confirm_purge_title),
+          content: Text(AppLocalizations.of(context)!.confirm_purge_message),
+          actions: [
+            TextButton(
+              child: Text(AppLocalizations.of(context)!.discard),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text(AppLocalizations.of(context)!.confirm),
+              onPressed: () {
+                Navigator.of(context).pop();
+                requestDataPurge();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
@@ -73,7 +121,7 @@ class _IndividualHistoryState extends State<IndividualHistory> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('YOUR PERIOD HISTORY'),
+        title: Text(AppLocalizations.of(context)!.your_period_history),
       ),
       body: FutureBuilder<Map<String, List<dynamic>>>(
         future: getAllHistoryData(),
@@ -172,18 +220,16 @@ class _IndividualHistoryState extends State<IndividualHistory> {
       floatingActionButton: Padding(
         padding: Theme.of(context).largemainPadding,
         child: ElevatedButton(
-          onPressed: () {
-            Navigator.pushNamed(context, '/');
-          },
+          onPressed: confirmPurge,
           style: ElevatedButton.styleFrom(
             backgroundColor: ACCENT,
             minimumSize: const Size(double.infinity, 50),
             shadowColor: Colors.black,
             side: const BorderSide(width: 1),
           ),
-          child: const Text(
-            "Request Data Purge",
-            style: TextStyle(color: Colors.white),
+          child: Text(
+            AppLocalizations.of(context)!.request_data_purge,
+            style: const TextStyle(color: Colors.white),
           ),
         ),
       ),

@@ -62,5 +62,11 @@
   "postpone": "স্থগিত",
   "discard": "বাতিল",
   "Cohort_period_history": "দলের মাসিকের ইতিহাস",
-  "request_data_purge": "ডেটা পরিস্কারের অনুরোধ করুন"
+  "request_data_purge": "ডেটা পরিস্কারের অনুরোধ করুন",
+  "add": "যোগ করুন",
+  "your_period_history": "আপনার মাসিকের ইতিহাস",
+  "purge_request_successful": "শুদ্ধ করার অনুরোধ সফল",
+  "purge_request_failed": "শুদ্ধ করার অনুরোধ ব্যর্থ হয়েছে",
+  "confirm_purge_title": "আপনি কি নিশ্চিত?",
+  "confirm_purge_message": "আপনার সমস্ত বার্তা এবং ইতিহাস মুছে যাবে"
 }

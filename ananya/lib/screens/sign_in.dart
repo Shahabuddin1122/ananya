@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:ananya/screens/loading.dart';
 import 'package:ananya/utils/api_sattings.dart';
 import 'package:ananya/utils/constants.dart';
 import 'package:ananya/utils/custom_theme.dart';
@@ -81,14 +80,14 @@ class _SignInState extends State<SignIn> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Error'),
+        title: Text(AppLocalizations.of(context)!.ok),
         content: Text(message),
         actions: [
           TextButton(
             onPressed: () {
               Navigator.of(context).pop();
             },
-            child: const Text('OK'),
+            child: Text(AppLocalizations.of(context)!.error),
           ),
         ],
       ),

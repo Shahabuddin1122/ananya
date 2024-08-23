@@ -18,4 +18,5 @@ urlpatterns = [
     path('update-period-information/<int:user_id>', views.update_period_information, name='update_period_information'),
     path('advance-period-information/<int:user_id>', views.advance_period_information, name='advance_period_information'),
     path('get-cohort-user/<int:superuser_id>', views.get_cohort_user, name='get_cohort_user'),
+    path('request-data-purge/<int:user_id>', views.request_data_purge, name='request_data_purge')
 ]

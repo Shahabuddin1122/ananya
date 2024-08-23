@@ -140,7 +140,7 @@ class _SuperuserHomeState extends State<SuperuserHome> {
 
                               SharedPreferences prefs =
                                   await SharedPreferences.getInstance();
-                              String? id = prefs.getString('userId');
+                              String? id = prefs.getString('cohort-user');
                               Map<String, String> data = {
                                 "period_date": DateFormat('yyyy-MM-dd')
                                     .format(DateTime.now())
@@ -167,7 +167,7 @@ class _SuperuserHomeState extends State<SuperuserHome> {
 
                               SharedPreferences prefs =
                                   await SharedPreferences.getInstance();
-                              String? id = prefs.getString('userId');
+                              String? id = prefs.getString('cohort-user');
                               await ApiSettings(
                                       endPoint:
                                           'user/update-period-information/$id')
