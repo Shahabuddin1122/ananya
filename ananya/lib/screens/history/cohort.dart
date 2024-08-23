@@ -36,6 +36,7 @@ class _CohortHistoryState extends State<CohortHistory> {
     await prefs.setString('cohort-user', id);
     setState(() {
       selectedUserId = id;
+      selectedUser = Future.value(id);
     });
   }
 
@@ -61,11 +62,13 @@ class _CohortHistoryState extends State<CohortHistory> {
   ];
 
   Future<Map<String, List<dynamic>>> getAllHistoryData() async {
+    if (selectedUserId == null) {
+      return {};
+    }
+
     try {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      String? id = prefs.getString('cohort-user');
       final response =
-          await ApiSettings(endPoint: 'user/get-period-history/$id')
+          await ApiSettings(endPoint: 'user/get-period-history/$selectedUserId')
               .getMethod();
       if (response.statusCode == 200) {
         List<dynamic> historyData = json.decode(response.body);
@@ -82,7 +85,6 @@ class _CohortHistoryState extends State<CohortHistory> {
       }
       return {};
     } catch (e) {
-      print("Error $e");
       return {};
     }
   }
@@ -106,6 +108,70 @@ class _CohortHistoryState extends State<CohortHistory> {
     }
   }
 
+  void _showConfirmationDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(AppLocalizations.of(context)!.confirm),
+          content: Text(AppLocalizations.of(context)!.confirm_purge_message),
+          actions: <Widget>[
+            TextButton(
+              child: Text(AppLocalizations.of(context)!.discard),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text(AppLocalizations.of(context)!.confirm),
+              onPressed: () {
+                Navigator.of(context).pop();
+                requestDataPurge();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> requestDataPurge() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? id = prefs.getString('cohort-user');
+    if (id == null) return;
+
+    final response =
+        await ApiSettings(endPoint: 'user/request-data-purge/$id').getMethod();
+    if (response.statusCode == 200) {
+      Map<String, dynamic> cohortUsers = await getAllCohort();
+      List<dynamic> users = cohortUsers['predicted'] ?? [];
+
+      if (users.isNotEmpty) {
+        String newUserId = users.first['id'].toString();
+        await prefs.setString('cohort-user', newUserId);
+        setState(() {
+          selectedUserId = newUserId;
+          selectedUser = Future.value(newUserId);
+        });
+      }
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(AppLocalizations.of(context)!.purge_request_successful),
+          backgroundColor: Colors.green,
+        ),
+      );
+      Navigator.pushNamed(context, '/');
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(AppLocalizations.of(context)!.purge_request_failed),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  }
+
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
@@ -124,6 +190,12 @@ class _CohortHistoryState extends State<CohortHistory> {
           if (selectedUserSnapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           }
+
+          if (!selectedUserSnapshot.hasData ||
+              selectedUserSnapshot.data == null) {
+            return const Center(child: Text("No user selected"));
+          }
+
           return FutureBuilder<Map<String, List<dynamic>>>(
             future: getAllHistoryData(),
             builder: (context, snapshot) {
@@ -260,7 +332,7 @@ class _CohortHistoryState extends State<CohortHistory> {
         padding: Theme.of(context).largemainPadding,
         child: ElevatedButton(
           onPressed: () {
-            Navigator.pushNamed(context, '/');
+            _showConfirmationDialog();
           },
           style: ElevatedButton.styleFrom(
             backgroundColor: ACCENT,

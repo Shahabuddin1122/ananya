@@ -134,7 +134,10 @@ def add_period_info(request, user_id):
         return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
 
     # Clear previous data
-    Questionnaire.objects.filter(user=user).delete()
+    questionnaires = Questionnaire.objects.filter(user=user)
+    health_condition_ids = questionnaires.values_list('health_condition_id', flat=True).distinct().first()
+    HealthCondition.objects.filter(id=health_condition_ids).delete()
+    questionnaires.delete()
     PeriodHistory.objects.filter(user=user).delete()
     PeriodPrediction.objects.filter(user=user).delete()
 
@@ -158,7 +161,7 @@ def add_period_info(request, user_id):
         while predicted_date and predicted_date.get('period_start_from') < date.today():
             period_history_data = {
                 'period_start': predicted_date.get('period_start_from') + (predicted_date.get('period_start_to') -
-                                                                           predicted_date.get('period_start_from'))/2,
+                                                                           predicted_date.get('period_start_from')) / 2,
                 'cycle_length': predicted_date.get('length_of_period'),
                 'days_between_period': predicted_date.get('days_between_period'),
                 'anomalies': predicted_date.get('anomalies', 'Regular'),
@@ -335,7 +338,7 @@ def advance_period_information(request, user_id):
         previous_period = PeriodPrediction.objects.filter(user_id=user_id)
         most_recent_period = previous_period.first()
         last_period_start = most_recent_period.period_start_from + (most_recent_period.period_start_to -
-                                                                    most_recent_period.period_start_from)/2
+                                                                    most_recent_period.period_start_from) / 2
         period_date = get_period_date(user_id, last_period_start)
         total_period = sum([data.days_between_period for data in period_history])
         total_period_length = sum([data.cycle_length for data in period_history])
@@ -344,7 +347,7 @@ def advance_period_information(request, user_id):
         average_period_length = int(total_period_length / number)
         data = {
             "next_cycle": period_date.get('period_start_from') + (period_date.get('period_start_to') -
-                                                                  period_date.get('period_start_from'))/2,
+                                                                  period_date.get('period_start_from')) / 2,
             "average_period_cycle": average_period_cycle,
             "average_period_length": average_period_length,
         }
@@ -384,3 +387,24 @@ def get_cohort_user(request, superuser_id):
         return Response(data, status=status.HTTP_200_OK)
 
     return Response({'error': 'Invalid request method'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+def request_data_purge(request, user_id):
+    if request.method == 'GET':
+        try:
+            user = User.objects.get(id=user_id)
+        except User.DoesNotExist:
+            return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+
+        try:
+            questionnaires = Questionnaire.objects.filter(user=user)
+            health_condition_ids = questionnaires.values_list('health_condition_id', flat=True).distinct().first()
+            HealthCondition.objects.filter(id=health_condition_ids).delete()
+            questionnaires.delete()
+            PeriodHistory.objects.filter(user=user).delete()
+            PeriodPrediction.objects.filter(user=user).delete()
+
+            return Response({"success": True}, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

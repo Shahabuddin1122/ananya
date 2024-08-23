@@ -6,6 +6,7 @@ import 'package:ananya/utils/custom_theme.dart';
 import 'package:ananya/widgets/custom_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AddAUser extends StatefulWidget {
   const AddAUser({super.key});
@@ -101,11 +102,11 @@ class _AddAUserState extends State<AddAUser> {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 255, 235, 239),
       appBar: AppBar(
-        title: const Text("Add a user"),
+        title: Text(AppLocalizations.of(context)!.add_a_user),
       ),
       body: Center(
         child: isLoading
-            ? CircularProgressIndicator()
+            ? const CircularProgressIndicator()
             : SingleChildScrollView(
                 child: Container(
                   width: double.infinity,
@@ -118,10 +119,10 @@ class _AddAUserState extends State<AddAUser> {
                         fit: BoxFit.cover,
                         width: 200,
                       ),
-                      const Text(
+                      Text(
                         textAlign: TextAlign.center,
-                        "Add a user",
-                        style: TextStyle(
+                        AppLocalizations.of(context)!.add_a_user,
+                        style: const TextStyle(
                           fontSize: 32,
                           color: ACCENT,
                           fontWeight: FontWeight.bold,
@@ -131,15 +132,15 @@ class _AddAUserState extends State<AddAUser> {
                         height: 50,
                       ),
                       CustomTextField(
-                        text: "Username",
+                        text: AppLocalizations.of(context)!.name,
                         controller: usernameController,
                       ),
                       CustomTextField(
-                        text: 'Phone Number',
+                        text: AppLocalizations.of(context)!.phone_number,
                         controller: phoneController,
                       ),
                       CustomTextField(
-                        text: 'Email',
+                        text: AppLocalizations.of(context)!.email,
                         controller: emailController,
                       ),
                       const SizedBox(
@@ -158,9 +159,9 @@ class _AddAUserState extends State<AddAUser> {
                             ),
                           ),
                         ),
-                        child: const Text(
-                          "Add",
-                          style: TextStyle(
+                        child: Text(
+                          AppLocalizations.of(context)!.add,
+                          style: const TextStyle(
                             color: Colors.white,
                           ),
                         ),

@@ -113,9 +113,9 @@ class _UserHomeState extends State<UserHome> {
             return Stack(
               children: [
                 AlertDialog(
-                  title: const Text('Period Start Today'),
-                  content:
-                      const Text('Your period starts today. Please confirm.'),
+                  title: Text(AppLocalizations.of(context)!.period_start_today),
+                  content: Text(AppLocalizations.of(context)!
+                      .your_period_starts_today_please_confirm),
                   actions: <Widget>[
                     TextButton(
                       onPressed: isProcessing
@@ -142,7 +142,7 @@ class _UserHomeState extends State<UserHome> {
 
                               Navigator.of(context).pop();
                             },
-                      child: const Text('Confirm'),
+                      child: Text(AppLocalizations.of(context)!.confirm),
                     ),
                     TextButton(
                       onPressed: isProcessing
@@ -166,7 +166,7 @@ class _UserHomeState extends State<UserHome> {
 
                               Navigator.of(context).pop();
                             },
-                      child: const Text('Postpone'),
+                      child: Text(AppLocalizations.of(context)!.postpone),
                     ),
                     TextButton(
                       onPressed: isProcessing
@@ -174,7 +174,7 @@ class _UserHomeState extends State<UserHome> {
                           : () {
                               Navigator.of(context).pop();
                             },
-                      child: const Text('Discard'),
+                      child: Text(AppLocalizations.of(context)!.discard),
                     ),
                   ],
                 ),

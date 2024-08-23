@@ -63,5 +63,11 @@
   "postpone": "Postpone",
   "discard": "Discard",
   "cohort_period_history": "COHORT PERIOD HISTORY",
-  "request_data_purge": "Request Data Purge"
+  "request_data_purge": "Request Data Purge",
+  "add": "Add",
+  "your_period_history": "YOUR PERIOD HISTORY",
+  "purge_request_successful": "Purge request successful",
+  "purge_request_failed": "Purge Request Failed",
+  "confirm_purge_title": "Are you sure?",
+  "confirm_purge_message": "Your all the history will be disappeared"
 }
