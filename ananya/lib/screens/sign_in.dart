@@ -58,6 +58,7 @@ class _SignInState extends State<SignIn> {
         await prefs.setString('userNumber', phoneController.text);
         await prefs.setString('userId', user['id'].toString());
         await prefs.setBool('is_superuser', user['is_superuser']);
+        await prefs.setString('token', responseData['token']);
         if (responseData['managed_users'].isNotEmpty) {
           await prefs.setString(
               "cohort-user", responseData['managed_users'][0].toString());

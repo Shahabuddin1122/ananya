@@ -177,6 +177,7 @@ class _UserSidebarState extends State<UserSidebar> {
               await prefs.remove('userId');
               await prefs.remove('is_superuser');
               await prefs.remove('cohort-user');
+              await prefs.remove('token');
               Navigator.pushNamed(context, '/signin');
             },
           ),

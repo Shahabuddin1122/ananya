@@ -27,7 +27,8 @@ class _LandingState extends State<Landing> {
   Future<bool> getInfo() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? number = prefs.getString('userNumber');
-    return number != null;
+    String? token = prefs.getString('token');
+    return (number != null && token != null);
   }
 
   Future<bool> isSuperuser() async {
@@ -49,7 +50,7 @@ class _LandingState extends State<Landing> {
           future: isSuperuser(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(child: CircularProgressIndicator());
+              return const Center(child: CircularProgressIndicator());
             } else if (snapshot.hasData && snapshot.data == true) {
               return const SuperuserHome();
             } else {
@@ -104,7 +105,7 @@ class _LandingState extends State<Landing> {
                       },
                       child: Text(
                         AppLocalizations.of(context)!.log_in,
-                        style: TextStyle(fontSize: 12),
+                        style: const TextStyle(fontSize: 12),
                       ),
                     ),
                   );
