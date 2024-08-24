@@ -23,11 +23,9 @@ class _SignUpState extends State<SignUp> {
   final TextEditingController passwordController = TextEditingController();
   String? selectedDistrict;
   String? selectedProject;
+  String? selectUserType;
 
   bool isLoading = false;
-
-  ApiSettings api = ApiSettings(endPoint: 'user/signup');
-
   final List<String> district = [
     "Dhaka",
     "Khulna",
@@ -36,6 +34,10 @@ class _SignUpState extends State<SignUp> {
   final List<String> projects = [
     "WaterAid",
     "Brac",
+  ];
+  final List<String> userTypes = [
+    "user",
+    "superuser",
   ];
   void check() async {
     if (nameController.text.isEmpty) {
@@ -70,17 +72,36 @@ class _SignUpState extends State<SignUp> {
     setState(() {
       isLoading = true;
     });
-
-    Map<String, dynamic> data = {
-      'name': nameController.text,
-      'email': emailController.text,
-      'date_of_birth': dobController.text,
-      'phone': phoneController.text,
-      'password': passwordController.text,
-      'district': selectedDistrict,
-      'project': selectedProject,
-      'is_superuser': false,
-    };
+    Map<String, dynamic> data;
+    ApiSettings api;
+    if (selectUserType == 'superuser') {
+      api = ApiSettings(endPoint: 'user/superuser/signup');
+      data = {
+        "user": {
+          'name': nameController.text,
+          'email': emailController.text,
+          'date_of_birth': dobController.text,
+          'phone': phoneController.text,
+          'password': passwordController.text,
+          'district': selectedDistrict,
+          'project': selectedProject,
+          'is_superuser': true,
+        },
+        "managed_users": []
+      };
+    } else {
+      api = ApiSettings(endPoint: 'user/signup');
+      data = {
+        'name': nameController.text,
+        'email': emailController.text,
+        'date_of_birth': dobController.text,
+        'phone': phoneController.text,
+        'password': passwordController.text,
+        'district': selectedDistrict,
+        'project': selectedProject,
+        'is_superuser': false,
+      };
+    }
 
     try {
       final response = await api.postMethod(json.encode(data));
@@ -88,7 +109,6 @@ class _SignUpState extends State<SignUp> {
         isLoading = false;
       });
       if (response.statusCode == 201) {
-        print('Data posted successfully: $response');
         Navigator.pushNamed(context, '/signin');
       } else {
         _showErrorMessage("Invalid Credentials");
@@ -186,6 +206,13 @@ class _SignUpState extends State<SignUp> {
                               options: projects,
                               onChanged: (value) {
                                 selectedProject = value;
+                              },
+                            ),
+                            CustomDropdown(
+                              header: AppLocalizations.of(context)!.user_type,
+                              options: userTypes,
+                              onChanged: (value) {
+                                selectUserType = value;
                               },
                             ),
                             const SizedBox(

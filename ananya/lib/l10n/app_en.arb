@@ -69,5 +69,6 @@
   "purge_request_successful": "Purge request successful",
   "purge_request_failed": "Purge Request Failed",
   "confirm_purge_title": "Are you sure?",
-  "confirm_purge_message": "Your all the history will be disappeared"
+  "confirm_purge_message": "Your all the history will be disappeared",
+  "user_type": "User Type"
 }

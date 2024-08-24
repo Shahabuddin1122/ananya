@@ -30,7 +30,8 @@ class _CustomDropdownState extends State<CustomDropdown> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Container(
-            height: 50,
+            width: 140,
+            height: 48,
             padding: const EdgeInsets.symmetric(
               horizontal: 20,
               vertical: 7,
@@ -54,6 +55,7 @@ class _CustomDropdownState extends State<CustomDropdown> {
           const SizedBox(width: 10),
           Expanded(
             child: Container(
+              height: 48,
               decoration: const BoxDecoration(
                 color: Colors.white,
               ),
