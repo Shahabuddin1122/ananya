@@ -27,12 +27,10 @@ class UserHome extends StatefulWidget {
 class _UserHomeState extends State<UserHome> {
   late Future<bool> numberPresent;
   bool get_data = false;
-  Future<Map<String, dynamic>>? _get_data;
 
   @override
   void initState() {
     super.initState();
-    _get_data = getPeriodData();
   }
 
   Future<Map<String, dynamic>> getPeriodData() async {
