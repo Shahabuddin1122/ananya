@@ -105,6 +105,7 @@ class _SignUpState extends State<SignUp> {
 
     try {
       final response = await api.postMethod(json.encode(data));
+      print(response.statusCode);
       setState(() {
         isLoading = false;
       });

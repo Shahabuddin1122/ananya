@@ -1,8 +1,11 @@
 from datetime import date
 
-from rest_framework.decorators import api_view
+from django.contrib.auth.hashers import make_password, check_password
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework_simplejwt.tokens import RefreshToken
 
 from .models import User, SuperUser, PeriodPrediction, HealthCondition
 from .serializers import UserSerializer, SuperUserSerializer, QuestionnaireSerializer, PeriodHistorySerializer, \
@@ -13,9 +16,10 @@ from .utils import *
 @api_view(['POST'])
 def user_signup(request):
     if request.method == 'POST':
-        if not request.data['is_superuser']:
-            # Handling regular User creation
-            user_data = request.data
+        if not request.data.get('is_superuser', False):
+            user_data = request.data.copy()
+            user_data['password'] = make_password(user_data['password'])
+
             serializer = UserSerializer(data=user_data)
             if serializer.is_valid():
                 serializer.save()
@@ -26,7 +30,9 @@ def user_signup(request):
 @api_view(['POST'])
 def super_user_signup(request):
     if request.method == 'POST':
-        if request.data['user']:
+        user_data = request.data.get('user')
+        if user_data:
+            user_data['password'] = make_password(user_data['password'])
             superuser_data = request.data
             serializer = SuperUserSerializer(data=superuser_data)
             if serializer.is_valid():
@@ -43,11 +49,12 @@ def user_login(request):
 
         try:
             user = User.objects.get(phone=phone)
-            if user.password == password:
+            if check_password(password, user.password):
                 serializer = UserSerializer(user)
                 data = {
                     "user": serializer.data,
-                    "managed_users": []
+                    "managed_users": [],
+                    "token": str(RefreshToken.for_user(user).access_token)
                 }
 
                 if user.is_superuser:
@@ -80,7 +87,7 @@ def add_user_in_superuser(request, superuser_id):
 
     user_data = request.data
 
-    email = user_data.get('phone')
+    email = user_data.get('email')
     if not email:
         return Response({"error": "Email is required"}, status=status.HTTP_400_BAD_REQUEST)
 
