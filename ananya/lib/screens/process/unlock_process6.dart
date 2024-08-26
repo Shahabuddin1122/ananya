@@ -66,6 +66,7 @@ class _UnlockProcess6State extends State<UnlockProcess6> {
       } else {
         response = await api.postMethod(json.encode(data));
       }
+      print("AAAAAAAAA");
       setState(() {
         isLoading = false;
       });
@@ -79,6 +80,9 @@ class _UnlockProcess6State extends State<UnlockProcess6> {
       } else {
         print('Failed to post data. Status code: ${response.statusCode}');
         print('Response body: $response');
+        setState(() {
+          isLoading = false;
+        });
       }
     } catch (e) {
       setState(() {

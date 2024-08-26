@@ -18,7 +18,6 @@ class ApiSettings {
   Future<http.Response> postMethod(String data) async {
     try {
       String? token = await _getToken();
-      print(token);
       final response = await http.post(
         Uri.parse(uri),
         headers: {

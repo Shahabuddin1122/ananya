@@ -50,9 +50,9 @@ class _PeriodDateShowState extends State<PeriodDateShow> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(height: 40),
-                Image.network(
-                  'https://s3-alpha-sig.figma.com/img/cd87/d28f/ba2592f440db12c51c088a402e29ddbb?Expires=1724630400&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=LFEdfkADcKTVLmPga6IthUoowiq6nO200RKPcck23ViBGRxGVzURzClzrk612Moa9XPCnfgYei7JkfeeFsoxGGkWVDHybgSsQwkltMLUAJsJ-GQ6n~pdpp2CaUjmKpinE1CkQ6fjvk-gtDXCf9AO~-hJg7TBOo5e2xCdiHHSgIHebCHmFjfnZ0rN4ryubny9ysASNTxFjIUY77Jo1PdXZdh6OsRILA2X6o-2SATewF7cAD9Y4OCV7gSLfERQdzJZzb-gQXBt6~XLfPYMORblfGq7TyGwxFnqaMrvCVpvQ-SPtf89OQ6gyA9g0tyQZKCTtAz2CbPRJTgbWUaKLphjsA__',
-                  width: 100,
+                Image.asset(
+                  'assets/gif/loading.gif',
+                  width: 500,
                 ),
                 const SizedBox(height: 20),
                 Text.rich(
