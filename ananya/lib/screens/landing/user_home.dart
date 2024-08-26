@@ -5,7 +5,7 @@ import 'package:ananya/utils/constants.dart';
 import 'package:ananya/utils/custom_theme.dart';
 import 'package:ananya/widgets/advance_info.dart';
 import 'package:ananya/widgets/help.dart';
-import 'package:ananya/widgets/knowledge_nexus.dart';
+import 'package:ananya/widgets/knowledge_nexus_component.dart';
 import 'package:ananya/widgets/period_cycle_information.dart';
 import 'package:ananya/widgets/probahini.dart';
 import 'package:ananya/widgets/shop.dart';

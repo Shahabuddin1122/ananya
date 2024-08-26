@@ -68,6 +68,10 @@ class _SignUpState extends State<SignUp> {
       _showErrorMessage("Project is required.");
       return;
     }
+    if (selectUserType == null || selectUserType!.isEmpty) {
+      _showErrorMessage("User type is required.");
+      return;
+    }
 
     setState(() {
       isLoading = true;
@@ -112,7 +116,8 @@ class _SignUpState extends State<SignUp> {
       if (response.statusCode == 201) {
         Navigator.pushNamed(context, '/signin');
       } else {
-        _showErrorMessage("Invalid Credentials");
+        final Map<String, dynamic> responseData = json.decode(response.body);
+        _showErrorMessage(responseData['error']);
       }
     } catch (e) {
       setState(() {

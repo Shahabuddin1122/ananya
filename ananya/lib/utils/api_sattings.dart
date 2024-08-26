@@ -11,7 +11,7 @@ class ApiSettings {
 
   Future<String?> _getToken() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? token = prefs.getString('tokenn');
+    String? token = prefs.getString('token');
     return token;
   }
 
@@ -23,7 +23,7 @@ class ApiSettings {
         Uri.parse(uri),
         headers: {
           'Content-Type': 'application/json',
-          // if (token != null) 'Authorization': 'Bearer $token',
+          if (token != null) 'Authorization': 'Bearer $token',
         },
         body: data,
       );
@@ -41,7 +41,7 @@ class ApiSettings {
         Uri.parse(baseUrl + ep),
         headers: {
           'Content-Type': 'application/json',
-          // if (token != null) 'Authorization': 'Bearer $token',
+          if (token != null) 'Authorization': 'Bearer $token',
         },
         body: data,
       );
@@ -57,7 +57,7 @@ class ApiSettings {
       final response = await http.get(
         Uri.parse(uri),
         headers: {
-          // if (token != null) 'Authorization': 'Bearer $token',
+          if (token != null) 'Authorization': 'Bearer $token',
         },
       );
       return response;
@@ -72,7 +72,7 @@ class ApiSettings {
       final response = await http.get(
         Uri.parse(baseUrl + ep),
         headers: {
-          // if (token != null) 'Authorization': 'Bearer $token',
+          if (token != null) 'Authorization': 'Bearer $token',
         },
       );
       return response;
@@ -88,7 +88,7 @@ class ApiSettings {
         Uri.parse(uri),
         headers: {
           'Content-Type': 'application/json',
-          // if (token != null) 'Authorization': 'Bearer $token',
+          if (token != null) 'Authorization': 'Bearer $token',
         },
         body: data,
       );

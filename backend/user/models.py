@@ -1,16 +1,41 @@
+from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
+from django.contrib.auth.models import PermissionsMixin
 from django.db import models
 
 
 # Create your models here.
-class User(models.Model):
+class UserManager(BaseUserManager):
+    def create_user(self, email, name, phone, date_of_birth, district, project, password=None):
+        if not email:
+            raise ValueError('Users must have an email address')
+        email = self.normalize_email(email)
+        user = self.model(email=email, name=name, phone=phone, date_of_birth=date_of_birth, district=district,
+                          project=project)
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+
+    def create_superuser(self, email, name, phone, date_of_birth, district, project, password=None):
+        user = self.create_user(email, name, phone, date_of_birth, district, project, password)
+        user.is_superuser = True
+        user.is_staff = True
+        user.save(using=self._db)
+        return user
+
+
+class User(AbstractBaseUser, PermissionsMixin):
     name = models.TextField()
-    email = models.TextField(unique=True)
+    email = models.EmailField(unique=True)
     password = models.TextField()
     phone = models.TextField(unique=True)
     date_of_birth = models.DateField()
     district = models.TextField()
     project = models.TextField()
-    is_superuser = models.BooleanField(default=False)
+
+    objects = UserManager()
+
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['name', 'phone', 'date_of_birth', 'district', 'project']
 
 
 class SuperUser(models.Model):
