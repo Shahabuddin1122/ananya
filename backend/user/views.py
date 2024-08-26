@@ -14,8 +14,14 @@ from .utils import *
 
 
 @api_view(['POST'])
+@permission_classes([AllowAny])
 def user_signup(request):
     if request.method == 'POST':
+        if User.objects.filter(email=request.data.get('email')).exists():
+            return Response({"error": "Email already taken"}, status=status.HTTP_400_BAD_REQUEST)
+        if User.objects.filter(phone=request.data.get('phone')).exists():
+            return Response({"error": "Phone already in use"}, status=status.HTTP_400_BAD_REQUEST)
+
         if not request.data.get('is_superuser', False):
             user_data = request.data.copy()
             user_data['password'] = make_password(user_data['password'])
@@ -24,24 +30,50 @@ def user_signup(request):
             if serializer.is_valid():
                 serializer.save()
                 return Response({"message": "User created successfully"}, status=status.HTTP_201_CREATED)
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"error": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['POST'])
+@permission_classes([AllowAny])
 def super_user_signup(request):
     if request.method == 'POST':
         user_data = request.data.get('user')
-        if user_data:
-            user_data['password'] = make_password(user_data['password'])
-            superuser_data = request.data
-            serializer = SuperUserSerializer(data=superuser_data)
-            if serializer.is_valid():
+
+        if not user_data:
+            return Response({"error": "User data is missing"}, status=status.HTTP_400_BAD_REQUEST)
+
+        if 'email' not in user_data or not user_data['email']:
+            return Response({"error": "Email is required"}, status=status.HTTP_400_BAD_REQUEST)
+
+        if 'phone' not in user_data or not user_data.get('phone'):
+            return Response({"error": "Username is required"}, status=status.HTTP_400_BAD_REQUEST)
+
+        if 'password' not in user_data or not user_data.get('password'):
+            return Response({"error": "Password is required"}, status=status.HTTP_400_BAD_REQUEST)
+
+        if User.objects.filter(phone=user_data.get('phone')).exists():
+            return Response({"error": "phone already taken"}, status=status.HTTP_400_BAD_REQUEST)
+
+        if User.objects.filter(email=user_data.get('email')).exists():
+            return Response({"error": "Email already in use"}, status=status.HTTP_400_BAD_REQUEST)
+
+        user_data['password'] = make_password(user_data['password'])
+        superuser_data = request.data
+        serializer = SuperUserSerializer(data=superuser_data)
+
+        if serializer.is_valid():
+            try:
                 serializer.save()
                 return Response({"message": "SuperUser created successfully"}, status=status.HTTP_201_CREATED)
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            except Exception as e:
+                return Response({"error": f"An error occurred while creating the superuser: {str(e)}"},
+                                status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+        return Response({"error": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['POST'])
+@permission_classes([AllowAny])
 def user_login(request):
     if request.method == 'POST':
         phone = request.data.get('phone')
@@ -51,10 +83,14 @@ def user_login(request):
             user = User.objects.get(phone=phone)
             if check_password(password, user.password):
                 serializer = UserSerializer(user)
+                refresh = RefreshToken.for_user(user)
+                access_token = refresh.access_token
+
                 data = {
                     "user": serializer.data,
                     "managed_users": [],
-                    "token": str(RefreshToken.for_user(user).access_token)
+                    "token": str(access_token),
+                    "refresh_token": str(refresh),
                 }
 
                 if user.is_superuser:
@@ -62,7 +98,6 @@ def user_login(request):
                     managed_users = superuser.managed_users.all()
 
                     for managed_user in managed_users:
-                        # Check if a PeriodPrediction exists for this managed_user
                         if PeriodPrediction.objects.filter(user_id=managed_user.id).exists():
                             data["managed_users"].append(managed_user.id)
 
@@ -79,6 +114,7 @@ def user_login(request):
 
 
 @api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def add_user_in_superuser(request, superuser_id):
     try:
         superuser = SuperUser.objects.get(user_id=superuser_id)
@@ -122,18 +158,18 @@ def add_user_in_superuser(request, superuser_id):
 
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def get_user(request, user_id):
-    if request.method == 'GET':
-        try:
-            users = User.objects.get(id=user_id)
-            serializer = UserSerializer(users)
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        except User.DoesNotExist:
-            return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
-    return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
+    try:
+        user = User.objects.get(id=user_id)
+        serializer = UserSerializer(user)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    except User.DoesNotExist:
+        return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
 
 
 @api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def add_period_info(request, user_id):
     try:
         user = User.objects.get(id=user_id)
@@ -197,6 +233,7 @@ def add_period_info(request, user_id):
 
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def get_user_period_questionnaire(request, user_id):
     try:
         user = User.objects.get(id=user_id)
@@ -212,6 +249,7 @@ def get_user_period_questionnaire(request, user_id):
 
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def get_period_prediction(request, user_id):
     if request.method == 'GET':
         try:
@@ -223,6 +261,7 @@ def get_period_prediction(request, user_id):
 
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def get_period_history(request, user_id):
     if request.method == 'GET':
         try:
@@ -237,6 +276,7 @@ def get_period_history(request, user_id):
 
 
 @api_view(['PUT'])
+@permission_classes([IsAuthenticated])
 def log_new_period(request, user_id):
     if request.method == 'PUT':
         try:
@@ -284,6 +324,7 @@ def log_new_period(request, user_id):
 
 
 @api_view(['PUT'])
+@permission_classes([IsAuthenticated])
 def period_confirmation(request, user_id):
     if request.method == 'PUT':
         # add period history
@@ -320,6 +361,7 @@ def period_confirmation(request, user_id):
 
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def update_period_information(request, user_id):
     try:
         period_data = PeriodPrediction.objects.get(user_id=user_id)
@@ -337,6 +379,7 @@ def update_period_information(request, user_id):
 
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def advance_period_information(request, user_id):
     if request.method == 'GET':
         period_history = (PeriodHistory.objects
@@ -363,6 +406,7 @@ def advance_period_information(request, user_id):
 
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def get_cohorts(request, superuser_id):
     if request.method == 'GET':
         superuser = SuperUser.objects.get(user_id=superuser_id)
@@ -372,6 +416,7 @@ def get_cohorts(request, superuser_id):
 
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def get_cohort_user(request, superuser_id):
     try:
         superuser = SuperUser.objects.get(user_id=superuser_id)
@@ -397,6 +442,7 @@ def get_cohort_user(request, superuser_id):
 
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def request_data_purge(request, user_id):
     if request.method == 'GET':
         try:
