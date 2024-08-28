@@ -17,6 +17,7 @@ import 'package:ananya/screens/process/unlock_process6.dart';
 import 'package:ananya/screens/sign_in.dart';
 import 'package:ananya/screens/sign_up.dart';
 import 'package:ananya/utils/scheme.dart';
+import 'package:ananya/screens/help.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -109,6 +110,7 @@ class _MyAppState extends State<MyApp> {
           '/history/indivisual': (context) => const IndividualHistory(),
           '/history/cohort': (context) => const CohortHistory(),
           '/knowledge-nexus': (context) => const KnowledgeNexusInfo(),
+          '/help': (context) => const Help(),
         },
       ),
     );
