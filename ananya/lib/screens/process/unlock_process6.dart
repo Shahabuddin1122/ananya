@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class UnlockProcess6 extends StatefulWidget {
   final bool update_period;
@@ -66,7 +67,6 @@ class _UnlockProcess6State extends State<UnlockProcess6> {
       } else {
         response = await api.postMethod(json.encode(data));
       }
-      print("AAAAAAAAA");
       setState(() {
         isLoading = false;
       });
@@ -110,25 +110,27 @@ class _UnlockProcess6State extends State<UnlockProcess6> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text.rich(
+                      Text.rich(
                         TextSpan(
                           children: [
                             TextSpan(
-                              text: 'Do you have any of these ',
-                              style: TextStyle(
+                              text: AppLocalizations.of(context)!
+                                  .do_you_have_any_of_these,
+                              style: const TextStyle(
                                 fontSize: 32,
                               ),
                             ),
                             TextSpan(
-                              text: 'health conditions',
-                              style: TextStyle(
+                              text: AppLocalizations.of(context)!
+                                  .health_conditions,
+                              style: const TextStyle(
                                 fontSize: 32,
                                 color: PRIMARY_COLOR,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            TextSpan(
-                              text: '?',
+                            const TextSpan(
+                              text: ' ?',
                               style: TextStyle(
                                 fontSize: 32,
                               ),
@@ -139,8 +141,8 @@ class _UnlockProcess6State extends State<UnlockProcess6> {
                       const SizedBox(
                         height: 10,
                       ),
-                      const Text(
-                        "Choose all that apply.",
+                      Text(
+                        AppLocalizations.of(context)!.choose_all_that_apply,
                       ),
                       const SizedBox(
                         height: 10,
@@ -172,9 +174,9 @@ class _UnlockProcess6State extends State<UnlockProcess6> {
                             ),
                           ),
                         ),
-                        child: const Text(
-                          "Continue",
-                          style: TextStyle(
+                        child: Text(
+                          AppLocalizations.of(context)!.continues,
+                          style: const TextStyle(
                             color: Colors.white,
                           ),
                         ),

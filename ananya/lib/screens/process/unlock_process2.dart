@@ -5,6 +5,7 @@ import 'package:ananya/widgets/custom_app_bar_with_progress.dart';
 import 'package:ananya/widgets/input_box.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class UnlockProcess2 extends StatefulWidget {
   const UnlockProcess2({super.key});
@@ -49,40 +50,41 @@ class _UnlockProcess2State extends State<UnlockProcess2> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text.rich(
+              Text.rich(
                 TextSpan(
                   children: [
                     TextSpan(
-                      text: 'What is the\n',
-                      style: TextStyle(
+                      text: AppLocalizations.of(context)!.what_is_the,
+                      style: const TextStyle(
                         fontSize: 32,
                       ),
                     ),
                     TextSpan(
-                      text: 'number of days\n',
-                      style: TextStyle(
-                        fontSize: 32,
-                        color: PRIMARY_COLOR,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    TextSpan(
-                      text: 'between your periods and \n',
-                      style: TextStyle(
-                        fontSize: 32,
-                      ),
-                    ),
-                    TextSpan(
-                      text: 'how long ',
-                      style: TextStyle(
+                      text: AppLocalizations.of(context)!.number_of_days,
+                      style: const TextStyle(
                         fontSize: 32,
                         color: PRIMARY_COLOR,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     TextSpan(
-                      text: 'does it last?',
-                      style: TextStyle(
+                      text: AppLocalizations.of(context)!
+                          .between_your_periods_and,
+                      style: const TextStyle(
+                        fontSize: 32,
+                      ),
+                    ),
+                    TextSpan(
+                      text: AppLocalizations.of(context)!.how_long,
+                      style: const TextStyle(
+                        fontSize: 32,
+                        color: PRIMARY_COLOR,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    TextSpan(
+                      text: AppLocalizations.of(context)!.does_it_last,
+                      style: const TextStyle(
                         fontSize: 32,
                       ),
                     ),
@@ -92,18 +94,21 @@ class _UnlockProcess2State extends State<UnlockProcess2> {
               const SizedBox(
                 height: 10,
               ),
-              const Text(
-                "Generally, periods occur every 21 to 35 days and last 2 to 7 days.",
+              Text(
+                AppLocalizations.of(context)!
+                    .generally_periods_occur_every_21_to_35_days_and_last_2_to_7_days,
               ),
               const SizedBox(
                 height: 10,
               ),
               InputBox(
-                text: 'Number of days between period e.g 27 days',
+                text: AppLocalizations.of(context)!
+                    .number_of_days_between_period_eg_27_days,
                 controller: _daysBetweenPeriodController,
               ),
               InputBox(
-                text: 'Length of your period e.g 6 days...',
+                text: AppLocalizations.of(context)!
+                    .length_of_your_period_eg_6_days,
                 controller: _lengthOfPeriodController,
               ),
               const SizedBox(
@@ -124,9 +129,9 @@ class _UnlockProcess2State extends State<UnlockProcess2> {
                     ),
                   ),
                 ),
-                child: const Text(
-                  "I don't know",
-                  style: TextStyle(
+                child: Text(
+                  AppLocalizations.of(context)!.i_dont_know,
+                  style: const TextStyle(
                     color: ACCENT,
                   ),
                 ),
@@ -146,7 +151,7 @@ class _UnlockProcess2State extends State<UnlockProcess2> {
                     ),
                   ),
                 ),
-                child: const Text("Continue"),
+                child: Text(AppLocalizations.of(context)!.continues),
               ),
             ],
           ),

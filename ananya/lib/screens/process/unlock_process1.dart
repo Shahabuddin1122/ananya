@@ -5,6 +5,7 @@ import 'package:ananya/widgets/choice_item.dart';
 import 'package:ananya/widgets/custom_app_bar_with_progress.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class UnlockProcess1 extends StatefulWidget {
   const UnlockProcess1({super.key});
@@ -27,24 +28,24 @@ class _UnlockProcess1State extends State<UnlockProcess1> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text.rich(
+              Text.rich(
                 TextSpan(
                   children: [
                     TextSpan(
-                      text: 'Are your periods ',
-                      style: TextStyle(
+                      text: AppLocalizations.of(context)!.are_your_periods,
+                      style: const TextStyle(
                         fontSize: 32,
                       ),
                     ),
                     TextSpan(
-                      text: 'regular',
-                      style: TextStyle(
+                      text: AppLocalizations.of(context)!.regular,
+                      style: const TextStyle(
                         fontSize: 32,
                         color: PRIMARY_COLOR,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    TextSpan(
+                    const TextSpan(
                       text: '?',
                       style: TextStyle(
                         fontSize: 32,
@@ -56,28 +57,29 @@ class _UnlockProcess1State extends State<UnlockProcess1> {
               const SizedBox(
                 height: 10,
               ),
-              const Text(
-                "Regular means that the gap between your periods is around the same number of days each month",
+              Text(
+                AppLocalizations.of(context)!
+                    .regular_means_that_the_gap_between_your_periods_is_around_the_same_number_of_days_each_month,
               ),
               const SizedBox(
                 height: 10,
               ),
               ChoiceItem(
-                text: 'Yes',
+                text: AppLocalizations.of(context)!.yes,
                 onSelected: (choice) {
                   context.read<PeriodState>().updatePeriodRegularity(true);
                   Navigator.pushNamed(context, '/unlock-process/2');
                 },
               ),
               ChoiceItem(
-                text: 'No',
+                text: AppLocalizations.of(context)!.no,
                 onSelected: (choice) {
                   context.read<PeriodState>().updatePeriodRegularity(false);
                   Navigator.pushNamed(context, '/unlock-process/2');
                 },
               ),
               ChoiceItem(
-                text: 'I don\'t Know',
+                text: AppLocalizations.of(context)!.dont_know,
                 onSelected: (choice) {
                   context.read<PeriodState>().updatePeriodRegularity(false);
                   Navigator.pushNamed(context, '/unlock-process/2');

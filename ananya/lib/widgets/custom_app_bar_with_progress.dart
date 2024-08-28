@@ -1,6 +1,6 @@
 import 'package:ananya/utils/constants.dart';
-import 'package:ananya/utils/custom_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CustomAppBarWithProgress extends StatelessWidget
     implements PreferredSizeWidget {
@@ -43,9 +43,9 @@ class CustomAppBarWithProgress extends StatelessWidget
                   );
                 }
               },
-              child: const Text(
-                'Skip',
-                style: TextStyle(
+              child: Text(
+                AppLocalizations.of(context)!.skip,
+                style: const TextStyle(
                   color: ACCENT,
                 ),
               ),
