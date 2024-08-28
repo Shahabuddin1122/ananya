@@ -32,6 +32,7 @@ dependencies:
     sdk: flutter
   google_fonts: ^6.2.1
   http: ^1.2.1
+  youtube_player_flutter: ^9.0.3
   flutter_svg: ^2.0.10+1
   table_calendar: ^3.1.2
   shared_preferences: ^2.2.3
@@ -79,6 +80,7 @@ flutter:
     - assets/images/me.png
     - assets/images/default_person.png
     - assets/gif/loading.gif
+    - assets/gif/bell.gif
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

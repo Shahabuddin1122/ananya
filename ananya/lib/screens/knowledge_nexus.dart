@@ -97,6 +97,7 @@ class KnowledgeNexus extends StatelessWidget {
                     children: [
                       Container(
                         width: MediaQuery.of(context).size.width * 0.35,
+                        height: MediaQuery.of(context).size.width * 0.35,
                         padding: Theme.of(context).insideCardPadding,
                         decoration: BoxDecoration(
                           color: PRIMARY_COLOR,
@@ -106,7 +107,28 @@ class KnowledgeNexus extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              "Governmental Health Regulations",
+                              "To know about Governmental Health Regulations click here",
+                              textAlign: TextAlign.start,
+                              style: TextStyle(
+                                fontSize: 14,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        width: MediaQuery.of(context).size.width * 0.35,
+                        height: MediaQuery.of(context).size.width * 0.35,
+                        padding: Theme.of(context).insideCardPadding,
+                        decoration: BoxDecoration(
+                          color: SECONDARY_COLOR,
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        child: const Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              "Call now to know about more",
                               style: TextStyle(
                                 fontSize: 16,
                               ),

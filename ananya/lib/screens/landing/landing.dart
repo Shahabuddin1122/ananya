@@ -128,26 +128,26 @@ class _LandingState extends State<Landing> {
             BottomNavigationBarItem(
               icon: Icon(
                 Icons.calendar_today,
-                size: _selectedIndex == 0 ? 40 : 30,
+                size: 30,
                 color: _selectedIndex == 0 ? SECONDARY_COLOR : Colors.grey[600],
               ),
-              label: "Tracker",
+              label: "",
             ),
             BottomNavigationBarItem(
               icon: Icon(
                 Icons.language,
-                size: _selectedIndex == 1 ? 40 : 30,
+                size: 30,
                 color: _selectedIndex == 1 ? SECONDARY_COLOR : Colors.grey[600],
               ),
-              label: "Knowledge Nexus",
+              label: "",
             ),
             BottomNavigationBarItem(
               icon: Icon(
                 Icons.shopping_cart,
-                size: _selectedIndex == 2 ? 40 : 30,
+                size: 30,
                 color: _selectedIndex == 2 ? SECONDARY_COLOR : Colors.grey[600],
               ),
-              label: "Shop",
+              label: "",
             ),
           ],
         ),

@@ -49,7 +49,10 @@ class ChooseUser extends StatelessWidget {
               );
             } else if (snapshot.hasError) {
               return const Center(child: Text('Error loading data'));
-            } else if (snapshot.hasData && snapshot.data!.isNotEmpty) {
+            } else if (snapshot.hasData &&
+                snapshot.data!.isNotEmpty &&
+                (snapshot.data!['predicted'].isNotEmpty ||
+                    snapshot.data!['not_predicted'].isNotEmpty)) {
               List<dynamic> predictedUsers = snapshot.data!['predicted'];
               List<dynamic> notPredictedUsers = snapshot.data!['not_predicted'];
               return ListView(

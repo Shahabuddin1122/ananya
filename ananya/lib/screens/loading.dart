@@ -13,12 +13,10 @@ class Loading extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const SizedBox(
-              height: 50,
-            ),
             Image.asset(
               'assets/gif/loading.gif',
-              width: 500,
+              width: 400,
+              fit: BoxFit.fill,
             ),
             Padding(
               padding: Theme.of(context).largemainPadding,
