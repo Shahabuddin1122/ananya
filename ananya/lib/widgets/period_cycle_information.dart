@@ -52,22 +52,29 @@ class _PeriodCycleInformationState extends State<PeriodCycleInformation> {
     DateTime startDateTime = inputFormat.parse(startDate);
     DateTime endDateTime = inputFormat.parse(endDate);
 
-    final int cycleLength = widget.data['days_between_period'];
-    final int daysBetweenCycle = widget.data['length_of_period'];
-    final DateTime ovulationDay =
-        startDateTime.add(Duration(days: cycleLength ~/ 2));
+    final int daysBetweenCycle = widget.data['days_between_period'];
+    final int cycleLength = widget.data['length_of_period'];
 
-    // Calculate ovulation days
-    List<DateTime> ovulationDays = [
-      ovulationDay.subtract(const Duration(days: 1)),
-      ovulationDay,
-      ovulationDay.add(const Duration(days: 1))
-    ];
-
-    // Calculate menstrual days
+    // Initialize lists for ovulation and menstrual days
+    List<DateTime> ovulationDays = [];
     List<DateTime> menstrualDays = [];
-    for (int i = 0; i < daysBetweenCycle; i++) {
-      menstrualDays.add(startDateTime.add(Duration(days: i)));
+
+    // Loop through three cycles to calculate days
+    for (int j = 0; j < 3; j++) {
+      DateTime currentCycleStartDate =
+          startDateTime.add(Duration(days: j * daysBetweenCycle));
+      DateTime ovulationDay =
+          currentCycleStartDate.add(Duration(days: daysBetweenCycle ~/ 2));
+
+      // Calculate ovulation days for this cycle
+      ovulationDays.add(ovulationDay.subtract(const Duration(days: 1)));
+      ovulationDays.add(ovulationDay);
+      ovulationDays.add(ovulationDay.add(const Duration(days: 1)));
+
+      // Calculate menstrual days for this cycle
+      for (int i = 0; i < cycleLength; i++) {
+        menstrualDays.add(currentCycleStartDate.add(Duration(days: i)));
+      }
     }
 
     Map<String, dynamic> periodData = {

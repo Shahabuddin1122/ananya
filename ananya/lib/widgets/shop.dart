@@ -2,9 +2,22 @@ import 'package:ananya/utils/custom_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Shop extends StatelessWidget {
   const Shop({super.key});
+
+  Future<void> _searchInMaps() async {
+    const String query = 'hospitals,pharmacies';
+    final Uri url =
+        Uri.parse('https://www.google.com/maps/search/?api=1&query=$query');
+
+    if (await canLaunchUrl(url)) {
+      await launchUrl(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +56,7 @@ class Shop extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             ElevatedButton(
-              onPressed: () {},
+              onPressed: _searchInMaps,
               child: Text(
                 AppLocalizations.of(context)!.view_product,
                 style: const TextStyle(
