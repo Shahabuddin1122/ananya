@@ -36,7 +36,9 @@ class Help extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(context).pushNamed('/help');
+              },
               child: Text(
                 AppLocalizations.of(context)!.call_now,
                 style: const TextStyle(

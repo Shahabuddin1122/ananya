@@ -39,6 +39,7 @@ dependencies:
   provider: ^6.1.2
   intl: ^0.19.0
   rxdart: ^0.27.4
+  url_launcher: ^6.3.0
   flutter_localizations:
     sdk: flutter
   # The following adds the Cupertino Icons font to your application.
