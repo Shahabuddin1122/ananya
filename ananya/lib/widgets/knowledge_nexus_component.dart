@@ -42,7 +42,9 @@ class KnowledgeNexus extends StatelessWidget {
                 height: 10,
               ),
               ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.of(context).pushNamed('/knowledge-nexus');
+                },
                 child: Text(AppLocalizations.of(context)!.go_to_nexus),
               )
             ],
