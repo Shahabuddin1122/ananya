@@ -51,8 +51,9 @@ class _PeriodDateShowState extends State<PeriodDateShow> {
               children: [
                 const SizedBox(height: 40),
                 Image.asset(
-                  'assets/gif/loading.gif',
-                  width: 500,
+                  'assets/gif/bell.gif',
+                  width: 400,
+                  fit: BoxFit.contain,
                 ),
                 const SizedBox(height: 20),
                 Text.rich(

@@ -8,28 +8,33 @@ class KnowledgeContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: MediaQuery.of(context).size.width * 0.25,
-      child: Column(
-        children: [
-          Container(
-            width: double.maxFinite,
-            height: 100,
-            color: Colors.red,
-          ),
-          Container(
-            color: ACCENT,
-            padding: Theme.of(context).insideCardPadding,
-            child: Text(
-              text,
-              style: const TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                fontSize: 12,
-              ),
+    return GestureDetector(
+      onTap: () {
+        Navigator.of(context).pushNamed('/knowledge-nexus');
+      },
+      child: SizedBox(
+        width: MediaQuery.of(context).size.width * 0.25,
+        child: Column(
+          children: [
+            Container(
+              width: double.maxFinite,
+              height: 100,
+              color: PRIMARY_COLOR,
             ),
-          )
-        ],
+            Container(
+              color: ACCENT,
+              padding: Theme.of(context).insideCardPadding,
+              child: Text(
+                text,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 12,
+                ),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

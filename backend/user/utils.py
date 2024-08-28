@@ -18,14 +18,9 @@ def get_period_date(user_id, last_period_start):
     average_period_length = int(total_period_length / number)
 
     if question_info.is_period_regular:
-        if not question_info.take_birth_control:
-            next_period_date_from = last_period_start + timedelta(days=days_between_period)
-            next_period_date_to = last_period_start + timedelta(days=days_between_period)
-            length_of_period = question_info.length_of_period
-        else:
-            next_period_date_from = last_period_start + timedelta(days=average_period_cycle)
-            next_period_date_to = last_period_start + timedelta(days=average_period_cycle)
-            length_of_period = average_period_length
+        next_period_date_from = last_period_start + timedelta(days=average_period_cycle)
+        next_period_date_to = last_period_start + timedelta(days=average_period_cycle)
+        length_of_period = average_period_length
     else:
         next_period_date_from = last_period_start + timedelta(days=average_period_cycle - 5)
         next_period_date_to = last_period_start + timedelta(days=average_period_cycle + 5)

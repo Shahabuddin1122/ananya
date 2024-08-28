@@ -4,6 +4,7 @@ import 'package:ananya/screens/add_a_user.dart';
 import 'package:ananya/screens/choose_user.dart';
 import 'package:ananya/screens/history/cohort.dart';
 import 'package:ananya/screens/history/individual.dart';
+import 'package:ananya/screens/knowledge_nexus_info.dart';
 import 'package:ananya/screens/landing/landing.dart';
 import 'package:ananya/screens/loading.dart';
 import 'package:ananya/screens/period_date_show.dart';
@@ -107,6 +108,7 @@ class _MyAppState extends State<MyApp> {
           },
           '/history/indivisual': (context) => const IndividualHistory(),
           '/history/cohort': (context) => const CohortHistory(),
+          '/knowledge-nexus': (context) => const KnowledgeNexusInfo(),
         },
       ),
     );
