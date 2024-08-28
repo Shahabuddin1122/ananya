@@ -1,11 +1,9 @@
-import 'package:ananya/models/period_state_questionnaire.dart';
 import 'package:ananya/utils/constants.dart';
 import 'package:ananya/utils/custom_theme.dart';
-import 'package:ananya/widgets/calender.dart';
 import 'package:ananya/widgets/custom_app_bar_with_progress.dart';
 import 'package:ananya/widgets/dynamic_calender.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class UnlockProcess4 extends StatelessWidget {
   final bool update_period;
@@ -24,26 +22,26 @@ class UnlockProcess4 extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text.rich(
+                Text.rich(
                   TextSpan(
                     children: [
                       TextSpan(
-                        text: 'When did your \n',
-                        style: TextStyle(
+                        text: AppLocalizations.of(context)!.when_did_your,
+                        style: const TextStyle(
                           fontSize: 32,
                         ),
                       ),
                       TextSpan(
-                        text: 'last period ',
-                        style: TextStyle(
+                        text: AppLocalizations.of(context)!.last_period,
+                        style: const TextStyle(
                           fontSize: 32,
                           color: PRIMARY_COLOR,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                       TextSpan(
-                        text: 'start?',
-                        style: TextStyle(
+                        text: AppLocalizations.of(context)!.start,
+                        style: const TextStyle(
                           fontSize: 32,
                         ),
                       ),
@@ -77,9 +75,9 @@ class UnlockProcess4 extends StatelessWidget {
                       ),
                     ),
                   ),
-                  child: const Text(
-                    "I don't know",
-                    style: TextStyle(
+                  child: Text(
+                    AppLocalizations.of(context)!.i_dont_know,
+                    style: const TextStyle(
                       color: ACCENT,
                     ),
                   ),
@@ -107,9 +105,9 @@ class UnlockProcess4 extends StatelessWidget {
                       ),
                     ),
                   ),
-                  child: const Text(
-                    "Continue",
-                    style: TextStyle(
+                  child: Text(
+                    AppLocalizations.of(context)!.continues,
+                    style: const TextStyle(
                       color: Colors.white,
                     ),
                   ),

@@ -1,7 +1,9 @@
+import 'package:ananya/l10n/app_localizations_extension.dart';
 import 'package:ananya/models/period_state_questionnaire.dart';
 import 'package:ananya/utils/custom_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ChoiceItemWithRadioIcon extends StatelessWidget {
   final String text;
@@ -13,6 +15,9 @@ class ChoiceItemWithRadioIcon extends StatelessWidget {
   Widget build(BuildContext context) {
     final periodState = context.watch<PeriodState>();
     final isSelected = periodState.healthCondition[text] ?? false;
+
+    final localizedText =
+        AppLocalizations.of(context)!.translateCondition(text);
 
     return GestureDetector(
       onTap: () {
@@ -30,7 +35,7 @@ class ChoiceItemWithRadioIcon extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              text,
+              localizedText,
               style: const TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,

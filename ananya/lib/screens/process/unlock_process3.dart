@@ -2,10 +2,8 @@ import 'package:ananya/utils/constants.dart';
 import 'package:ananya/utils/custom_theme.dart';
 import 'package:ananya/widgets/calender.dart';
 import 'package:ananya/widgets/custom_app_bar_with_progress.dart';
-import 'package:ananya/widgets/dynamic_calender.dart';
-import 'package:ananya/widgets/input_box.dart';
 import 'package:flutter/material.dart';
-import 'package:table_calendar/table_calendar.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class UnlockProcess3 extends StatelessWidget {
   UnlockProcess3({super.key});
@@ -75,7 +73,7 @@ class UnlockProcess3 extends StatelessWidget {
                           const SizedBox(
                             width: 10,
                           ),
-                          const Text("Menstruation")
+                          Text(AppLocalizations.of(context)!.menstruation)
                         ],
                       ),
                       const SizedBox(
@@ -91,7 +89,7 @@ class UnlockProcess3 extends StatelessWidget {
                           const SizedBox(
                             width: 10,
                           ),
-                          const Text("Ovulation")
+                          Text(AppLocalizations.of(context)!.ovulation)
                         ],
                       ),
                     ],
@@ -110,19 +108,21 @@ class UnlockProcess3 extends StatelessWidget {
               padding: Theme.of(context).largemainPadding,
               child: Column(
                 children: [
-                  const Text.rich(
+                  Text.rich(
                     TextSpan(
                       children: [
                         TextSpan(
-                          text: 'Log your periods to get ',
-                          style: TextStyle(
+                          text: AppLocalizations.of(context)!
+                              .log_your_periods_to_get,
+                          style: const TextStyle(
                             fontSize: 32,
                             fontWeight: FontWeight.w100,
                           ),
                         ),
                         TextSpan(
-                          text: 'accurate predictions',
-                          style: TextStyle(
+                          text: AppLocalizations.of(context)!
+                              .accurate_predictions,
+                          style: const TextStyle(
                             fontSize: 32,
                             color: ACCENT,
                             fontWeight: FontWeight.w900,
@@ -134,8 +134,8 @@ class UnlockProcess3 extends StatelessWidget {
                   const SizedBox(
                     height: 10,
                   ),
-                  const Text(
-                      "Logging your period when it happens in the Ananya App will get you accurate predictions of your next period cycle."),
+                  Text(AppLocalizations.of(context)!
+                      .logging_your_period_when_it_happens_in_the_ananya_app_will_get_you_accurate_predictions_of_your_next_period_cycle),
                   const SizedBox(
                     height: 30,
                   ),
@@ -158,9 +158,9 @@ class UnlockProcess3 extends StatelessWidget {
                         ),
                       ),
                     ),
-                    child: const Text(
-                      "Continue",
-                      style: TextStyle(
+                    child: Text(
+                      AppLocalizations.of(context)!.continues,
+                      style: const TextStyle(
                         color: Colors.white,
                       ),
                     ),
