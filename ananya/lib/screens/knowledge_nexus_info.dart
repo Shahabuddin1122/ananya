@@ -97,12 +97,15 @@ class KnowledgeNexusInfo extends StatelessWidget {
                     children: [
                       KnowledgeContainer(
                         text: "What is menstrution?",
+                        image: 'assets/images/menstruation.jpg',
                       ),
                       KnowledgeContainer(
                         text: "What is menstrution?",
+                        image: 'assets/images/menstruation.jpg',
                       ),
                       KnowledgeContainer(
                         text: "What is menstrution?",
+                        image: 'assets/images/menstruation.jpg',
                       ),
                     ],
                   ),

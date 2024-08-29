@@ -72,18 +72,8 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/images/hotline.png
-    - assets/images/pink_ellipse.svg
-    - assets/images/hand_spoon.png
-    - assets/images/period_cycle.svg
-    - assets/images/Anannya Anim 1.svg
-    - assets/images/knowledge_nexus.svg
-    - assets/images/Sanitary Pads 1.svg
-    - assets/images/logo.png
-    - assets/images/me.png
-    - assets/images/default_person.png
-    - assets/gif/loading.gif
-    - assets/gif/bell.gif
+    - assets/images/
+    - assets/gif/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
