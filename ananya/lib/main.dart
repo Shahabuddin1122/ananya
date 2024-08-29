@@ -19,10 +19,15 @@ import 'package:ananya/screens/sign_up.dart';
 import 'package:ananya/utils/scheme.dart';
 import 'package:ananya/screens/help.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:permission_handler/permission_handler.dart';
+
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -31,7 +36,23 @@ Future<void> main() async {
   String? languageCode = prefs.getString('language_code');
   Locale initialLocale = Locale(languageCode ?? 'bn');
 
+  await _initializeNotification();
+
   runApp(MyApp(initialLocale: initialLocale));
+}
+
+Future<void> _initializeNotification() async {
+  final androidSettings = AndroidInitializationSettings('@mipmap/ic_launcher');
+  final initializationSettings = InitializationSettings(
+    android: androidSettings,
+  );
+
+  await flutterLocalNotificationsPlugin.initialize(initializationSettings);
+
+  // Check and request notification permission for Android 13 and above
+  if (await Permission.notification.isDenied) {
+    await Permission.notification.request();
+  }
 }
 
 class MyApp extends StatefulWidget {
