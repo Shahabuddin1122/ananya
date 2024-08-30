@@ -1,13 +1,14 @@
+import 'package:ananya/models/knowledge_nexus_data.dart';
 import 'package:ananya/utils/constants.dart';
 import 'package:ananya/utils/custom_theme.dart';
 import 'package:flutter/material.dart';
 
 class KnowledgeContainer extends StatelessWidget {
-  final String text, image, id;
+  final String id;
+  final Map<String, String> data;
   const KnowledgeContainer({
-    required this.image,
-    required this.text,
     required this.id,
+    required this.data,
     super.key,
   });
 
@@ -18,7 +19,7 @@ class KnowledgeContainer extends StatelessWidget {
         Navigator.pushNamed(
           context,
           '/knowledge-nexus-info',
-          arguments: id,
+          arguments: [id, data],
         );
       },
       child: Column(
@@ -26,7 +27,7 @@ class KnowledgeContainer extends StatelessWidget {
         children: [
           Expanded(
             child: Image.asset(
-              image,
+              data['hero_image']!,
               fit: BoxFit.fill,
             ),
           ),
@@ -34,7 +35,7 @@ class KnowledgeContainer extends StatelessWidget {
             color: ACCENT,
             padding: Theme.of(context).insideCardPadding,
             child: Text(
-              text,
+              data['question']!,
               style: const TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.bold,

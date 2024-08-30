@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class VideoPlayer extends StatefulWidget {
-  final String id;
+  final String? id;
   const VideoPlayer({required this.id, super.key});
 
   @override
@@ -16,17 +16,14 @@ class _VideoPlayerState extends State<VideoPlayer> {
   void initState() {
     super.initState();
     _controller = YoutubePlayerController(
-      initialVideoId: 'https://www.youtube.com/watch?v=a0oa3Qiz5tw',
+      initialVideoId: widget.id ??
+          'Vl2wRbO8LZU', //https://www.youtube.com/watch?v=ueZbo_bQHMg
       flags: const YoutubePlayerFlags(
-        autoPlay: true,
+        autoPlay: false,
         mute: true,
+        isLive: false,
       ),
     );
-    _controller.addListener(listener);
-  }
-
-  void listener() {
-    print('Player state changed');
   }
 
   @override
@@ -34,14 +31,11 @@ class _VideoPlayerState extends State<VideoPlayer> {
     return YoutubePlayer(
       controller: _controller,
       showVideoProgressIndicator: true,
-      progressIndicatorColor: Colors.amber,
+      progressIndicatorColor: Colors.red,
       progressColors: const ProgressBarColors(
-        playedColor: Colors.amber,
-        handleColor: Colors.amberAccent,
+        playedColor: Colors.red,
+        handleColor: Colors.red,
       ),
-      onReady: () {
-        _controller.addListener(listener);
-      },
     );
   }
 }

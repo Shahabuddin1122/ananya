@@ -10,6 +10,7 @@ final List<Map<String, String>> knowledgeItems = [
     "third_description":
         "Remember, menstruation is a normal-healthy process and natural part of being a woman. It is a sign that your body is functioning properly and preparing for the possibility of pregnancy. It\'s important to be open and talk about it, as it can help remove the stigma and create a supportive environment for girls and women to take care of their menstrual health.",
     "additional_image_1": "assets/images/femaleorgans.jpg",
+    "video_id": "Vl2wRbO8LZU",
   },
   {
     "id": "2",
@@ -25,6 +26,7 @@ final List<Map<String, String>> knowledgeItems = [
     "id": "3",
     "question": "Learn about the common symptoms of Menstruation",
     "hero_image": "assets/images/menssymp.jpg",
+    "video_id": "oZEBjMBMV40",
     "first_description":
         "During menstruation, it is common to experience a range of symptoms that can vary from person to person. These symptoms are caused by hormonal changes in the body and are typically not a cause for concern. It\'s important to remember that menstruation is a natural and healthy process, and there is no need to be scared of it. \n \nSome of the common symptoms of menstruation include:\n \nAbdominal cramps: Many women experience mild to moderate cramping in the lower abdomen during their periods. This is caused by the contraction of the uterus as it sheds its lining. \n \nBloating: Hormonal fluctuations during menstruation can cause water retention and bloating, leading to a feeling of fullness or swelling in the abdomen.",
     "additional_image_1": "assets/images/commonsymp2.jpg",
@@ -38,6 +40,7 @@ final List<Map<String, String>> knowledgeItems = [
     "question": "What are the steps of Menstruation Cycle?",
     "hero_image": "assets/images/stagesofmens.jpg",
     "additional_image_1": "assets/images/stepsofmenscycle.png",
+    "video_id": "spe_mto4gFk",
     "first_description":
         "Understanding the menstrual cycle is crucial for teenage girls as it is a natural and recurring process in a womans reproductive system. The menstrual cycle consists of several stages that prepare the body for potential pregnancy. Knowing these stages and their symptoms can help girls track their menstrual health and understand their bodies better.\n \nSteps of the Menstrual Cycle:\n \n1. Follicular Phase: Following menstruation, the body enters the follicular phase. Hormones stimulate the growth of follicles in the ovaries, each containing an egg. The lining of the uterus also starts to thicken. Girls may experience increased energy levels and a sense of well-being during this phase.",
     "second_description":
@@ -49,6 +52,7 @@ final List<Map<String, String>> knowledgeItems = [
     "id": "5",
     "question": "What is abnormal Menstruation?",
     "hero_image": "assets/images/abnormalmens.jpg",
+    "video_id": "Barm4vAfM",
     "first_description":
         "Abnormal menstruation refers to any deviation from a regular menstrual cycle. While periods can vary from person to person, certain signs indicate abnormality. Understanding what constitutes abnormal menstruation is essential for teenage girls to monitor their menstrual health effectively.\n \nSymptoms of Abnormal Menstruation:\n \nIrregular periods: Menstrual cycles that occur less than 21 days apart or more than 35 days apart are considered irregular.\n \nExcessive bleeding: Heavy or prolonged menstrual bleeding that requires changing pads or tampons every hour for several consecutive hours.",
     "additional_image_1": "assets/images/abnormalmens22.jpg",
@@ -96,6 +100,7 @@ final List<Map<String, String>> knowledgeItems = [
     "id": "11",
     "question": "Necessary hygiene measures during menstruation",
     "hero_image": "assets/images/img_image7.png",
+    "video_id": "3Og40MfBlz8",
     "additional_image_1": "assets/images/mhmmeasures2.PNG",
     "first_description":
         "Could you be pregnant? The proof is in the pregnancy test. But even before you miss a period, you might suspect or hope that you are pregnant. The most common early signs and symptoms of pregnancy might include:   1. Missed period: A missed period is the most obvious sign of pregnancy.  2. Nausea: Nausea and vomiting are common symptoms in early pregnancy.  3. Breast changes: The hormones produced during pregnancy cause changes in the breasts, such as tenderness and enlargement.  4. Fatigue: Increased fatigue is a common symptom in early pregnancy, due to hormonal changes.",
@@ -131,6 +136,7 @@ final List<Map<String, String>> knowledgeItems = [
     "question": "What Could Cause a Late or Missed Period?",
     "hero_image": "assets/images/latepriod.jpg",
     "additional_image_1": "assets/images/missperiod2.jpg",
+    "video_id": "kQD0Bou2yJQ",
     "first_description":
         "Late or missed periods can be a cause of concern for teenage girls. It is important to understand that various factors can contribute to this occurrence. By recognizing the possible reasons and associated symptoms, girls can gain insights into their menstrual health and alleviate unnecessary worry.\n \nReasons for Late or Missed Periods:\n \nHormonal Imbalance: Fluctuations in hormone levels, especially during adolescence, can cause irregular periods. Stress, excessive exercise, weight changes, and certain medical conditions can disrupt the hormonal balance and lead to delayed or missed periods.\n \nPolycystic Ovary Syndrome (PCOS): PCOS is a common hormonal disorder that affects the ovaries. It can cause irregular periods, prolonged cycles, or even missed periods. Other symptoms may include acne, weight gain, and excessive hair growth.",
     "second_description":
@@ -153,6 +159,7 @@ final List<Map<String, String>> knowledgeItems = [
     "question": "What to do on first period?",
     "hero_image": "assets/images/firstperiod.jpg",
     "additional_image_1": "assets/images/firstperiod2.jpg",
+    "video_id": "ImzxzlPzbRk",
     "first_description":
         "When a teenage girl experiences her first menstruation, also known as her first period, it can be an exciting yet unfamiliar milestone. It is important to approach this new phase of life with knowledge and understanding. This guide aims to provide a step-by-step approach on what to do when you get your first period, helping you navigate this natural process with confidence and ease. From staying calm to finding support and practicing good hygiene, these simple steps will empower you to embrace and manage your menstrual health effectively.\n \nStay calm: First and foremost, it is essential to remain calm and remember that menstruation is a normal part of a girls life. Take a deep breath and know that millions of girls go through this too.\n \nFind support: Talk to a trusted adult, such as your mother, older sister, or a female guardian, about your first period. They can offer guidance, support, and practical advice to help you navigate this new phase.\n \nBe prepared: It is helpful to have menstrual supplies on hand before your first period arrives. Stock up on sanitary pads or tampons to ensure you are ready when it happens. If you are unsure which products to choose, ask a knowledgeable adult for recommendations.",
     "second_description":
@@ -167,5 +174,34 @@ final List<Map<String, String>> knowledgeItems = [
     "hero_image": "assets/images/regularprep.jpg",
     "first_description":
         "A clear idea about when menstruation may occur should be kept in advance. For example, it is possible to easily know the next month\'s date using the period tracker in this app. You have to think in advance if your period is during school hours or when you are away from home, what should be prepared.\n \nFor menstrual preparation, go out with your favorite pad, tissue, soap in a small bag and if possible, a bottle of water. keep.",
+  },
+];
+
+final List<Map<String, String>> relatedInfo = [
+  {
+    "id": "1",
+    "question": "Early Sign of Pregnancy",
+    "hero_image": "assets/images/img_image4.png",
+    "first_description":
+        "Could you be pregnant? The proof is in the pregnancy test. But even before you miss a period, you might suspect or hope that you are pregnant. The most common early signs and symptoms of pregnancy might include:   1. Missed period: A missed period is the most obvious sign of pregnancy.  2. Nausea: Nausea and vomiting are common symptoms in early pregnancy.  3. Breast changes: The hormones produced during pregnancy cause changes in the breasts, such as tenderness and enlargement.  4. Fatigue: Increased fatigue is a common symptom in early pregnancy, due to hormonal changes.",
+  },
+  {
+    "id": "2",
+    "question": "Know when you are fertile",
+    "hero_image": "assets/images/fertiledayspic.jpg",
+    "video_id": "pnm7QiG1zW4",
+    "first_description":
+        "Are you trying to conceive or avoid pregnancy? Understanding your fertility can be crucial in achieving your family planning goals. Knowing when you are most fertile can help you time intercourse for optimal chances of conception, or avoid unprotected sex during the fertile window to prevent unintended pregnancy. In this article, we will discuss the basics of female fertility and the various methods to help you determine when you are most likely to conceive.   1. Ovulation: Ovulation is when an egg is released from the ovary and can be fertilized by sperm. Understanding your ovulation cycle is the key to determining your fertile window.  2. Basal Body Temperature: Monitoring your basal body temperature, which is your temperature at rest, can indicate when you are ovulating. A slight increase in temperature may indicate that ovulation has occurred.  3. Ovulation Predictor Kits: Ovulation predictor kits can help you determine when you are fertile by measuring the levels of luteinizing hormone (LH) in your urine. LH levels rise just before ovulation, indicating that you are fertile.",
+    "additional_image_1": "assets/images/knowwhenyouarefertile.PNG",
+    "second_description":
+        "If your menstrual cycle lasts 28 days and your period arrives like clockwork, it\'s likely that you\'ll ovulate on day 14. That\'s halfway through your cycle. Your fertile window begins on day 10. You\'re more likely to get pregnant if you have sex at least every other day between days 10 and 14 of a 28-day cycle.",
+    "third_description":
+        "Remember that fertility can vary from cycle to cycle and can be affected by many factors, including age, weight, stress, and medical conditions. Consult with a healthcare provider if you have any concerns about your fertility.",
+  },
+  {
+    "id": "3",
+    "question": "Spotting vs Period vs Bleeding",
+    "hero_image": "assets/images/img_pngtreecartoo.png",
+    "first_description": "Will add soon.",
   },
 ];
