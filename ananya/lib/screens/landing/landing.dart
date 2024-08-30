@@ -60,7 +60,7 @@ class _LandingState extends State<Landing> {
           },
         );
       case 1:
-        return KnowledgeNexus();
+        return const KnowledgeNexus();
       case 2:
         return UserHome(); // Replace with the appropriate widget for "Shop"
       default:

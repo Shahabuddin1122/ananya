@@ -1,11 +1,12 @@
+import 'package:ananya/models/knowledge_nexus_data.dart';
 import 'package:ananya/utils/constants.dart';
 import 'package:ananya/utils/custom_theme.dart';
 import 'package:ananya/widgets/knowledge_container.dart';
-import 'package:ananya/widgets/video_player.dart';
 import 'package:flutter/material.dart';
 
 class KnowledgeNexusInfo extends StatelessWidget {
-  const KnowledgeNexusInfo({super.key});
+  final String id;
+  const KnowledgeNexusInfo({required this.id, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -17,10 +18,10 @@ class KnowledgeNexusInfo extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
+            Image.asset(
               width: double.infinity,
-              height: 250,
-              color: PRIMARY_COLOR,
+              knowledgeItems[int.parse(id) - 1]['hero_image']!,
+              fit: BoxFit.fill,
             ),
             const SizedBox(
               height: 20,
@@ -30,9 +31,9 @@ class KnowledgeNexusInfo extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    "What is mestrual cycle?",
-                    style: TextStyle(
+                  Text(
+                    knowledgeItems[int.parse(id) - 1]['question']!,
+                    style: const TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                       color: ACCENT,
@@ -41,31 +42,36 @@ class KnowledgeNexusInfo extends StatelessWidget {
                   const SizedBox(
                     height: 10,
                   ),
-                  const Text(
-                    "Menstrual Cycle is the time period between first day of menstuation to first day of next period.\n\nTypically menstrual cycle are 28 days long. But it can vary from 21 to 35 days",
-                    style: TextStyle(
+                  Text(
+                    knowledgeItems[int.parse(id) - 1]['first_description']!,
+                    style: const TextStyle(
                       fontSize: 16,
                       color: ACCENT,
                     ),
-                  ),
-                  const SizedBox(
-                    height: 50,
-                  ),
-                  Container(
-                    width: double.infinity,
-                    height: 200,
-                    color: PRIMARY_COLOR,
                   ),
                   const SizedBox(
                     height: 30,
                   ),
-                  const Text(
-                    "Menstrual Cycle is the time period between first day of menstuation to first day of next period.\n\nTypically menstrual cycle are 28 days long. But it can vary from 21 to 35 days",
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: ACCENT,
+                  if (knowledgeItems[int.parse(id) - 1]['second_description'] !=
+                      null) ...[
+                    Image.asset(
+                      width: double.infinity,
+                      knowledgeItems[int.parse(id) - 1]['additional_image_1']!,
+                      fit: BoxFit.fill,
                     ),
-                  ),
+                    const SizedBox(
+                      height: 30,
+                    ),
+                    Text(
+                      knowledgeItems[int.parse(id) - 1]['second_description']!,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        color: ACCENT,
+                      ),
+                    ),
+                  ] else ...[
+                    Container(),
+                  ],
                   const SizedBox(
                     height: 20,
                   ),
@@ -76,9 +82,6 @@ class KnowledgeNexusInfo extends StatelessWidget {
                     color: ACCENT,
                     thickness: 0.5,
                   ),
-                  const SizedBox(
-                    height: 20,
-                  ),
                   const Text(
                     "To learn more",
                     style: TextStyle(
@@ -88,33 +91,33 @@ class KnowledgeNexusInfo extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(
-                    height: 20,
+                    height: 10,
                   ),
-                  const Wrap(
-                    direction: Axis.horizontal,
-                    spacing: 15.0,
-                    runSpacing: 15.0,
-                    children: [
-                      KnowledgeContainer(
-                        text: "What is menstrution?",
-                        image: 'assets/images/menstruation.jpg',
-                      ),
-                      KnowledgeContainer(
-                        text: "What is menstrution?",
-                        image: 'assets/images/menstruation.jpg',
-                      ),
-                      KnowledgeContainer(
-                        text: "What is menstrution?",
-                        image: 'assets/images/menstruation.jpg',
-                      ),
-                    ],
+                  GridView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 3,
+                      crossAxisSpacing: 15.0,
+                      mainAxisSpacing: 15.0,
+                      childAspectRatio: 0.75,
+                    ),
+                    itemCount: 3, // Limit to 3 items
+                    itemBuilder: (context, index) {
+                      return KnowledgeContainer(
+                        text: knowledgeItems[index]['question']!,
+                        image: knowledgeItems[index]['hero_image']!,
+                        id: knowledgeItems[index]['id']!,
+                      );
+                    },
                   ),
                   const SizedBox(
-                    height: 10,
+                    height: 20,
                   ),
                 ],
               ),
-            )
+            ),
           ],
         ),
       ),
