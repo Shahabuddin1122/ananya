@@ -130,7 +130,10 @@ class _MyAppState extends State<MyApp> {
           },
           '/history/indivisual': (context) => const IndividualHistory(),
           '/history/cohort': (context) => const CohortHistory(),
-          '/knowledge-nexus': (context) => const KnowledgeNexusInfo(),
+          '/knowledge-nexus-info': (context) {
+            final args = ModalRoute.of(context)!.settings.arguments as String;
+            return KnowledgeNexusInfo(id: args);
+          },
           '/help': (context) => const Help(),
         },
       ),

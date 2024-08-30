@@ -2,86 +2,10 @@ import 'package:ananya/utils/constants.dart';
 import 'package:ananya/utils/custom_theme.dart';
 import 'package:ananya/widgets/knowledge_container.dart';
 import 'package:flutter/material.dart';
+import 'package:ananya/models/knowledge_nexus_data.dart';
 
 class KnowledgeNexus extends StatelessWidget {
-  KnowledgeNexus({super.key});
-
-  final List<Map<String, String>> knowledgeItems = [
-    {
-      "text": "What is Menstruation?",
-      "image": "assets/images/menstruation.jpg"
-    },
-    {
-      "text": "What is Menstruation Cycle?",
-      "image": "assets/images/periodcycle1.jpg"
-    },
-    {
-      "text": "Learn about the common symptoms of Menstruation",
-      "image": "assets/images/menssymp.jpg"
-    },
-    {
-      "text": "What are the steps of Menstruation Cycle?",
-      "image": "assets/images/stagesofmens.jpg"
-    },
-    {
-      "text": "What is abnormal Menstruation?",
-      "image": "assets/images/abnormalmens.jpg"
-    },
-    {
-      "text": "What are the common misconceptions about menstruation?",
-      "image": "assets/images/missperiod.jpg"
-    },
-    {
-      "text": "What is PMS or Premenstrual Syndrome?",
-      "image": "assets/images/pmsimage.jpg"
-    },
-    {
-      "text": "When should a doctor be consulted?",
-      "image": "assets/images/doctorsadvise.jpg"
-    },
-    {
-      "text": "What should be the food habit during menstruation?",
-      "image": "assets/images/foodhabitttt.jpg"
-    },
-    {
-      "text": "Why is iron important for girls?",
-      "image": "assets/images/ironneed.jpg"
-    },
-    {
-      "text": "Necessary hygiene measures during menstruation",
-      "image": "assets/images/img_image7.png"
-    },
-    {
-      "text":
-          "What are the pillars of menstrual health and menstrual hygiene management?",
-      "image": "assets/images/menstruationmisconception.jpg"
-    },
-    {
-      "text": "What are the things needed during menstruation?",
-      "image": "assets/images/thingsneeded.jpg"
-    },
-    {
-      "text": "Menstrual health care is a human right",
-      "image": "assets/images/humanright.jpg"
-    },
-    {
-      "text": "What Could Cause a Late or Missed Period?",
-      "image": "assets/images/latepriod.jpg"
-    },
-    {
-      "text": "Why should a girl know about this before menstruation?",
-      "image": "assets/images/thingstoknowbeforefirstperiod.jpg"
-    },
-    {
-      "text": "What to do on first period?",
-      "image": "assets/images/firstperiod.jpg"
-    },
-    {
-      "text":
-          "What preparations should girls take so that menstruation does not interfere with daily life?",
-      "image": "assets/images/regularprep.jpg"
-    },
-  ];
+  const KnowledgeNexus({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -140,8 +64,9 @@ class KnowledgeNexus extends StatelessWidget {
               itemCount: knowledgeItems.length,
               itemBuilder: (context, index) {
                 return KnowledgeContainer(
-                  text: knowledgeItems[index]['text']!,
-                  image: knowledgeItems[index]['image']!,
+                  text: knowledgeItems[index]['question']!,
+                  image: knowledgeItems[index]['hero_image']!,
+                  id: knowledgeItems[index]['id']!,
                 );
               },
             ),
