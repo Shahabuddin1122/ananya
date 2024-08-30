@@ -4,7 +4,6 @@ import 'package:ananya/utils/custom_theme.dart';
 import 'package:ananya/widgets/knowledge_container.dart';
 import 'package:ananya/widgets/video_player.dart';
 import 'package:flutter/material.dart';
-import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class KnowledgeNexusInfo extends StatelessWidget {
   final String id;
@@ -13,6 +12,8 @@ class KnowledgeNexusInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final relatedInfo = KnowledgeItemProvider.getAdditionalInfo(context);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Knowledge nexus'),

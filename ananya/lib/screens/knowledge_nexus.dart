@@ -9,6 +9,7 @@ class KnowledgeNexus extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final knowledgeItems = KnowledgeItemProvider.getKnowledgeItems(context);
     return SingleChildScrollView(
       child: Container(
         padding: Theme.of(context).largemainPadding,
