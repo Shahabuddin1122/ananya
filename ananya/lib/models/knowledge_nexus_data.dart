@@ -169,3 +169,27 @@ final List<Map<String, String>> knowledgeItems = [
         "A clear idea about when menstruation may occur should be kept in advance. For example, it is possible to easily know the next month\'s date using the period tracker in this app. You have to think in advance if your period is during school hours or when you are away from home, what should be prepared.\n \nFor menstrual preparation, go out with your favorite pad, tissue, soap in a small bag and if possible, a bottle of water. keep.",
   },
 ];
+
+final List<Map<String, String>> relatedInfo = [
+  {
+    "id": "1",
+    "question": "Early Sign of Pregnancy",
+    "hero_image": "assets/images/img_image4.png",
+    "first_description":
+        "Menstruation is a natural bodily process experienced by millions of women worldwide. However, despite its prevalence, there is still a significant amount of stigma and misinformation surrounding menstrual hygiene.In this article, we will delve into the basics of menstrual hygiene and provide practical tips for maintaining good practices. \n \nWhat is Menstrual Hygiene? Menstrual hygiene refers to the measures taken to maintain cleanliness and hygiene during the menstrual period. This includes using sanitary products such as pads, tampons, menstrual cups, or period panties, as well as taking steps to keep the genital area clean and dry. Good menstrual hygiene helps prevent infections and discomfort and promotes overall health and well-being.",
+  },
+  {
+    "id": "2",
+    "question": "Know when you are fertile",
+    "hero_image": "assets/images/fertiledayspic.jpg",
+    "first_description":
+        "Menstruation is a natural bodily process experienced by millions of women worldwide. However, despite its prevalence, there is still a significant amount of stigma and misinformation surrounding menstrual hygiene.In this article, we will delve into the basics of menstrual hygiene and provide practical tips for maintaining good practices. \n \nWhat is Menstrual Hygiene? Menstrual hygiene refers to the measures taken to maintain cleanliness and hygiene during the menstrual period. This includes using sanitary products such as pads, tampons, menstrual cups, or period panties, as well as taking steps to keep the genital area clean and dry. Good menstrual hygiene helps prevent infections and discomfort and promotes overall health and well-being.",
+  },
+  {
+    "id": "3",
+    "question": "Spotting vs Period vs Bleeding",
+    "hero_image": "assets/images/img_pngtreecartoo.png",
+    "first_description":
+        "Menstruation is a natural bodily process experienced by millions of women worldwide. However, despite its prevalence, there is still a significant amount of stigma and misinformation surrounding menstrual hygiene.In this article, we will delve into the basics of menstrual hygiene and provide practical tips for maintaining good practices. \n \nWhat is Menstrual Hygiene? Menstrual hygiene refers to the measures taken to maintain cleanliness and hygiene during the menstrual period. This includes using sanitary products such as pads, tampons, menstrual cups, or period panties, as well as taking steps to keep the genital area clean and dry. Good menstrual hygiene helps prevent infections and discomfort and promotes overall health and well-being.",
+  },
+];

@@ -64,9 +64,8 @@ class KnowledgeNexus extends StatelessWidget {
               itemCount: knowledgeItems.length,
               itemBuilder: (context, index) {
                 return KnowledgeContainer(
-                  text: knowledgeItems[index]['question']!,
-                  image: knowledgeItems[index]['hero_image']!,
                   id: knowledgeItems[index]['id']!,
+                  data: knowledgeItems[index],
                 );
               },
             ),

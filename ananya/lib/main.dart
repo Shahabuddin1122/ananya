@@ -49,7 +49,6 @@ Future<void> _initializeNotification() async {
 
   await flutterLocalNotificationsPlugin.initialize(initializationSettings);
 
-  // Check and request notification permission for Android 13 and above
   if (await Permission.notification.isDenied) {
     await Permission.notification.request();
   }
@@ -131,8 +130,15 @@ class _MyAppState extends State<MyApp> {
           '/history/indivisual': (context) => const IndividualHistory(),
           '/history/cohort': (context) => const CohortHistory(),
           '/knowledge-nexus-info': (context) {
-            final args = ModalRoute.of(context)!.settings.arguments as String;
-            return KnowledgeNexusInfo(id: args);
+            final args = ModalRoute.of(context)!.settings.arguments as List;
+            final String id = args[0] as String;
+            final Map<String, String> knowledgeItems =
+                args[1] as Map<String, String>;
+
+            return KnowledgeNexusInfo(
+              id: id,
+              data: knowledgeItems,
+            );
           },
           '/help': (context) => const Help(),
         },

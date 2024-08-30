@@ -6,7 +6,8 @@ import 'package:flutter/material.dart';
 
 class KnowledgeNexusInfo extends StatelessWidget {
   final String id;
-  const KnowledgeNexusInfo({required this.id, super.key});
+  final Map<String, String> data;
+  const KnowledgeNexusInfo({required this.data, required this.id, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +21,8 @@ class KnowledgeNexusInfo extends StatelessWidget {
           children: [
             Image.asset(
               width: double.infinity,
-              knowledgeItems[int.parse(id) - 1]['hero_image']!,
+              height: 300,
+              data['hero_image']!,
               fit: BoxFit.fill,
             ),
             const SizedBox(
@@ -32,7 +34,7 @@ class KnowledgeNexusInfo extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    knowledgeItems[int.parse(id) - 1]['question']!,
+                    data['question']!,
                     style: const TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
@@ -43,27 +45,27 @@ class KnowledgeNexusInfo extends StatelessWidget {
                     height: 10,
                   ),
                   Text(
-                    knowledgeItems[int.parse(id) - 1]['first_description']!,
+                    data['first_description']!,
                     style: const TextStyle(
                       fontSize: 16,
                       color: ACCENT,
                     ),
                   ),
-                  const SizedBox(
-                    height: 30,
-                  ),
-                  if (knowledgeItems[int.parse(id) - 1]['second_description'] !=
-                      null) ...[
+
+                  if (data['second_description'] != null) ...[
+                    const SizedBox(
+                      height: 30,
+                    ),
                     Image.asset(
                       width: double.infinity,
-                      knowledgeItems[int.parse(id) - 1]['additional_image_1']!,
+                      data['additional_image_1']!,
                       fit: BoxFit.fill,
                     ),
                     const SizedBox(
                       height: 30,
                     ),
                     Text(
-                      knowledgeItems[int.parse(id) - 1]['second_description']!,
+                      data['second_description']!,
                       style: const TextStyle(
                         fontSize: 16,
                         color: ACCENT,
@@ -83,7 +85,7 @@ class KnowledgeNexusInfo extends StatelessWidget {
                     thickness: 0.5,
                   ),
                   const Text(
-                    "To learn more",
+                    "RECOMENDED READINGS FOR YOU",
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
@@ -106,9 +108,8 @@ class KnowledgeNexusInfo extends StatelessWidget {
                     itemCount: 3, // Limit to 3 items
                     itemBuilder: (context, index) {
                       return KnowledgeContainer(
-                        text: knowledgeItems[index]['question']!,
-                        image: knowledgeItems[index]['hero_image']!,
-                        id: knowledgeItems[index]['id']!,
+                        id: relatedInfo[index]['id']!,
+                        data: relatedInfo[index],
                       );
                     },
                   ),
