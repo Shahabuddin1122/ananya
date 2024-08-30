@@ -2,7 +2,9 @@ import 'package:ananya/models/knowledge_nexus_data.dart';
 import 'package:ananya/utils/constants.dart';
 import 'package:ananya/utils/custom_theme.dart';
 import 'package:ananya/widgets/knowledge_container.dart';
+import 'package:ananya/widgets/video_player.dart';
 import 'package:flutter/material.dart';
+import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class KnowledgeNexusInfo extends StatelessWidget {
   final String id;
@@ -51,7 +53,6 @@ class KnowledgeNexusInfo extends StatelessWidget {
                       color: ACCENT,
                     ),
                   ),
-
                   if (data['second_description'] != null) ...[
                     const SizedBox(
                       height: 30,
@@ -74,12 +75,24 @@ class KnowledgeNexusInfo extends StatelessWidget {
                   ] else ...[
                     Container(),
                   ],
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  // const VideoPlayer(
-                  //   id: 'dfd',
-                  // ),
+                  if (data['video_id'] != null) ...[
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    VideoPlayer(id: data['video_id']),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Text(
+                      data['third_description']!,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        color: ACCENT,
+                      ),
+                    ),
+                  ] else ...[
+                    Container(),
+                  ],
                   const Divider(
                     color: ACCENT,
                     thickness: 0.5,
