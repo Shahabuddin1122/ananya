@@ -4,6 +4,7 @@ import 'package:ananya/utils/custom_theme.dart';
 import 'package:ananya/widgets/knowledge_container.dart';
 import 'package:ananya/widgets/video_player.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class KnowledgeNexusInfo extends StatelessWidget {
   final String id;
@@ -16,7 +17,7 @@ class KnowledgeNexusInfo extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Knowledge nexus'),
+        title: Text(AppLocalizations.of(context)!.knowledge_nexus),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -91,6 +92,9 @@ class KnowledgeNexusInfo extends StatelessWidget {
                         color: ACCENT,
                       ),
                     ),
+                    const SizedBox(
+                      height: 20,
+                    ),
                   ] else ...[
                     Container(),
                   ],
@@ -98,9 +102,9 @@ class KnowledgeNexusInfo extends StatelessWidget {
                     color: ACCENT,
                     thickness: 0.5,
                   ),
-                  const Text(
-                    "RECOMENDED READINGS FOR YOU",
-                    style: TextStyle(
+                  Text(
+                    AppLocalizations.of(context)!.recomended_reading_for_you,
+                    style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                       color: ACCENT,

@@ -20,7 +20,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class UserHome extends StatefulWidget {
-  const UserHome({super.key});
+  final Function(int) onselect;
+  const UserHome({required this.onselect, super.key});
 
   @override
   State<UserHome> createState() => _UserHomeState();
@@ -397,7 +398,9 @@ class _UserHomeState extends State<UserHome> {
                 },
               ),
               const Probahini(),
-              const KnowledgeNexus(),
+              KnowledgeNexusComponent(
+                onselect: widget.onselect,
+              ),
               const SizedBox(
                 height: 10,
               ),
