@@ -5,12 +5,44 @@ import 'package:flutter/material.dart';
 import 'package:ananya/models/knowledge_nexus_data.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class KnowledgeNexus extends StatelessWidget {
+class KnowledgeNexus extends StatefulWidget {
   const KnowledgeNexus({super.key});
 
   @override
+  State<KnowledgeNexus> createState() => _KnowledgeNexusState();
+}
+
+class _KnowledgeNexusState extends State<KnowledgeNexus> {
+  final TextEditingController searchController = TextEditingController();
+  List<Map<String, String>> knowledgeItems = [];
+  List<Map<String, String>> filteredItems = [];
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final knowledgeItemsData =
+          KnowledgeItemProvider.getKnowledgeItems(context);
+      setState(() {
+        knowledgeItems = knowledgeItemsData;
+        filteredItems = List.from(knowledgeItemsData);
+      });
+    });
+    searchController.addListener(_filterKnowledgeItems);
+  }
+
+  void _filterKnowledgeItems() {
+    final query = searchController.text.toLowerCase();
+    setState(() {
+      filteredItems = knowledgeItems.where((item) {
+        final question = item['question']?.toLowerCase() ?? '';
+        return question.contains(query);
+      }).toList();
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final knowledgeItems = KnowledgeItemProvider.getKnowledgeItems(context);
     return SingleChildScrollView(
       child: Container(
         padding: Theme.of(context).largemainPadding,
@@ -25,6 +57,7 @@ class KnowledgeNexus extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             TextField(
+              controller: searchController,
               decoration: InputDecoration(
                 hintText: AppLocalizations.of(context)!.search,
                 hintStyle: const TextStyle(
@@ -64,11 +97,11 @@ class KnowledgeNexus extends StatelessWidget {
                 mainAxisSpacing: 15.0,
                 childAspectRatio: 0.75,
               ),
-              itemCount: knowledgeItems.length,
+              itemCount: filteredItems.length,
               itemBuilder: (context, index) {
                 return KnowledgeContainer(
-                  id: knowledgeItems[index]['id']!,
-                  data: knowledgeItems[index],
+                  id: filteredItems[index]['id']!,
+                  data: filteredItems[index],
                 );
               },
             ),
