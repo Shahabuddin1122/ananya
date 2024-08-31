@@ -39,8 +39,10 @@ class _LandingState extends State<Landing> {
   }
 
   void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
+    Future.delayed(Duration.zero, () {
+      setState(() {
+        _selectedIndex = index;
+      });
     });
   }
 
@@ -53,18 +55,26 @@ class _LandingState extends State<Landing> {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: CircularProgressIndicator());
             } else if (snapshot.hasData && snapshot.data == true) {
-              return const SuperuserHome();
+              return SuperuserHome(
+                onselect: _onItemTapped,
+              );
             } else {
-              return const UserHome();
+              return UserHome(
+                onselect: _onItemTapped,
+              );
             }
           },
         );
       case 1:
         return const KnowledgeNexus();
       case 2:
-        return UserHome(); // Replace with the appropriate widget for "Shop"
+        return UserHome(
+          onselect: _onItemTapped,
+        ); // Replace with the appropriate widget for "Shop"
       default:
-        return UserHome();
+        return UserHome(
+          onselect: _onItemTapped,
+        );
     }
   }
 

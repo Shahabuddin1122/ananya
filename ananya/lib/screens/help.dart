@@ -1,44 +1,43 @@
+import 'package:ananya/models/help_data.dart';
 import 'package:ananya/utils/constants.dart';
 import 'package:ananya/utils/custom_theme.dart';
 import 'package:ananya/widgets/help_card.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class Help extends StatelessWidget {
   const Help({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final helpData = HelpProvider.helpData(context);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Help'),
+        title: Text(AppLocalizations.of(context)!.help),
       ),
       body: SingleChildScrollView(
           child: Container(
         padding: Theme.of(context).largemainPadding,
-        child: const Column(
+        child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "Help number list",
-              style: TextStyle(
+              AppLocalizations.of(context)!.help_number_list,
+              style: const TextStyle(
                 fontSize: 16,
                 color: ACCENT,
                 fontWeight: FontWeight.bold,
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
-            HelpCard(
-              number: '16263',
-              text:
-                  'Health related call center. Dial this number to get 24 hour support from doctor.',
-            ),
-            HelpCard(
-              number: '109',
-              text:
-                  'Governmental helpline to protect Woman agaist crime/early marriage',
-            ),
+            ...helpData.map((item) {
+              return HelpCard(
+                number: item['number']!,
+                text: item['description']!,
+              );
+            }),
           ],
         ),
       )),

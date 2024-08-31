@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class KnowledgeNexus extends StatelessWidget {
-  const KnowledgeNexus({super.key});
+class KnowledgeNexusComponent extends StatelessWidget {
+  final Function(int)? onselect;
+  const KnowledgeNexusComponent({this.onselect, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -43,12 +44,12 @@ class KnowledgeNexus extends StatelessWidget {
               ),
               ElevatedButton(
                 onPressed: () {
-                  Navigator.of(context).pushNamed('/knowledge-nexus');
+                  onselect!(1);
                 },
                 child: Text(AppLocalizations.of(context)!.go_to_nexus),
               )
             ],
-          )
+          ),
         ],
       ),
     );

@@ -3,6 +3,7 @@ import 'package:ananya/utils/custom_theme.dart';
 import 'package:ananya/widgets/knowledge_container.dart';
 import 'package:flutter/material.dart';
 import 'package:ananya/models/knowledge_nexus_data.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class KnowledgeNexus extends StatelessWidget {
   const KnowledgeNexus({super.key});
@@ -25,7 +26,7 @@ class KnowledgeNexus extends StatelessWidget {
           children: [
             TextField(
               decoration: InputDecoration(
-                hintText: "Search",
+                hintText: AppLocalizations.of(context)!.search,
                 hintStyle: const TextStyle(
                   color: Colors.grey,
                   fontSize: 16,
@@ -44,9 +45,10 @@ class KnowledgeNexus extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 20),
-            const Text(
-              'Common asked question on Menstruation',
-              style: TextStyle(
+            Text(
+              AppLocalizations.of(context)!
+                  .common_asked_question_on_menstruation,
+              style: const TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w900,
                 color: ACCENT,
@@ -81,10 +83,11 @@ class KnowledgeNexus extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  const Text(
-                    'Do you know we have governmental regulation about menstrual?',
+                  Text(
+                    AppLocalizations.of(context)!
+                        .do_you_know_we_have_governmental_regulation_about_menstrual,
                     textAlign: TextAlign.center,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       color: ACCENT,
                       fontSize: 16,
@@ -96,7 +99,7 @@ class KnowledgeNexus extends StatelessWidget {
                     children: [
                       Container(
                         width: MediaQuery.of(context).size.width * 0.35,
-                        height: MediaQuery.of(context).size.width * 0.30,
+                        height: MediaQuery.of(context).size.width * 0.35,
                         decoration: BoxDecoration(
                           color: PRIMARY_COLOR,
                           borderRadius: BorderRadius.circular(5),
@@ -107,10 +110,11 @@ class KnowledgeNexus extends StatelessWidget {
                           children: [
                             Padding(
                               padding: Theme.of(context).insideCardPadding,
-                              child: const Text(
-                                "National MHM Strategies",
+                              child: Text(
+                                AppLocalizations.of(context)!
+                                    .national_mhm_strategies,
                                 textAlign: TextAlign.start,
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: 14,
                                 ),
                               ),
@@ -130,7 +134,7 @@ class KnowledgeNexus extends StatelessWidget {
                                   ),
                                 ),
                                 onPressed: () {},
-                                child: const Text("VIEW"),
+                                child: Text(AppLocalizations.of(context)!.view),
                               ),
                             ),
                           ],
@@ -138,7 +142,7 @@ class KnowledgeNexus extends StatelessWidget {
                       ),
                       Container(
                         width: MediaQuery.of(context).size.width * 0.35,
-                        height: MediaQuery.of(context).size.width * 0.30,
+                        height: MediaQuery.of(context).size.width * 0.35,
                         decoration: BoxDecoration(
                           color: SECONDARY_COLOR,
                           borderRadius: BorderRadius.circular(5),
@@ -149,10 +153,11 @@ class KnowledgeNexus extends StatelessWidget {
                           children: [
                             Padding(
                               padding: Theme.of(context).insideCardPadding,
-                              child: const Text(
-                                "Call to Learn More",
+                              child: Text(
+                                AppLocalizations.of(context)!
+                                    .call_to_learn_more,
                                 textAlign: TextAlign.start,
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: 14,
                                 ),
                               ),
@@ -172,7 +177,8 @@ class KnowledgeNexus extends StatelessWidget {
                                   ),
                                 ),
                                 onPressed: () {},
-                                child: const Text("CLICK NOW..."),
+                                child:
+                                    Text(AppLocalizations.of(context)!.click),
                               ),
                             ),
                           ],

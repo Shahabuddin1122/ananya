@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:ananya/utils/constants.dart';
 import 'package:ananya/utils/custom_theme.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HelpCard extends StatelessWidget {
   final String number, text;
@@ -34,25 +35,29 @@ class HelpCard extends StatelessWidget {
         children: [
           InkWell(
             onTap: () => _makePhoneCall(number),
-            child: const Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Icon(
-                  Icons.call,
-                  size: 30,
-                ),
-                Text(
-                  "Call now",
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: ACCENT,
+            child: SizedBox(
+              width: 80,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Icon(
+                    Icons.call,
+                    size: 30,
                   ),
-                ),
-              ],
+                  Text(
+                    AppLocalizations.of(context)!.call_now,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      color: ACCENT,
+                    ),
+                    softWrap: true,
+                  ),
+                ],
+              ),
             ),
           ),
           const SizedBox(
-            width: 20,
+            width: 10,
           ),
           Expanded(
             child: Column(

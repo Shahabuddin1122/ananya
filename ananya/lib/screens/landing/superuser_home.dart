@@ -20,7 +20,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SuperuserHome extends StatefulWidget {
-  const SuperuserHome({super.key});
+  final Function(int) onselect;
+  const SuperuserHome({required this.onselect, super.key});
 
   @override
   State<SuperuserHome> createState() => _SuperuserHomeState();
@@ -379,7 +380,7 @@ class _SuperuserHomeState extends State<SuperuserHome> {
                 },
               ),
               const Probahini(),
-              const KnowledgeNexus(),
+              const KnowledgeNexusComponent(),
               const SizedBox(
                 height: 10,
               ),
