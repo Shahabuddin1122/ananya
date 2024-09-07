@@ -31,11 +31,13 @@ class _SignInState extends State<SignIn> {
       return;
     }
     if (passwordController.text.isEmpty) {
-      _showErrorMessage("Password is required.");
+      _showErrorMessage(
+          '${AppLocalizations.of(context)!.password} ${AppLocalizations.of(context)!.is_required}');
       return;
     }
     if (phoneController.text.isEmpty) {
-      _showErrorMessage("Phone Number is required.");
+      _showErrorMessage(
+          '${AppLocalizations.of(context)!.phone_number} ${AppLocalizations.of(context)!.is_required}');
       return;
     }
     setState(() {
@@ -66,14 +68,13 @@ class _SignInState extends State<SignIn> {
 
         Navigator.pushNamed(context, '/');
       } else {
-        _showErrorMessage("Invalid Credentials");
+        _showErrorMessage(AppLocalizations.of(context)!.invalid_credentials);
       }
     } catch (e) {
       setState(() {
         isLoading = false;
       });
-      _showErrorMessage("Invalid Credentials");
-      print('Error occurred: $e');
+      _showErrorMessage(AppLocalizations.of(context)!.invalid_credentials);
     }
   }
 

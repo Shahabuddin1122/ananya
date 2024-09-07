@@ -215,6 +215,16 @@
   "view": "দেখুন",
   "click": "ক্লিক",
   "knowledge_nexus": "জ্ঞানের সম্পর্ক",
-  "recomended_reading_for_you": "আপনার জন্য প্রস্তাবিত পড়া"
+  "recomended_reading_for_you": "আপনার জন্য প্রস্তাবিত পড়া",
+  "irregular": "অনিয়মিত",
+  "invalid_credentials": "ভুল তথ্য",
+  "is_required": "প্রয়োজনীয়",
+  "dhaka": "ঢাকা",
+  "sylhet": "সিলেট",
+  "khulna": "খুলনা",
+  "wateraid": "ওয়াটারএইড",
+  "brac": "ব্র্যাক",
+  "user": "একক",
+  "superuser": "দল"
 
 }

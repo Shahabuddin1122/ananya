@@ -92,7 +92,9 @@ class _LandingState extends State<Landing> {
     return Container(
       color: Colors.white,
       child: Scaffold(
-        drawer: const UserSidebar(),
+        drawer: UserSidebar(
+          onselect: _onItemTapped,
+        ),
         backgroundColor: Colors.transparent,
         appBar: AppBar(
           actions: [

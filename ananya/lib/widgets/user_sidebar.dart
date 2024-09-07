@@ -7,7 +7,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class UserSidebar extends StatefulWidget {
-  const UserSidebar({super.key});
+  final Function(int) onselect;
+  const UserSidebar({required this.onselect, super.key});
 
   @override
   State<UserSidebar> createState() => _UserSidebarState();
@@ -146,12 +147,15 @@ class _UserSidebarState extends State<UserSidebar> {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            onTap: () {},
+            onTap: () {
+              Navigator.pop(context);
+              widget.onselect(0);
+            },
           ),
-          FutureBuilder<bool>(
-            future: _checkLoginStatus(),
+          FutureBuilder<Map<String, dynamic>>(
+            future: getInfo(),
             builder: (context, loginSnapshot) {
-              if (!loginSnapshot.hasData || !loginSnapshot.data!) {
+              if (!loginSnapshot.hasData || loginSnapshot.data!.isEmpty) {
                 return Column(
                   children: [
                     ListTile(
@@ -172,7 +176,6 @@ class _UserSidebarState extends State<UserSidebar> {
                   ],
                 );
               }
-
               return Column(
                 children: [
                   ListTile(
@@ -231,7 +234,10 @@ class _UserSidebarState extends State<UserSidebar> {
           ListTile(
             leading: const Icon(Icons.school),
             title: Text(AppLocalizations.of(context)!.knowledge_nexus),
-            onTap: () => Navigator.pushNamed(context, '/'),
+            onTap: () {
+              Navigator.pop(context);
+              widget.onselect(1);
+            },
           ),
           ListTile(
             leading: const Icon(Icons.shop),
