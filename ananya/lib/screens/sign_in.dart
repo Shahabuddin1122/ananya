@@ -48,7 +48,7 @@ class _SignInState extends State<SignIn> {
     };
 
     try {
-      final response = await api.postMethod(json.encode(data));
+      final response = await api.postMethodWithoutToken(json.encode(data));
       setState(() {
         isLoading = false;
       });

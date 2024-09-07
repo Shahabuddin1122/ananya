@@ -375,8 +375,11 @@ class _UserHomeState extends State<UserHome> {
                               SharedPreferences prefs =
                                   await SharedPreferences.getInstance();
                               String? id = prefs.getString('userId');
+                              ApiSettings api =
+                                  ApiSettings(endPoint: 'user/get-user/$id');
+                              final response = await api.getMethod();
 
-                              if (id == null) {
+                              if (response.statusCode != 200) {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
                                     content: Text(AppLocalizations.of(context)!

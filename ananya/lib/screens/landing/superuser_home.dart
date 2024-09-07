@@ -363,12 +363,28 @@ class _SuperuserHomeState extends State<SuperuserHome> {
                             height: 20,
                           ),
                           ElevatedButton(
-                            onPressed: () {
-                              Navigator.pushNamed(
-                                context,
-                                '/choose-user',
-                                arguments: false,
-                              );
+                            onPressed: () async {
+                              SharedPreferences prefs =
+                                  await SharedPreferences.getInstance();
+                              String? id = prefs.getString('userId');
+                              ApiSettings api =
+                                  ApiSettings(endPoint: 'user/get-user/$id');
+                              final response = await api.getMethod();
+
+                              if (response.statusCode != 200) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(AppLocalizations.of(context)!
+                                        .you_need_to_log_in_first),
+                                  ),
+                                );
+                              } else {
+                                Navigator.pushNamed(
+                                  context,
+                                  '/choose-user',
+                                  arguments: false,
+                                );
+                              }
                             },
                             child: Text(AppLocalizations.of(context)!
                                 .unlock_period_prediction),
