@@ -1,3 +1,4 @@
+import 'package:ananya/l10n/dynamic_translation.dart';
 import 'package:ananya/utils/constants.dart';
 import 'package:ananya/widgets/calender.dart';
 import 'package:ananya/widgets/circle_image.dart';
@@ -233,7 +234,8 @@ class _PeriodCycleInformationState extends State<PeriodCycleInformation> {
                           width: 10,
                         ),
                         Text(
-                          widget.data['anomalies'],
+                          translateAnnomalies(
+                              context, widget.data['anomalies']),
                           textAlign: TextAlign.center,
                           style: const TextStyle(
                             color: ACCENT,

@@ -1,9 +1,15 @@
+import 'dart:io';
+
 import 'package:ananya/utils/constants.dart';
 import 'package:ananya/utils/custom_theme.dart';
 import 'package:ananya/widgets/knowledge_container.dart';
+import 'package:ananya/widgets/pdf-viewer-screen.dart';
 import 'package:flutter/material.dart';
 import 'package:ananya/models/knowledge_nexus_data.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class KnowledgeNexus extends StatefulWidget {
   const KnowledgeNexus({super.key});
@@ -29,6 +35,37 @@ class _KnowledgeNexusState extends State<KnowledgeNexus> {
       });
     });
     searchController.addListener(_filterKnowledgeItems);
+  }
+
+  Future<void> _makeMHMCall() async {
+    final Uri launchUri = Uri(
+      scheme: 'tel',
+      path: '16263',
+    );
+    if (await canLaunchUrl(launchUri)) {
+      await launchUrl(launchUri);
+    } else {
+      throw 'Could not launch 16263';
+    }
+  }
+
+  Future<String?> downloadPDF() async {
+    try {
+      final byteData = await rootBundle.load('assets/pdf/nmhmsbn.pdf');
+      final buffer = byteData.buffer;
+
+      final directory = await getApplicationDocumentsDirectory();
+      final filePath = '${directory.path}/mhm.pdf';
+
+      final file = File(filePath);
+      await file.writeAsBytes(buffer.asUint8List());
+
+      print('PDF saved to: $filePath');
+      return filePath;
+    } catch (e) {
+      print('Error downloading PDF: $e');
+      return null;
+    }
   }
 
   void _filterKnowledgeItems() {
@@ -166,7 +203,15 @@ class _KnowledgeNexusState extends State<KnowledgeNexus> {
                                     borderRadius: BorderRadius.circular(1),
                                   ),
                                 ),
-                                onPressed: () {},
+                                onPressed: () async {
+                                  await downloadPDF();
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text('Pdf Downloaded'),
+                                      backgroundColor: Colors.green,
+                                    ),
+                                  );
+                                },
                                 child: Text(AppLocalizations.of(context)!.view),
                               ),
                             ),
@@ -209,7 +254,9 @@ class _KnowledgeNexusState extends State<KnowledgeNexus> {
                                     borderRadius: BorderRadius.circular(1),
                                   ),
                                 ),
-                                onPressed: () {},
+                                onPressed: () {
+                                  _makeMHMCall();
+                                },
                                 child:
                                     Text(AppLocalizations.of(context)!.click),
                               ),

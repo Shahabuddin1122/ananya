@@ -217,6 +217,16 @@
   "view": "View",
   "click": "Click",
   "knowledge_nexus": "Knowledge nexus",
-  "recomended_reading_for_you": "RECOMENDED READINGS FOR YOU"
+  "recomended_reading_for_you": "RECOMENDED READINGS FOR YOU",
+  "irregular": "Irregular",
+  "invalid_credentials": "Invalid Credentials",
+  "is_required": "is required",
+  "dhaka": "Dhaka",
+  "sylhet": "Sylhet",
+  "khulna": "Khulna",
+  "wateraid": "WaterAid",
+  "brac": "Brac",
+  "user": "User",
+  "superuser": "Superuser"
 
 }

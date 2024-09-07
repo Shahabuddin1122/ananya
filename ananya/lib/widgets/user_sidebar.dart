@@ -7,7 +7,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class UserSidebar extends StatefulWidget {
-  const UserSidebar({super.key});
+  final Function(int) onselect;
+  const UserSidebar({required this.onselect, super.key});
 
   @override
   State<UserSidebar> createState() => _UserSidebarState();
@@ -16,7 +17,6 @@ class UserSidebar extends StatefulWidget {
 class _UserSidebarState extends State<UserSidebar> {
   bool _isSuperuser = false;
   Locale _currentLocale = const Locale('en');
-  bool _isLoggedIn = false;
 
   @override
   void initState() {
@@ -31,17 +31,21 @@ class _UserSidebarState extends State<UserSidebar> {
     ApiSettings api = ApiSettings(endPoint: 'user/get-user/$id');
     try {
       final response = await api.getMethod();
+
       if (response.statusCode == 200) {
         final Map<String, dynamic> responseData = json.decode(response.body);
-        setState(() {
-          _isLoggedIn = true;
-        });
         return responseData;
       }
       return {};
     } catch (e) {
       return {};
     }
+  }
+
+  Future<bool> _checkLoginStatus() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString('token');
+    return token != null;
   }
 
   Future<void> _checkSuperuserStatus() async {
@@ -143,45 +147,81 @@ class _UserSidebarState extends State<UserSidebar> {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            onTap: () {},
-          ),
-          ListTile(
-            leading: const Icon(Icons.track_changes),
-            title: Text(
-              AppLocalizations.of(context)!.log_new_period,
-            ),
             onTap: () {
-              if (_isLoggedIn) {
-                if (_isSuperuser) {
-                  Navigator.pushNamed(
-                    context,
-                    '/choose-user',
-                    arguments: false,
-                  );
-                } else {
-                  Navigator.pushNamed(context, '/unlock-process/1');
-                }
-              } else {
-                Navigator.pushNamed(context, '/');
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(
-                        AppLocalizations.of(context)!.you_need_to_log_in_first),
-                  ),
-                );
-              }
+              Navigator.pop(context);
+              widget.onselect(0);
             },
           ),
-          if (_isSuperuser)
-            ListTile(
-              leading: const Icon(Icons.add),
-              title: Text(
-                AppLocalizations.of(context)!.add_a_user,
-              ),
-              onTap: () {
-                Navigator.pushNamed(context, '/add-user');
-              },
-            ),
+          FutureBuilder<Map<String, dynamic>>(
+            future: getInfo(),
+            builder: (context, loginSnapshot) {
+              if (!loginSnapshot.hasData || loginSnapshot.data!.isEmpty) {
+                return Column(
+                  children: [
+                    ListTile(
+                      leading: const Icon(Icons.track_changes),
+                      title: Text(
+                        AppLocalizations.of(context)!.log_new_period,
+                      ),
+                      onTap: () {
+                        Navigator.pushNamed(context, '/');
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(AppLocalizations.of(context)!
+                                .you_need_to_log_in_first),
+                          ),
+                        );
+                      },
+                    ),
+                  ],
+                );
+              }
+              return Column(
+                children: [
+                  ListTile(
+                    leading: const Icon(Icons.track_changes),
+                    title: Text(
+                      AppLocalizations.of(context)!.log_new_period,
+                    ),
+                    onTap: () {
+                      if (_isSuperuser) {
+                        Navigator.pushNamed(
+                          context,
+                          '/choose-user',
+                          arguments: false,
+                        );
+                      } else {
+                        Navigator.pushNamed(context, '/unlock-process/1');
+                      }
+                    },
+                  ),
+                  if (_isSuperuser)
+                    ListTile(
+                      leading: const Icon(Icons.add),
+                      title: Text(
+                        AppLocalizations.of(context)!.add_a_user,
+                      ),
+                      onTap: () {
+                        Navigator.pushNamed(context, '/add-user');
+                      },
+                    ),
+                  ListTile(
+                    leading: const Icon(Icons.history),
+                    title: Text(
+                      AppLocalizations.of(context)!.period_history,
+                    ),
+                    onTap: () {
+                      if (_isSuperuser) {
+                        Navigator.pushNamed(context, '/history/cohort');
+                      } else {
+                        Navigator.pushNamed(context, '/history/indivisual');
+                      }
+                    },
+                  ),
+                ],
+              );
+            },
+          ),
           ListTile(
             leading: const Icon(Icons.chat),
             title: Text(
@@ -194,35 +234,15 @@ class _UserSidebarState extends State<UserSidebar> {
           ListTile(
             leading: const Icon(Icons.school),
             title: Text(AppLocalizations.of(context)!.knowledge_nexus),
-            onTap: () => Navigator.pushNamed(context, '/'),
+            onTap: () {
+              Navigator.pop(context);
+              widget.onselect(1);
+            },
           ),
           ListTile(
             leading: const Icon(Icons.shop),
             title: Text(AppLocalizations.of(context)!.visit_shop),
             onTap: () => Navigator.pushNamed(context, '/'),
-          ),
-          ListTile(
-            leading: const Icon(Icons.history),
-            title: Text(
-              AppLocalizations.of(context)!.period_history,
-            ),
-            onTap: () {
-              if (_isLoggedIn) {
-                if (_isSuperuser) {
-                  Navigator.pushNamed(context, '/history/cohort');
-                } else {
-                  Navigator.pushNamed(context, '/history/indivisual');
-                }
-              } else {
-                Navigator.pushNamed(context, '/');
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(
-                        AppLocalizations.of(context)!.you_need_to_log_in_first),
-                  ),
-                );
-              }
-            },
           ),
           const Divider(
             height: 1,

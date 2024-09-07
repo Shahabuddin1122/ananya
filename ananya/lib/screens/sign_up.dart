@@ -24,52 +24,51 @@ class _SignUpState extends State<SignUp> {
   String? selectedDistrict;
   String? selectedProject;
   String? selectUserType;
+  List<String> district = [];
+  List<String> projects = [];
+  List<String> userTypes = [];
 
   bool isLoading = false;
-  final List<String> district = [
-    "Dhaka",
-    "Khulna",
-    "Sylhet",
-  ];
-  final List<String> projects = [
-    "WaterAid",
-    "Brac",
-  ];
-  final List<String> userTypes = [
-    "user",
-    "superuser",
-  ];
+
   void check() async {
     if (nameController.text.isEmpty) {
-      _showErrorMessage("Name is required.");
+      _showErrorMessage(
+          '${AppLocalizations.of(context)!.name} ${AppLocalizations.of(context)!.is_required}');
       return;
     }
     if (dobController.text.isEmpty) {
-      _showErrorMessage("Date of Birth is required.");
+      _showErrorMessage(
+          '${AppLocalizations.of(context)!.date_of_birth} ${AppLocalizations.of(context)!.is_required}');
       return;
     }
     if (phoneController.text.isEmpty) {
-      _showErrorMessage("Phone Number is required.");
+      _showErrorMessage(
+          '${AppLocalizations.of(context)!.phone_number} ${AppLocalizations.of(context)!.is_required}');
       return;
     }
     if (emailController.text.isEmpty) {
-      _showErrorMessage("Email is required.");
+      _showErrorMessage(
+          '${AppLocalizations.of(context)!.email} ${AppLocalizations.of(context)!.is_required}');
       return;
     }
     if (passwordController.text.isEmpty) {
-      _showErrorMessage("Password is required.");
+      _showErrorMessage(
+          '${AppLocalizations.of(context)!.password} ${AppLocalizations.of(context)!.is_required}');
       return;
     }
     if (selectedDistrict == null || selectedDistrict!.isEmpty) {
-      _showErrorMessage("District is required.");
+      _showErrorMessage(
+          '${AppLocalizations.of(context)!.district} ${AppLocalizations.of(context)!.is_required}');
       return;
     }
     if (selectedProject == null || selectedProject!.isEmpty) {
-      _showErrorMessage("Project is required.");
+      _showErrorMessage(
+          '${AppLocalizations.of(context)!.project} ${AppLocalizations.of(context)!.is_required}');
       return;
     }
     if (selectUserType == null || selectUserType!.isEmpty) {
-      _showErrorMessage("User type is required.");
+      _showErrorMessage(
+          '${AppLocalizations.of(context)!.user_type} ${AppLocalizations.of(context)!.is_required}');
       return;
     }
 
@@ -78,7 +77,8 @@ class _SignUpState extends State<SignUp> {
     });
     Map<String, dynamic> data;
     ApiSettings api;
-    if (selectUserType == 'superuser') {
+    print(userTypes);
+    if (selectUserType == 'superuser' || selectUserType == 'দল') {
       api = ApiSettings(endPoint: 'user/superuser/signup');
       data = {
         "user": {
@@ -122,7 +122,8 @@ class _SignUpState extends State<SignUp> {
       setState(() {
         isLoading = false;
       });
-      _showErrorMessage("Invalid Credentials");
+      _showErrorMessage(
+          AppLocalizations.of(context)!.invalid_bangladeshi_phone_number);
     }
   }
 
@@ -146,6 +147,19 @@ class _SignUpState extends State<SignUp> {
 
   @override
   Widget build(BuildContext context) {
+    district = [
+      AppLocalizations.of(context)!.dhaka,
+      AppLocalizations.of(context)!.khulna,
+      AppLocalizations.of(context)!.sylhet,
+    ];
+    projects = [
+      AppLocalizations.of(context)!.wateraid,
+      AppLocalizations.of(context)!.brac,
+    ];
+    userTypes = [
+      AppLocalizations.of(context)!.user,
+      AppLocalizations.of(context)!.superuser,
+    ];
     return Scaffold(
       body: Center(
         child: isLoading
