@@ -108,8 +108,7 @@ class _SignUpState extends State<SignUp> {
     }
 
     try {
-      final response = await api.postMethod(json.encode(data));
-      print(response.statusCode);
+      final response = await api.postMethodWithoutToken(json.encode(data));
       setState(() {
         isLoading = false;
       });

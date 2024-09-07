@@ -1,6 +1,7 @@
 import 'package:ananya/screens/knowledge_nexus.dart';
 import 'package:ananya/screens/landing/superuser_home.dart';
 import 'package:ananya/screens/landing/user_home.dart';
+import 'package:ananya/utils/api_sattings.dart';
 import 'package:ananya/utils/constants.dart';
 import 'package:ananya/utils/custom_theme.dart';
 import 'package:ananya/widgets/user_sidebar.dart';
@@ -17,19 +18,27 @@ class Landing extends StatefulWidget {
 
 class _LandingState extends State<Landing> {
   int _selectedIndex = 0;
-  late Future<bool> numberPresent;
+  late Future<bool> userPresent = getInfo();
 
   @override
   void initState() {
     super.initState();
-    numberPresent = getInfo();
+    userPresent = getInfo();
   }
 
   Future<bool> getInfo() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? number = prefs.getString('userNumber');
-    String? token = prefs.getString('token');
-    return (number != null && token != null);
+    String? id = prefs.getString('userId');
+    ApiSettings api = ApiSettings(endPoint: 'user/get-user/$id');
+    try {
+      final response = await api.getMethod();
+      if (response.statusCode == 200) {
+        return true;
+      }
+      return false;
+    } catch (e) {
+      return false;
+    }
   }
 
   Future<bool> isSuperuser() async {
@@ -88,7 +97,7 @@ class _LandingState extends State<Landing> {
         appBar: AppBar(
           actions: [
             FutureBuilder<bool>(
-              future: numberPresent,
+              future: userPresent,
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return Container();

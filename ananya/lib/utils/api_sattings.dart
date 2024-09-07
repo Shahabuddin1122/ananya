@@ -32,15 +32,12 @@ class ApiSettings {
     }
   }
 
-  Future<http.Response> postMethodWithDiffEndPoint(
-      String data, String ep) async {
+  Future<http.Response> postMethodWithoutToken(String data) async {
     try {
-      String? token = await _getToken();
       final response = await http.post(
-        Uri.parse(baseUrl + ep),
+        Uri.parse(uri),
         headers: {
           'Content-Type': 'application/json',
-          if (token != null) 'Authorization': 'Bearer $token',
         },
         body: data,
       );

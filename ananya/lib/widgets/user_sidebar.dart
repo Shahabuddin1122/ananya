@@ -1,4 +1,7 @@
-﻿import 'package:ananya/main.dart';
+﻿import 'dart:convert';
+
+import 'package:ananya/main.dart';
+import 'package:ananya/utils/api_sattings.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -13,12 +16,32 @@ class UserSidebar extends StatefulWidget {
 class _UserSidebarState extends State<UserSidebar> {
   bool _isSuperuser = false;
   Locale _currentLocale = const Locale('en');
+  bool _isLoggedIn = false;
 
   @override
   void initState() {
     super.initState();
     _checkSuperuserStatus();
     _loadLocale();
+  }
+
+  Future<Map<String, dynamic>> getInfo() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? id = prefs.getString('userId');
+    ApiSettings api = ApiSettings(endPoint: 'user/get-user/$id');
+    try {
+      final response = await api.getMethod();
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> responseData = json.decode(response.body);
+        setState(() {
+          _isLoggedIn = true;
+        });
+        return responseData;
+      }
+      return {};
+    } catch (e) {
+      return {};
+    }
   }
 
   Future<void> _checkSuperuserStatus() async {
@@ -53,27 +76,64 @@ class _UserSidebarState extends State<UserSidebar> {
       child: ListView(
         padding: EdgeInsets.zero,
         children: [
-          UserAccountsDrawerHeader(
-            accountName: const Text(
-              "Shahabuddin",
-              style: TextStyle(
-                color: Color.fromARGB(255, 0, 0, 0),
-              ),
-            ),
-            accountEmail: const Text(
-              "shavoddin54@gmail.com",
-              style: TextStyle(
-                color: Color.fromARGB(255, 0, 0, 0),
-              ),
-            ),
-            currentAccountPicture: CircleAvatar(
-              child: ClipOval(
-                child: Image.asset('assets/images/default_person.png'),
-              ),
-            ),
-            decoration: const BoxDecoration(
-              color: Color.fromARGB(255, 255, 255, 255),
-            ),
+          FutureBuilder<Map<String, dynamic>>(
+            future: getInfo(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Image.asset(
+                      'assets/images/logo.png',
+                      width: 100,
+                      height: 100,
+                      fit: BoxFit.cover,
+                    ),
+                  ],
+                );
+              } else if (snapshot.hasData && snapshot.data!.isNotEmpty) {
+                return UserAccountsDrawerHeader(
+                  accountName: Text(
+                    snapshot.data!['name'],
+                    style: const TextStyle(
+                      color: Color.fromARGB(255, 0, 0, 0),
+                    ),
+                  ),
+                  accountEmail: Text(
+                    snapshot.data!['email'],
+                    style: const TextStyle(
+                      color: Color.fromARGB(255, 0, 0, 0),
+                    ),
+                  ),
+                  currentAccountPicture: CircleAvatar(
+                    child: ClipOval(
+                      child: Image.asset('assets/images/default_person.png'),
+                    ),
+                  ),
+                  decoration: const BoxDecoration(
+                    color: Color.fromARGB(255, 255, 255, 255),
+                  ),
+                );
+              } else {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Image.asset(
+                      'assets/images/logo.png',
+                      width: 100,
+                      height: 100,
+                      fit: BoxFit.cover,
+                    ),
+                  ],
+                );
+              }
+            },
           ),
           ListTile(
             leading: const Icon(Icons.home),
@@ -91,7 +151,25 @@ class _UserSidebarState extends State<UserSidebar> {
               AppLocalizations.of(context)!.log_new_period,
             ),
             onTap: () {
-              Navigator.pushNamed(context, '/new-period');
+              if (_isLoggedIn) {
+                if (_isSuperuser) {
+                  Navigator.pushNamed(
+                    context,
+                    '/choose-user',
+                    arguments: false,
+                  );
+                } else {
+                  Navigator.pushNamed(context, '/unlock-process/1');
+                }
+              } else {
+                Navigator.pushNamed(context, '/');
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                        AppLocalizations.of(context)!.you_need_to_log_in_first),
+                  ),
+                );
+              }
             },
           ),
           if (_isSuperuser)
@@ -110,18 +188,18 @@ class _UserSidebarState extends State<UserSidebar> {
               AppLocalizations.of(context)!.chat_with_ananya,
             ),
             onTap: () {
-              Navigator.pushNamed(context, '/chat');
+              Navigator.pushNamed(context, '/');
             },
           ),
           ListTile(
             leading: const Icon(Icons.school),
             title: Text(AppLocalizations.of(context)!.knowledge_nexus),
-            onTap: () => Navigator.pushNamed(context, '/knowledge-nexus'),
+            onTap: () => Navigator.pushNamed(context, '/'),
           ),
           ListTile(
             leading: const Icon(Icons.shop),
             title: Text(AppLocalizations.of(context)!.visit_shop),
-            onTap: () => Navigator.pushNamed(context, '/visit-shop'),
+            onTap: () => Navigator.pushNamed(context, '/'),
           ),
           ListTile(
             leading: const Icon(Icons.history),
@@ -129,10 +207,20 @@ class _UserSidebarState extends State<UserSidebar> {
               AppLocalizations.of(context)!.period_history,
             ),
             onTap: () {
-              if (_isSuperuser) {
-                Navigator.pushNamed(context, '/history/cohort');
+              if (_isLoggedIn) {
+                if (_isSuperuser) {
+                  Navigator.pushNamed(context, '/history/cohort');
+                } else {
+                  Navigator.pushNamed(context, '/history/indivisual');
+                }
               } else {
-                Navigator.pushNamed(context, '/history/indivisual');
+                Navigator.pushNamed(context, '/');
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                        AppLocalizations.of(context)!.you_need_to_log_in_first),
+                  ),
+                );
               }
             },
           ),
@@ -178,7 +266,6 @@ class _UserSidebarState extends State<UserSidebar> {
               await prefs.remove('is_superuser');
               await prefs.remove('cohort-user');
               await prefs.remove('token');
-              await prefs.remove('last_notification_date');
               Navigator.pushNamed(context, '/signin');
             },
           ),
