@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:ananya/main.dart';
 import 'package:ananya/utils/api_sattings.dart';
 import 'package:ananya/utils/constants.dart';
 import 'package:ananya/utils/custom_theme.dart';
@@ -12,6 +13,7 @@ import 'package:ananya/widgets/probahini.dart';
 import 'package:ananya/widgets/shop.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
@@ -89,10 +91,47 @@ class _SuperuserHomeState extends State<SuperuserHome> {
     int daysUntilStart = startDateTime.difference(currentDate).inDays;
     int daysUntilEnd = endDateTime.difference(currentDate).inDays;
 
+    if (daysUntilStart < 8 && daysUntilStart >= 0) {
+      _sendNotificationOncePerDay(daysUntilStart.abs() + 1);
+    }
+
     if (startDate == endDate) {
       return "${daysUntilStart.abs() + 1} ";
     } else {
       return "${daysUntilStart.abs() + 1} - ${daysUntilEnd.abs() + 1} ";
+    }
+  }
+
+  Future<void> _sendNotificationOncePerDay(int daysUntilStart) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? lastNotificationDate = prefs.getString('last_notification_date');
+    String today = DateFormat('yyyy-MM-dd').format(DateTime.now());
+
+    String? token = prefs.getString('token');
+    if (token == null) {
+      return;
+    }
+
+    if (lastNotificationDate != today) {
+      var androidPlatformChannelSpecifics = const AndroidNotificationDetails(
+        'ananya',
+        'your menstrual partner',
+        importance: Importance.max,
+        priority: Priority.high,
+        ticker: 'ticker',
+      );
+      var platformChannelSpecifics =
+          NotificationDetails(android: androidPlatformChannelSpecifics);
+
+      await flutterLocalNotificationsPlugin.show(
+        0,
+        AppLocalizations.of(context)!.period_reminder,
+        '${AppLocalizations.of(context)!.your_period_starts_in} $daysUntilStart ${AppLocalizations.of(context)!.days}',
+        platformChannelSpecifics,
+        payload: 'item x',
+      );
+
+      await prefs.setString('last_notification_date', today);
     }
   }
 
