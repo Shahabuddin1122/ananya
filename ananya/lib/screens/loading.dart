@@ -1,6 +1,7 @@
 import 'package:ananya/utils/constants.dart';
 import 'package:ananya/utils/custom_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class Loading extends StatelessWidget {
   const Loading({super.key});
@@ -20,20 +21,21 @@ class Loading extends StatelessWidget {
             ),
             Padding(
               padding: Theme.of(context).largemainPadding,
-              child: const Text.rich(
+              child: Text.rich(
                 TextSpan(
                   children: [
                     TextSpan(
-                      text: 'Calculating ',
-                      style: TextStyle(
+                      text: '${AppLocalizations.of(context)!.calculating}\n',
+                      style: const TextStyle(
                         fontSize: 32,
                         color: ACCENT,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     TextSpan(
-                      text: 'your cycle prediction...',
-                      style: TextStyle(
+                      text:
+                          '${AppLocalizations.of(context)!.your_cycle_prediction}...',
+                      style: const TextStyle(
                         fontSize: 32,
                       ),
                     ),

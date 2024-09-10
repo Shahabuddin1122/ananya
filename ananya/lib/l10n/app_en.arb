@@ -227,6 +227,16 @@
   "wateraid": "WaterAid",
   "brac": "Brac",
   "user": "User",
-  "superuser": "Superuser"
-
+  "superuser": "Superuser",
+  "no_anomalies": "No anomalies",
+  "some_anomalies": "Some anomalies",
+  "days_cycle": "days cycle",
+  "your_period_starts_in": "Your period starts in",
+  "period_reminder": "Period Reminder",
+  "no_history_available": "No history available",
+  "error_loading_data": "Error loading data",
+  "no_user_selected": "No user selected",
+  "calculating": "Calculating",
+  "your_cycle_prediction": "your cycle prediction",
+  "your_next_period_will_start_around": "Your next period will start around"
 }

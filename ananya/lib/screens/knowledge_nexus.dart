@@ -3,12 +3,12 @@ import 'dart:io';
 import 'package:ananya/utils/constants.dart';
 import 'package:ananya/utils/custom_theme.dart';
 import 'package:ananya/widgets/knowledge_container.dart';
-import 'package:ananya/widgets/pdf-viewer-screen.dart';
 import 'package:flutter/material.dart';
 import 'package:ananya/models/knowledge_nexus_data.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class KnowledgeNexus extends StatefulWidget {
@@ -49,23 +49,59 @@ class _KnowledgeNexusState extends State<KnowledgeNexus> {
     }
   }
 
-  Future<String?> downloadPDF() async {
+  Future<void> downloadPDF(BuildContext context) async {
     try {
-      final byteData = await rootBundle.load('assets/pdf/nmhmsbn.pdf');
-      final buffer = byteData.buffer;
-
-      final directory = await getApplicationDocumentsDirectory();
-      final filePath = '${directory.path}/mhm.pdf';
-
-      final file = File(filePath);
-      await file.writeAsBytes(buffer.asUint8List());
-
-      print('PDF saved to: $filePath');
-      return filePath;
+      if (Platform.isAndroid) {
+        if (await Permission.manageExternalStorage.request().isGranted) {
+          await _savePDFToStorage(context);
+        } else if (await Permission.storage.request().isGranted) {
+          await _savePDFToStorage(context);
+        } else {
+          print('Permission denied');
+          _showSnackBar(context, 'Permission denied', Colors.red);
+        }
+      } else {
+        // Handle iOS or other platforms if necessary
+        if (await Permission.storage.request().isGranted) {
+          await _savePDFToStorage(context);
+        } else {
+          print('Permission denied');
+          _showSnackBar(context, 'Permission denied', Colors.red);
+        }
+      }
     } catch (e) {
       print('Error downloading PDF: $e');
-      return null;
     }
+  }
+
+  Future<void> _savePDFToStorage(BuildContext context) async {
+    final byteData = await rootBundle.load('assets/pdf/nmhmsbn.pdf');
+    final buffer = byteData.buffer;
+
+    final directory = await getExternalStorageDirectory();
+    if (directory != null) {
+      final downloadsPath = '${directory.path}/Download';
+      final downloadDirectory = Directory(downloadsPath);
+
+      if (!(await downloadDirectory.exists())) {
+        await downloadDirectory.create(recursive: true);
+      }
+
+      final filePath = '$downloadsPath/mhm.pdf';
+      final file = File(filePath);
+      await file.writeAsBytes(buffer.asUint8List());
+      print('PDF saved to: $downloadsPath');
+      _showSnackBar(context, 'PDF Downloaded', Colors.green);
+    }
+  }
+
+  void _showSnackBar(BuildContext context, String message, Color color) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: color,
+      ),
+    );
   }
 
   void _filterKnowledgeItems() {
@@ -204,13 +240,7 @@ class _KnowledgeNexusState extends State<KnowledgeNexus> {
                                   ),
                                 ),
                                 onPressed: () async {
-                                  await downloadPDF();
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content: Text('Pdf Downloaded'),
-                                      backgroundColor: Colors.green,
-                                    ),
-                                  );
+                                  await downloadPDF(context);
                                 },
                                 child: Text(AppLocalizations.of(context)!.view),
                               ),

@@ -81,7 +81,7 @@ class _UnlockProcess1State extends State<UnlockProcess1> {
               ChoiceItem(
                 text: AppLocalizations.of(context)!.dont_know,
                 onSelected: (choice) {
-                  context.read<PeriodState>().updatePeriodRegularity(false);
+                  context.read<PeriodState>().updatePeriodRegularity(true);
                   Navigator.pushNamed(context, '/unlock-process/2');
                 },
               )
