@@ -193,7 +193,8 @@ class _CohortHistoryState extends State<CohortHistory> {
 
           if (!selectedUserSnapshot.hasData ||
               selectedUserSnapshot.data == null) {
-            return const Center(child: Text("No user selected"));
+            return Center(
+                child: Text(AppLocalizations.of(context)!.no_user_selected));
           }
 
           return FutureBuilder<Map<String, List<dynamic>>>(
@@ -202,9 +203,13 @@ class _CohortHistoryState extends State<CohortHistory> {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const Center(child: CircularProgressIndicator());
               } else if (snapshot.hasError) {
-                return const Center(child: Text("Error loading data"));
+                return Center(
+                    child:
+                        Text(AppLocalizations.of(context)!.error_loading_data));
               } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                return const Center(child: Text("No history available"));
+                return Center(
+                    child: Text(
+                        AppLocalizations.of(context)!.no_history_available));
               } else {
                 Map<String, List<dynamic>> groupedData = snapshot.data!;
                 return SingleChildScrollView(
@@ -226,8 +231,9 @@ class _CohortHistoryState extends State<CohortHistory> {
                                   return const Center(
                                       child: CircularProgressIndicator());
                                 } else if (cohortSnapshot.hasError) {
-                                  return const Center(
-                                      child: Text('Error loading data'));
+                                  return Center(
+                                      child: Text(AppLocalizations.of(context)!
+                                          .error_loading_data));
                                 } else {
                                   return Wrap(
                                     direction: Axis.horizontal,
@@ -305,26 +311,26 @@ class _CohortHistoryState extends State<CohortHistory> {
           BottomNavigationBarItem(
             icon: Icon(
               Icons.calendar_today,
-              size: _selectedIndex == 0 ? 40 : 30,
+              size: 30,
               color: _selectedIndex == 0 ? SECONDARY_COLOR : Colors.grey[600],
             ),
-            label: "Tracker",
+            label: "",
           ),
           BottomNavigationBarItem(
             icon: Icon(
               Icons.language,
-              size: _selectedIndex == 1 ? 40 : 30,
+              size: 30,
               color: _selectedIndex == 1 ? SECONDARY_COLOR : Colors.grey[600],
             ),
-            label: "Knowledge Nexus",
+            label: "",
           ),
           BottomNavigationBarItem(
             icon: Icon(
               Icons.shopping_cart,
-              size: _selectedIndex == 2 ? 40 : 30,
+              size: 30,
               color: _selectedIndex == 2 ? SECONDARY_COLOR : Colors.grey[600],
             ),
-            label: "Shop",
+            label: "",
           ),
         ],
       ),

@@ -124,8 +124,8 @@ class _UserHomeState extends State<UserHome> {
 
       await flutterLocalNotificationsPlugin.show(
         0,
-        'Period Reminder',
-        'Your period starts in $daysUntilStart days.',
+        AppLocalizations.of(context)!.period_reminder,
+        '${AppLocalizations.of(context)!.your_period_starts_in} $daysUntilStart ${AppLocalizations.of(context)!.days}',
         platformChannelSpecifics,
         payload: 'item x',
       );

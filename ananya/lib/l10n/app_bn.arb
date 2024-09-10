@@ -225,6 +225,17 @@
   "wateraid": "ওয়াটারএইড",
   "brac": "ব্র্যাক",
   "user": "একক",
-  "superuser": "দল"
+  "superuser": "দল",
+  "no_anomalies": "কোনো অসঙ্গতি নেই",
+  "some_anomalies": "কিছু অসঙ্গতি",
+  "days_cycle": "দিন চক্র",
+  "your_period_starts_in": "আপনার পিরিয়ড শুরু",
+  "period_reminder": "পিরিয়ড অনুস্মারক",
+  "no_history_available": "কোন ইতিহাস নেই",
+  "error_loading_data": "ডেটা লোড করার সময় ত্রুটি ৷",
+  "no_user_selected": "কোনো ব্যবহারকারী নির্বাচিত হয়নি",
+  "calculating": "হিসাব করা হচ্ছে",
+  "your_cycle_prediction": "আপনার চক্রের পূর্বাভাস",
+  "your_next_period_will_start_around": "আপনার পরবর্তী পিরিয়ড প্রায় শুরু হবে"
 
 }

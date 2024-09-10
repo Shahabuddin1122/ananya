@@ -1,5 +1,6 @@
 import 'package:ananya/utils/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HistoryComponent extends StatelessWidget {
   final String month, day, monthcycle;
@@ -73,7 +74,7 @@ class HistoryComponent extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "$monthcycle days cycle",
+                  "$monthcycle ${AppLocalizations.of(context)!.days_cycle}",
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     color: ACCENT,
@@ -102,7 +103,9 @@ class HistoryComponent extends StatelessWidget {
                     ),
                     Expanded(
                       child: Text(
-                        anomalies == 1 ? "No anomalies" : "Some anomalies",
+                        anomalies == 1
+                            ? AppLocalizations.of(context)!.no_anomalies
+                            : AppLocalizations.of(context)!.some_anomalies,
                         style: const TextStyle(
                           color: ACCENT,
                           fontSize: 6,

@@ -2,6 +2,7 @@ import 'package:ananya/utils/constants.dart';
 import 'package:ananya/utils/custom_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class PeriodDateShow extends StatefulWidget {
   final Map<String, dynamic> data;
@@ -33,7 +34,7 @@ class _PeriodDateShowState extends State<PeriodDateShow> {
     if (startDate == endDate) {
       return formattedStartDate;
     } else {
-      return "$formattedStartDate to $formattedEndDate";
+      return "$formattedStartDate - $formattedEndDate";
     }
   }
 
@@ -59,9 +60,10 @@ class _PeriodDateShowState extends State<PeriodDateShow> {
                 Text.rich(
                   TextSpan(
                     children: [
-                      const TextSpan(
-                        text: 'Your next period will start around \n',
-                        style: TextStyle(
+                      TextSpan(
+                        text:
+                            '${AppLocalizations.of(context)!.your_next_period_will_start_around} \n',
+                        style: const TextStyle(
                           fontSize: 32,
                         ),
                       ),
@@ -92,9 +94,9 @@ class _PeriodDateShowState extends State<PeriodDateShow> {
                   ),
                 ),
               ),
-              child: const Text(
-                "Continue",
-                style: TextStyle(
+              child: Text(
+                AppLocalizations.of(context)!.continues,
+                style: const TextStyle(
                   color: Colors.white,
                 ),
               ),
