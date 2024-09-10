@@ -238,5 +238,7 @@
   "no_user_selected": "No user selected",
   "calculating": "Calculating",
   "your_cycle_prediction": "your cycle prediction",
-  "your_next_period_will_start_around": "Your next period will start around"
+  "your_next_period_will_start_around": "Your next period will start around",
+  "pdf_downloaded": "PDF Downloaded",
+  "permission_denied": "Permission denied"
 }

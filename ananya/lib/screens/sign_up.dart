@@ -77,7 +77,6 @@ class _SignUpState extends State<SignUp> {
     });
     Map<String, dynamic> data;
     ApiSettings api;
-    print(userTypes);
     if (selectUserType == 'superuser' || selectUserType == 'দল') {
       api = ApiSettings(endPoint: 'user/superuser/signup');
       data = {

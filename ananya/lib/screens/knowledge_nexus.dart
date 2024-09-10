@@ -58,7 +58,8 @@ class _KnowledgeNexusState extends State<KnowledgeNexus> {
           await _savePDFToStorage(context);
         } else {
           print('Permission denied');
-          _showSnackBar(context, 'Permission denied', Colors.red);
+          _showSnackBar(context,
+              AppLocalizations.of(context)!.permission_denied, Colors.red);
         }
       } else {
         // Handle iOS or other platforms if necessary
@@ -66,7 +67,8 @@ class _KnowledgeNexusState extends State<KnowledgeNexus> {
           await _savePDFToStorage(context);
         } else {
           print('Permission denied');
-          _showSnackBar(context, 'Permission denied', Colors.red);
+          _showSnackBar(context,
+              AppLocalizations.of(context)!.permission_denied, Colors.red);
         }
       }
     } catch (e) {
@@ -78,21 +80,21 @@ class _KnowledgeNexusState extends State<KnowledgeNexus> {
     final byteData = await rootBundle.load('assets/pdf/nmhmsbn.pdf');
     final buffer = byteData.buffer;
 
-    final directory = await getExternalStorageDirectory();
-    if (directory != null) {
-      final downloadsPath = '${directory.path}/Download';
-      final downloadDirectory = Directory(downloadsPath);
+    // Save to external downloads directory (public folder)
+    final downloadsPath = '/storage/emulated/0/Download';
+    final downloadDirectory = Directory(downloadsPath);
 
-      if (!(await downloadDirectory.exists())) {
-        await downloadDirectory.create(recursive: true);
-      }
-
-      final filePath = '$downloadsPath/mhm.pdf';
-      final file = File(filePath);
-      await file.writeAsBytes(buffer.asUint8List());
-      print('PDF saved to: $downloadsPath');
-      _showSnackBar(context, 'PDF Downloaded', Colors.green);
+    if (!(await downloadDirectory.exists())) {
+      await downloadDirectory.create(recursive: true);
     }
+
+    final filePath =
+        '$downloadsPath/National_Menstrual_Hygiene_Management_Strategy.pdf';
+    final file = File(filePath);
+    await file.writeAsBytes(buffer.asUint8List());
+    print('PDF saved to: $downloadsPath');
+    _showSnackBar(
+        context, AppLocalizations.of(context)!.pdf_downloaded, Colors.green);
   }
 
   void _showSnackBar(BuildContext context, String message, Color color) {

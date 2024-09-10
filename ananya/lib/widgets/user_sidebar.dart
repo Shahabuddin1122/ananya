@@ -3,6 +3,7 @@
 import 'package:ananya/main.dart';
 import 'package:ananya/utils/api_sattings.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -286,6 +287,10 @@ class _UserSidebarState extends State<UserSidebar> {
               await prefs.remove('is_superuser');
               await prefs.remove('cohort-user');
               await prefs.remove('token');
+              await prefs.remove('last_notification_date');
+              FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+                  FlutterLocalNotificationsPlugin();
+              await flutterLocalNotificationsPlugin.cancelAll();
               Navigator.pushNamed(context, '/signin');
             },
           ),

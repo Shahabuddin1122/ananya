@@ -236,6 +236,8 @@
   "no_user_selected": "কোনো ব্যবহারকারী নির্বাচিত হয়নি",
   "calculating": "হিসাব করা হচ্ছে",
   "your_cycle_prediction": "আপনার চক্রের পূর্বাভাস",
-  "your_next_period_will_start_around": "আপনার পরবর্তী পিরিয়ড প্রায় শুরু হবে"
+  "your_next_period_will_start_around": "আপনার পরবর্তী পিরিয়ড প্রায় শুরু হবে",
+  "pdf_downloaded": "ডাউনলোড হয়েছে",
+  "permission_denied": "অনুমতি অস্বীকার করা হয়েছে"
 
 }
