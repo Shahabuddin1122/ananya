@@ -2,6 +2,7 @@ import 'package:ananya/l10n/l10n.dart';
 import 'package:ananya/models/period_state_questionnaire.dart';
 import 'package:ananya/screens/add_a_user.dart';
 import 'package:ananya/screens/choose_user.dart';
+import 'package:ananya/screens/forget_password.dart';
 import 'package:ananya/screens/history/cohort.dart';
 import 'package:ananya/screens/history/individual.dart';
 import 'package:ananya/screens/knowledge_nexus_info.dart';
@@ -104,6 +105,7 @@ class _MyAppState extends State<MyApp> {
           '/': (context) => const Landing(),
           '/signin': (context) => const SignIn(),
           '/signup': (context) => const SignUp(),
+          '/forget-password': (context) => const ForgetPassword(),
           '/add-user': (context) => const AddAUser(),
           '/choose-user': (context) {
             final args = ModalRoute.of(context)!.settings.arguments as bool;

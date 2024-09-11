@@ -72,22 +72,23 @@ class _CustomTextFieldState extends State<CustomTextField> {
                   color: ACCENT,
                 ),
                 border: InputBorder.none,
-                suffixIcon:
-                    (widget.text == "Password" || widget.text == "পাসওয়ার্ড")
-                        ? IconButton(
-                            icon: Icon(
-                              _obscureText
-                                  ? Icons.visibility
-                                  : Icons.visibility_off,
-                              color: ACCENT,
-                            ),
-                            onPressed: () {
-                              setState(() {
-                                _obscureText = !_obscureText;
-                              });
-                            },
-                          )
-                        : null,
+                suffixIcon: (widget.text == "Password" ||
+                        widget.text == "পাসওয়ার্ড" ||
+                        widget.text == 'New password')
+                    ? IconButton(
+                        icon: Icon(
+                          _obscureText
+                              ? Icons.visibility
+                              : Icons.visibility_off,
+                          color: ACCENT,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            _obscureText = !_obscureText;
+                          });
+                        },
+                      )
+                    : null,
               ),
               keyboardType: (widget.text == "Phone Number" ||
                       widget.text == "মোবাইল নম্বর")
@@ -97,12 +98,15 @@ class _CustomTextFieldState extends State<CustomTextField> {
                       widget.text == "মোবাইল নম্বর")
                   ? <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly]
                   : null,
-              obscureText:
-                  (widget.text == "Password" || widget.text == "পাসওয়ার্ড")
-                      ? _obscureText
-                      : false,
+              obscureText: (widget.text == "Password" ||
+                      widget.text == "পাসওয়ার্ড" ||
+                      widget.text == 'New password')
+                  ? _obscureText
+                  : false,
               onChanged: (value) {
-                if (widget.text == "Password" || widget.text == "পাসওয়ার্ড") {
+                if (widget.text == "Password" ||
+                    widget.text == "পাসওয়ার্ড" ||
+                    widget.text == 'New password') {
                   setState(() {
                     _warningText = value.length < 6
                         ? AppLocalizations.of(context)!.password_is_too_short
