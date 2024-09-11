@@ -248,6 +248,8 @@
   "no_data_available": "No data available",
   "which_user_do_you_want_to": "Which user do you want to",
   "log_period_of": "log period of",
-  "probahini": "Probahini"
+  "probahini": "Probahini",
+  "others": "others",
+  "sts_project": "STS Project"
 
 }

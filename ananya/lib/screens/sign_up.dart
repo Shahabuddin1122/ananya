@@ -152,8 +152,8 @@ class _SignUpState extends State<SignUp> {
       AppLocalizations.of(context)!.sylhet,
     ];
     projects = [
-      AppLocalizations.of(context)!.wateraid,
-      AppLocalizations.of(context)!.brac,
+      AppLocalizations.of(context)!.sts_project,
+      AppLocalizations.of(context)!.others,
     ];
     userTypes = [
       AppLocalizations.of(context)!.user,
