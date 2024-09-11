@@ -5,6 +5,7 @@ urlpatterns = [
     path('signup', views.user_signup, name='user_signup'),
     path('superuser/signup', views.super_user_signup, name='super_user_signup'),
     path('login', views.user_login, name='user_login'),
+    path('forget-password', views.forget_password, name='forget-password'),
     path('add-user/<int:superuser_id>', views.add_user_in_superuser, name='add-user-in-superuser'),
     path('get-cohort/<int:superuser_id>', views.get_cohorts, name='get_all_cohorts'),
     path('get-user/<int:user_id>', views.get_user, name='get_user'),

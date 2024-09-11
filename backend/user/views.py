@@ -105,7 +105,7 @@ def user_login(request):
 
                 return Response(data, status=status.HTTP_200_OK)
             else:
-                return Response({"error": "Invalid credentials"}, status=status.HTTP_401_UNAUTHORIZED)
+                return Response({"error": "Invalid credentials"}, status=status.HTTP_400_BAD_REQUEST)
 
         except User.DoesNotExist:
             return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
@@ -114,6 +114,31 @@ def user_login(request):
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def forget_password(request):
+    if request.method == 'POST':
+        try:
+            number = request.data.get('number')
+            new_password = request.data.get('password')
+
+            # Fetch user by phone number
+            user = User.objects.get(phone=number)
+
+            user.password = make_password(new_password)
+            user.save()
+
+            serializer = UserSerializer(user)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+        except User.DoesNotExist:
+            return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    return Response({"error": "Invalid credentials"}, status=status.HTTP_403_FORBIDDEN)
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
