@@ -1,9 +1,19 @@
+import 'package:ananya/widgets/web-view-screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class Probahini extends StatelessWidget {
   const Probahini({super.key});
+
+  void _navigateToWebView(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const WebViewScreen(),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +43,7 @@ class Probahini extends StatelessWidget {
             bottom: MediaQuery.of(context).size.height * 0.05,
             left: MediaQuery.of(context).size.width * 0.07,
             child: ElevatedButton(
-              onPressed: () {},
+              onPressed: () => _navigateToWebView(context),
               child: Text(AppLocalizations.of(context)!.begin_chat),
             ),
           ),
