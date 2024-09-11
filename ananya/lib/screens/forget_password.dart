@@ -5,31 +5,21 @@ import 'package:ananya/utils/constants.dart';
 import 'package:ananya/utils/custom_theme.dart';
 import 'package:ananya/widgets/custom_text_field.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class SignIn extends StatefulWidget {
-  const SignIn({super.key});
+class ForgetPassword extends StatefulWidget {
+  const ForgetPassword({super.key});
 
   @override
-  State<SignIn> createState() => _SignInState();
+  State<ForgetPassword> createState() => _ForgetPasswordState();
 }
 
-class _SignInState extends State<SignIn> {
+class _ForgetPasswordState extends State<ForgetPassword> {
   final TextEditingController phoneController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   bool isLoading = false;
 
-  ApiSettings api = ApiSettings(endPoint: 'user/login');
-
-  void check() async {
-    SharedPreferences prefs;
-    try {
-      prefs = await SharedPreferences.getInstance();
-    } catch (e) {
-      print('Failed to load SharedPreferences: $e');
-      return;
-    }
+  void changePassword() async {
     if (passwordController.text.isEmpty) {
       _showErrorMessage(
           '${AppLocalizations.of(context)!.password} ${AppLocalizations.of(context)!.is_required}');
@@ -44,37 +34,28 @@ class _SignInState extends State<SignIn> {
       isLoading = true;
     });
 
-    Map<String, dynamic> data = {
-      'phone': phoneController.text,
-      'password': passwordController.text,
+    Map<String, String> data = {
+      "number": phoneController.text,
+      "password": passwordController.text,
     };
-
+    ApiSettings api = ApiSettings(endPoint: 'user/forget-password');
     try {
       final response = await api.postMethodWithoutToken(json.encode(data));
       setState(() {
         isLoading = false;
       });
       if (response.statusCode == 200) {
-        final Map<String, dynamic> responseData = json.decode(response.body);
-        final Map<String, dynamic> user = responseData['user'];
-        await prefs.setString('userNumber', phoneController.text);
-        await prefs.setString('userId', user['id'].toString());
-        await prefs.setBool('is_superuser', user['is_superuser']);
-        await prefs.setString('token', responseData['token']);
-        if (responseData['managed_users'].isNotEmpty) {
-          await prefs.setString(
-              "cohort-user", responseData['managed_users'][0].toString());
-        }
-
-        Navigator.pushNamed(context, '/');
+        print("Successfully changed the password");
+        Navigator.of(context).pushNamed('/signin');
       } else {
+        print("Error to change the password");
         _showErrorMessage(AppLocalizations.of(context)!.invalid_credentials);
       }
     } catch (e) {
       setState(() {
         isLoading = false;
       });
-      _showErrorMessage(AppLocalizations.of(context)!.invalid_credentials);
+      return;
     }
   }
 
@@ -100,6 +81,9 @@ class _SignInState extends State<SignIn> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 255, 235, 239),
+      appBar: AppBar(
+        title: Text('Forget password'),
+      ),
       body: Center(
         child: isLoading
             ? const CircularProgressIndicator()
@@ -117,8 +101,7 @@ class _SignInState extends State<SignIn> {
                       ),
                       Text(
                         textAlign: TextAlign.center,
-                        AppLocalizations.of(context)!
-                            .login_with_your_mobile_number_and_password,
+                        'Reset your account password',
                         style: const TextStyle(
                           fontSize: 32,
                           color: ACCENT,
@@ -133,14 +116,14 @@ class _SignInState extends State<SignIn> {
                         controller: phoneController,
                       ),
                       CustomTextField(
-                        text: AppLocalizations.of(context)!.password,
+                        text: 'New password',
                         controller: passwordController,
                       ),
                       const SizedBox(
                         height: 20,
                       ),
                       ElevatedButton(
-                        onPressed: check,
+                        onPressed: changePassword,
                         style: const ButtonStyle(
                           backgroundColor: WidgetStatePropertyAll(ACCENT),
                           minimumSize:
@@ -153,51 +136,12 @@ class _SignInState extends State<SignIn> {
                           ),
                         ),
                         child: Text(
-                          AppLocalizations.of(context)!.log_in,
+                          'Change',
                           style: const TextStyle(
                             color: Colors.white,
                           ),
                         ),
                       ),
-                      const SizedBox(
-                        height: 30,
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          Navigator.pushNamed(context, '/signup');
-                        },
-                        child: Text(
-                          AppLocalizations.of(context)!
-                              .dont_have_an_account_create_a_new_account,
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(
-                            color: Colors.indigo,
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          Navigator.pushNamed(context, '/forget-password');
-                        },
-                        child: Text(
-                          AppLocalizations.of(context)!
-                              .forget_password_set_a_new_password,
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(
-                            color: Colors.indigo,
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      )
                     ],
                   ),
                 ),

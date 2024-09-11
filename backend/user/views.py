@@ -130,7 +130,7 @@ def forget_password(request):
             user.save()
 
             serializer = UserSerializer(user)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response(serializer.data, status=status.HTTP_200_OK)
 
         except User.DoesNotExist:
             return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
