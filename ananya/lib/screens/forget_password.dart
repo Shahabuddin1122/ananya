@@ -82,7 +82,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 255, 235, 239),
       appBar: AppBar(
-        title: Text('Forget password'),
+        title: Text(AppLocalizations.of(context)!.forget_password),
       ),
       body: Center(
         child: isLoading
@@ -101,7 +101,8 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                       ),
                       Text(
                         textAlign: TextAlign.center,
-                        'Reset your account password',
+                        AppLocalizations.of(context)!
+                            .reset_your_account_password,
                         style: const TextStyle(
                           fontSize: 32,
                           color: ACCENT,
@@ -116,7 +117,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                         controller: phoneController,
                       ),
                       CustomTextField(
-                        text: 'New password',
+                        text: AppLocalizations.of(context)!.new_password,
                         controller: passwordController,
                       ),
                       const SizedBox(
@@ -136,7 +137,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                           ),
                         ),
                         child: Text(
-                          'Change',
+                          AppLocalizations.of(context)!.change,
                           style: const TextStyle(
                             color: Colors.white,
                           ),

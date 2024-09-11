@@ -74,7 +74,8 @@ class _CustomTextFieldState extends State<CustomTextField> {
                 border: InputBorder.none,
                 suffixIcon: (widget.text == "Password" ||
                         widget.text == "পাসওয়ার্ড" ||
-                        widget.text == 'New password')
+                        widget.text == 'New password' ||
+                        widget.text == 'নতুন পাসওয়ার্ড')
                     ? IconButton(
                         icon: Icon(
                           _obscureText
@@ -100,13 +101,15 @@ class _CustomTextFieldState extends State<CustomTextField> {
                   : null,
               obscureText: (widget.text == "Password" ||
                       widget.text == "পাসওয়ার্ড" ||
-                      widget.text == 'New password')
+                      widget.text == 'New password' ||
+                      widget.text == 'নতুন পাসওয়ার্ড')
                   ? _obscureText
                   : false,
               onChanged: (value) {
                 if (widget.text == "Password" ||
                     widget.text == "পাসওয়ার্ড" ||
-                    widget.text == 'New password') {
+                    widget.text == 'New password' ||
+                    widget.text == 'নতুন পাসওয়ার্ড') {
                   setState(() {
                     _warningText = value.length < 6
                         ? AppLocalizations.of(context)!.password_is_too_short
