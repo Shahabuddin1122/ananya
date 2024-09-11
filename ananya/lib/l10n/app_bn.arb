@@ -238,6 +238,13 @@
   "your_cycle_prediction": "আপনার চক্রের পূর্বাভাস",
   "your_next_period_will_start_around": "আপনার পরবর্তী পিরিয়ড প্রায় শুরু হবে",
   "pdf_downloaded": "ডাউনলোড হয়েছে",
-  "permission_denied": "অনুমতি অস্বীকার করা হয়েছে"
+  "permission_denied": "অনুমতি অস্বীকার করা হয়েছে",
+  "forget_password": "পাসওয়ার্ড পরিবর্তন করুন",
+  "reset_your_account_password": "আপনার অ্যাকাউন্ট পাসওয়ার্ড পুনরায় সেট করুন",
+  "new_password": "নতুন পাসওয়ার্ড",
+  "change": "পরিবর্তন",
+  "no_data_available": "কোন তথ্য উপলব্ধ নেই",
+  "which_user_do_you_want_to": "আপনি কোন ব্যবহারকারীর ",
+  "log_period_of": "সময়কাল লগ করতে চান"
 
 }

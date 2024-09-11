@@ -7,6 +7,7 @@ import 'package:ananya/widgets/custom_app_bar_with_progress.dart';
 import 'package:ananya/widgets/user_picture_name.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ChooseUser extends StatelessWidget {
   final bool updateperiod;
@@ -48,7 +49,9 @@ class ChooseUser extends StatelessWidget {
                 child: CircularProgressIndicator(),
               );
             } else if (snapshot.hasError) {
-              return const Center(child: Text('Error loading data'));
+              return Center(
+                  child:
+                      Text(AppLocalizations.of(context)!.error_loading_data));
             } else if (snapshot.hasData &&
                 snapshot.data!.isNotEmpty &&
                 (snapshot.data!['predicted'].isNotEmpty ||
@@ -57,17 +60,18 @@ class ChooseUser extends StatelessWidget {
               List<dynamic> notPredictedUsers = snapshot.data!['not_predicted'];
               return ListView(
                 children: [
-                  const Text.rich(
+                  Text.rich(
                     TextSpan(
                       children: [
                         TextSpan(
-                          text: 'Which user do you want to ',
+                          text: AppLocalizations.of(context)!
+                              .which_user_do_you_want_to,
                           style: TextStyle(
                             fontSize: 32,
                           ),
                         ),
                         TextSpan(
-                          text: 'log period of',
+                          text: AppLocalizations.of(context)!.log_period_of,
                           style: TextStyle(
                             fontSize: 32,
                             color: PRIMARY_COLOR,
@@ -105,7 +109,8 @@ class ChooseUser extends StatelessWidget {
                 ],
               );
             } else {
-              return const Center(child: Text('No data available'));
+              return Center(
+                  child: Text(AppLocalizations.of(context)!.no_data_available));
             }
           },
         ),
