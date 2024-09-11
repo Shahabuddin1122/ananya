@@ -2,6 +2,7 @@
 
 import 'package:ananya/main.dart';
 import 'package:ananya/utils/api_sattings.dart';
+import 'package:ananya/widgets/web-view-screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -229,7 +230,12 @@ class _UserSidebarState extends State<UserSidebar> {
               AppLocalizations.of(context)!.chat_with_ananya,
             ),
             onTap: () {
-              Navigator.pushNamed(context, '/');
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const WebViewScreen(),
+                ),
+              );
             },
           ),
           ListTile(
