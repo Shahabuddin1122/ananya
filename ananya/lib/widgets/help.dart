@@ -20,7 +20,10 @@ class Help extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Image.asset('assets/images/hotline.png'),
+            Image.asset(
+              'assets/images/hotline.png',
+              height: 100,
+            ),
             const SizedBox(height: 10),
             Text(
               AppLocalizations.of(context)!.help,

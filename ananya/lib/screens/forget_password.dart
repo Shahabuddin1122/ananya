@@ -46,6 +46,13 @@ class _ForgetPasswordState extends State<ForgetPassword> {
       });
       if (response.statusCode == 200) {
         print("Successfully changed the password");
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+                AppLocalizations.of(context)!.password_changed_successfully),
+            backgroundColor: Colors.green,
+          ),
+        );
         Navigator.of(context).pushNamed('/signin');
       } else {
         print("Error to change the password");

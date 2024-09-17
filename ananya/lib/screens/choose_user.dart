@@ -56,8 +56,16 @@ class ChooseUser extends StatelessWidget {
                 snapshot.data!.isNotEmpty &&
                 (snapshot.data!['predicted'].isNotEmpty ||
                     snapshot.data!['not_predicted'].isNotEmpty)) {
-              List<dynamic> predictedUsers = snapshot.data!['predicted'];
-              List<dynamic> notPredictedUsers = snapshot.data!['not_predicted'];
+              final data = snapshot.data!;
+              final predictedUsers = data['predicted'] ?? [];
+              final notPredictedUsers = data['not_predicted'] ?? [];
+
+              if (predictedUsers.isEmpty && notPredictedUsers.isEmpty) {
+                return Center(
+                  child: Text(AppLocalizations.of(context)!.no_users_found),
+                );
+              }
+
               return ListView(
                 children: [
                   Text.rich(

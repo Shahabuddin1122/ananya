@@ -2,6 +2,7 @@ import 'package:ananya/utils/constants.dart';
 import 'package:ananya/utils/custom_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class UserPictureName extends StatelessWidget {
   final String name, image, id;
@@ -67,7 +68,8 @@ class UserPictureName extends StatelessWidget {
                   ),
                   grey
                       ? Text(
-                          'User period logged, tracking in progress',
+                          AppLocalizations.of(context)!
+                              .user_period_logged_tracking_in_progress,
                           softWrap: true,
                           style: TextStyle(
                             fontSize: 10,

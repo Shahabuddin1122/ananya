@@ -17,6 +17,7 @@ import 'package:ananya/screens/process/unlock_process5.dart';
 import 'package:ananya/screens/process/unlock_process6.dart';
 import 'package:ananya/screens/sign_in.dart';
 import 'package:ananya/screens/sign_up.dart';
+import 'package:ananya/utils/local-notification.dart';
 import 'package:ananya/utils/scheme.dart';
 import 'package:ananya/screens/help.dart';
 import 'package:flutter/material.dart';
@@ -25,7 +26,7 @@ import 'package:provider/provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:permission_handler/permission_handler.dart';
+import 'package:timezone/data/latest.dart' as tz;
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
@@ -36,23 +37,10 @@ Future<void> main() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String? languageCode = prefs.getString('language_code');
   Locale initialLocale = Locale(languageCode ?? 'bn');
-
-  await _initializeNotification();
+  tz.initializeTimeZones();
+  await LocalNotifications.init();
 
   runApp(MyApp(initialLocale: initialLocale));
-}
-
-Future<void> _initializeNotification() async {
-  final androidSettings = AndroidInitializationSettings('@mipmap/ic_launcher');
-  final initializationSettings = InitializationSettings(
-    android: androidSettings,
-  );
-
-  await flutterLocalNotificationsPlugin.initialize(initializationSettings);
-
-  if (await Permission.notification.isDenied) {
-    await Permission.notification.request();
-  }
 }
 
 class MyApp extends StatefulWidget {

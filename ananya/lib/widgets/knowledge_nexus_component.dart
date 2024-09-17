@@ -18,39 +18,52 @@ class KnowledgeNexusComponent extends StatelessWidget {
           Radius.circular(10),
         ),
       ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          SvgPicture.asset(
-            'assets/images/knowledge_nexus.svg',
-            width: 120,
-            fit: BoxFit.cover,
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                AppLocalizations.of(context)!.knowledge_nexus,
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
+      child: IntrinsicHeight(
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Flexible(
+              flex: 1,
+              child: SvgPicture.asset(
+                'assets/images/knowledge_nexus.svg',
+                fit: BoxFit.contain,
+                width: double.infinity,
               ),
-              Text(
-                AppLocalizations.of(context)!.get_to_know_your_body_better,
+            ),
+            const SizedBox(width: 10),
+            Flexible(
+              flex: 1,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    AppLocalizations.of(context)!.knowledge_nexus,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 5),
+                  Text(
+                    AppLocalizations.of(context)!.get_to_know_your_body_better,
+                    style: const TextStyle(fontSize: 14),
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 2,
+                  ),
+                  const SizedBox(height: 10),
+                  ElevatedButton(
+                    onPressed: () {
+                      if (onselect != null) {
+                        onselect!(1);
+                      }
+                    },
+                    child: Text(AppLocalizations.of(context)!.go_to_nexus),
+                  ),
+                ],
               ),
-              const SizedBox(
-                height: 10,
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  onselect!(1);
-                },
-                child: Text(AppLocalizations.of(context)!.go_to_nexus),
-              )
-            ],
-          ),
-        ],
+            ),
+          ],
+        ),
       ),
     );
   }
