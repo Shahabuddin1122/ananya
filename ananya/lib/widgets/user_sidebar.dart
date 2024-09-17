@@ -2,6 +2,7 @@
 
 import 'package:ananya/main.dart';
 import 'package:ananya/utils/api_sattings.dart';
+import 'package:ananya/utils/constants.dart';
 import 'package:ananya/widgets/web-view-screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -283,23 +284,48 @@ class _UserSidebarState extends State<UserSidebar> {
             leading: const Icon(Icons.help),
             title: Text(AppLocalizations.of(context)!.get_help),
           ),
-          ListTile(
-            leading: const Icon(Icons.logout),
-            title: Text(AppLocalizations.of(context)!.log_out),
-            onTap: () async {
-              SharedPreferences prefs = await SharedPreferences.getInstance();
-              await prefs.remove('userNumber');
-              await prefs.remove('userId');
-              await prefs.remove('is_superuser');
-              await prefs.remove('cohort-user');
-              await prefs.remove('token');
-              await prefs.remove('last_notification_date');
-              FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-                  FlutterLocalNotificationsPlugin();
-              await flutterLocalNotificationsPlugin.cancelAll();
-              Navigator.pushNamed(context, '/signin');
-            },
-          ),
+          FutureBuilder<Map<String, dynamic>>(
+              future: getInfo(),
+              builder: (context, loginSnapshot) {
+                if (!loginSnapshot.hasData || loginSnapshot.data!.isEmpty) {
+                  return Container(
+                    color: ACCENT,
+                    child: ListTile(
+                      leading: const Icon(
+                        Icons.login,
+                        color: Colors.white,
+                      ),
+                      title: Text(
+                        AppLocalizations.of(context)!.log_in,
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      onTap: () {
+                        Navigator.pushNamed(context, '/signin');
+                      },
+                    ),
+                  );
+                } else {
+                  return ListTile(
+                    leading: const Icon(Icons.logout),
+                    title: Text(AppLocalizations.of(context)!.log_out),
+                    onTap: () async {
+                      SharedPreferences prefs =
+                          await SharedPreferences.getInstance();
+                      await prefs.remove('userNumber');
+                      await prefs.remove('userId');
+                      await prefs.remove('is_superuser');
+                      await prefs.remove('cohort-user');
+                      await prefs.remove('token');
+                      await prefs.remove('last_notification_date');
+                      FlutterLocalNotificationsPlugin
+                          flutterLocalNotificationsPlugin =
+                          FlutterLocalNotificationsPlugin();
+                      await flutterLocalNotificationsPlugin.cancelAll();
+                      Navigator.pushNamed(context, '/signin');
+                    },
+                  );
+                }
+              }),
         ],
       ),
     );

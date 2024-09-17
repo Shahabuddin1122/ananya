@@ -5,20 +5,38 @@ import 'package:ananya/widgets/custom_app_bar_with_progress.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class UnlockProcess3 extends StatelessWidget {
+class UnlockProcess3 extends StatefulWidget {
   UnlockProcess3({super.key});
 
-  final List<DateTime> redDates = [
-    DateTime.utc(2024, 8, 14),
-    DateTime.utc(2024, 8, 15),
-    DateTime.utc(2024, 8, 16),
-  ];
+  @override
+  State<UnlockProcess3> createState() => _UnlockProcess3State();
+}
 
-  final List<DateTime> greenDates = [
-    DateTime.utc(2024, 8, 20),
-    DateTime.utc(2024, 8, 21),
-    DateTime.utc(2024, 8, 22),
-  ];
+class _UnlockProcess3State extends State<UnlockProcess3> {
+  List<DateTime> redDates = [];
+  List<DateTime> greenDates = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeDates();
+  }
+
+  void _initializeDates() {
+    final today = DateTime.now();
+    final year = today.year;
+    final month = today.month;
+
+    for (int i = 0; i < 3; i++) {
+      redDates.add(DateTime(year, month, today.day + i));
+    }
+
+    final greenStartDate = redDates.last.add(const Duration(days: 7));
+    for (int i = 0; i < 3; i++) {
+      greenDates
+          .add(DateTime(year, greenStartDate.month, greenStartDate.day + i));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

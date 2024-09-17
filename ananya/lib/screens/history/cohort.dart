@@ -16,7 +16,6 @@ class CohortHistory extends StatefulWidget {
 }
 
 class _CohortHistoryState extends State<CohortHistory> {
-  int _selectedIndex = 0;
   late Future<String?> selectedUser = getSelectedUser();
   String? selectedUserId;
 
@@ -172,12 +171,6 @@ class _CohortHistoryState extends State<CohortHistory> {
     }
   }
 
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -298,41 +291,6 @@ class _CohortHistoryState extends State<CohortHistory> {
             },
           );
         },
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Colors.grey[100],
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
-        selectedItemColor: SECONDARY_COLOR,
-        unselectedItemColor: Colors.grey[600],
-        selectedFontSize: 16,
-        unselectedFontSize: 14,
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.calendar_today,
-              size: 30,
-              color: _selectedIndex == 0 ? SECONDARY_COLOR : Colors.grey[600],
-            ),
-            label: "",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.language,
-              size: 30,
-              color: _selectedIndex == 1 ? SECONDARY_COLOR : Colors.grey[600],
-            ),
-            label: "",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.shopping_cart,
-              size: 30,
-              color: _selectedIndex == 2 ? SECONDARY_COLOR : Colors.grey[600],
-            ),
-            label: "",
-          ),
-        ],
       ),
       floatingActionButton: Padding(
         padding: Theme.of(context).largemainPadding,

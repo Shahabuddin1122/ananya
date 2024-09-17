@@ -28,28 +28,29 @@ class CustomAppBarWithProgress extends StatelessWidget
           ),
           title: Container(),
           actions: [
-            TextButton(
-              onPressed: () {
-                if (id == 3) {
-                  Navigator.pushNamed(
-                    context,
-                    id + 1 == 7 ? '/' : '/unlock-process/${id + 1}',
-                    arguments: false,
-                  );
-                } else {
-                  Navigator.pushNamed(
-                    context,
-                    id + 1 == 7 ? '/' : '/unlock-process/${id + 1}',
-                  );
-                }
-              },
-              child: Text(
-                AppLocalizations.of(context)!.skip,
-                style: const TextStyle(
-                  color: ACCENT,
+            if (id != 6 || id != 5)
+              TextButton(
+                onPressed: () {
+                  if (id == 3) {
+                    Navigator.pushNamed(
+                      context,
+                      id + 1 == 7 ? '/' : '/unlock-process/${id + 1}',
+                      arguments: false,
+                    );
+                  } else {
+                    Navigator.pushNamed(
+                      context,
+                      id + 1 == 7 ? '/' : '/unlock-process/${id + 1}',
+                    );
+                  }
+                },
+                child: Text(
+                  AppLocalizations.of(context)!.skip,
+                  style: const TextStyle(
+                    color: ACCENT,
+                  ),
                 ),
               ),
-            ),
           ],
           backgroundColor: Colors.transparent,
           elevation: 0,

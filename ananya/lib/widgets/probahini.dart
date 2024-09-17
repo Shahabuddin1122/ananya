@@ -40,8 +40,8 @@ class Probahini extends StatelessWidget {
             ),
           ),
           Positioned(
-            bottom: MediaQuery.of(context).size.height * 0.05,
-            left: MediaQuery.of(context).size.width * 0.07,
+            bottom: MediaQuery.of(context).size.height * 0.035,
+            left: MediaQuery.of(context).size.width * 0.035,
             child: ElevatedButton(
               onPressed: () => _navigateToWebView(context),
               child: Text(AppLocalizations.of(context)!.begin_chat),

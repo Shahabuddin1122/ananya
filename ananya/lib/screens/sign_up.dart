@@ -112,6 +112,13 @@ class _SignUpState extends State<SignUp> {
         isLoading = false;
       });
       if (response.statusCode == 201) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+                AppLocalizations.of(context)!.account_created_successfully),
+            backgroundColor: Colors.green,
+          ),
+        );
         Navigator.pushNamed(context, '/signin');
       } else {
         final Map<String, dynamic> responseData = json.decode(response.body);
@@ -121,8 +128,7 @@ class _SignUpState extends State<SignUp> {
       setState(() {
         isLoading = false;
       });
-      _showErrorMessage(
-          AppLocalizations.of(context)!.invalid_bangladeshi_phone_number);
+      _showErrorMessage(AppLocalizations.of(context)!.invalid_credentials);
     }
   }
 

@@ -36,6 +36,7 @@ class Shop extends StatelessWidget {
           children: [
             SvgPicture.asset(
               'assets/images/Sanitary Pads 1.svg',
+              height: 100,
             ),
             const SizedBox(height: 10),
             Text(

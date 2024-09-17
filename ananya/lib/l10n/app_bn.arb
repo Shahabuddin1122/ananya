@@ -248,6 +248,13 @@
   "log_period_of": "সময়কাল লগ করতে চান",
   "probahini": "প্রবাহিনী",
   "others": "অন্যান্য",
-  "sts_project": "এসটিএস প্রকল্প"
+  "sts_project": "এসটিএস প্রকল্প",
+  "account_created_successfully": "অ্যাকাউন্ট সফলভাবে তৈরি করা হয়েছে ৷",
+  "hospital_and_pharmacy": "হাসপাতাল এবং ফার্মেসি",
+  "find_a_pharmacy_or_hospital_near_you": "আপনার কাছাকাছি কোনো ফার্মেসি বা হাসপাতাল খুঁজুন",
+  "see_address": "ঠিকানা দেখুন",
+  "password_changed_successfully": "পাসওয়ার্ড সফলভাবে পরিবর্তন করা হয়েছে",
+  "no_users_found": "কোনো ব্যবহারকারী পাওয়া যায়নি",
+  "user_period_logged_tracking_in_progress": "ব্যবহারকারীর সময়কাল লগ হয়েছে, ট্র্যাকিং চলছে"
 
 }

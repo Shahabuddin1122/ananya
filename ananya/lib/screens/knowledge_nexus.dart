@@ -202,101 +202,106 @@ class _KnowledgeNexusState extends State<KnowledgeNexus> {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                        width: MediaQuery.of(context).size.width * 0.35,
-                        height: MediaQuery.of(context).size.width * 0.35,
-                        decoration: BoxDecoration(
-                          color: PRIMARY_COLOR,
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Padding(
-                              padding: Theme.of(context).insideCardPadding,
-                              child: Text(
-                                AppLocalizations.of(context)!
-                                    .national_mhm_strategies,
-                                textAlign: TextAlign.start,
-                                style: const TextStyle(
-                                  fontSize: 14,
-                                ),
-                              ),
+                  IntrinsicHeight(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: PRIMARY_COLOR,
+                              borderRadius: BorderRadius.circular(5),
                             ),
-                            SizedBox(
-                              width: double.infinity,
-                              height: 35,
-                              child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  textStyle: const TextStyle(
-                                    fontSize: 12,
-                                  ),
-                                  backgroundColor: Colors.white,
-                                  foregroundColor: Colors.black,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(1),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Padding(
+                                  padding: Theme.of(context).insideCardPadding,
+                                  child: Text(
+                                    AppLocalizations.of(context)!
+                                        .national_mhm_strategies,
+                                    textAlign: TextAlign.start,
+                                    style: const TextStyle(
+                                      fontSize: 14,
+                                    ),
                                   ),
                                 ),
-                                onPressed: () async {
-                                  await downloadPDF(context);
-                                },
-                                child: Text(AppLocalizations.of(context)!.view),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Container(
-                        width: MediaQuery.of(context).size.width * 0.35,
-                        height: MediaQuery.of(context).size.width * 0.35,
-                        decoration: BoxDecoration(
-                          color: SECONDARY_COLOR,
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Padding(
-                              padding: Theme.of(context).insideCardPadding,
-                              child: Text(
-                                AppLocalizations.of(context)!
-                                    .call_to_learn_more,
-                                textAlign: TextAlign.start,
-                                style: const TextStyle(
-                                  fontSize: 14,
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              width: double.infinity,
-                              height: 35,
-                              child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  textStyle: const TextStyle(
-                                    fontSize: 12,
-                                  ),
-                                  backgroundColor: Colors.white,
-                                  foregroundColor: Colors.black,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(1),
+                                SizedBox(
+                                  width: double.infinity,
+                                  height: 35,
+                                  child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      textStyle: const TextStyle(
+                                        fontSize: 12,
+                                      ),
+                                      backgroundColor: Colors.white,
+                                      foregroundColor: Colors.black,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(1),
+                                      ),
+                                    ),
+                                    onPressed: () async {
+                                      await downloadPDF(context);
+                                    },
+                                    child: Text(
+                                        AppLocalizations.of(context)!.view),
                                   ),
                                 ),
-                                onPressed: () {
-                                  _makeMHMCall();
-                                },
-                                child:
-                                    Text(AppLocalizations.of(context)!.click),
-                              ),
+                              ],
                             ),
-                          ],
+                          ),
                         ),
-                      ),
-                    ],
+                        SizedBox(
+                            width: 15), // Optional spacing between containers
+                        Expanded(
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: SECONDARY_COLOR,
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Padding(
+                                  padding: Theme.of(context).insideCardPadding,
+                                  child: Text(
+                                    AppLocalizations.of(context)!
+                                        .call_to_learn_more,
+                                    textAlign: TextAlign.start,
+                                    style: const TextStyle(
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: double.infinity,
+                                  height: 35,
+                                  child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      textStyle: const TextStyle(
+                                        fontSize: 12,
+                                      ),
+                                      backgroundColor: Colors.white,
+                                      foregroundColor: Colors.black,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(1),
+                                      ),
+                                    ),
+                                    onPressed: () {
+                                      _makeMHMCall();
+                                    },
+                                    child: Text(
+                                        AppLocalizations.of(context)!.click),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                   const SizedBox(height: 10),
                 ],
