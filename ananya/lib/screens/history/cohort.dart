@@ -18,6 +18,7 @@ class CohortHistory extends StatefulWidget {
 class _CohortHistoryState extends State<CohortHistory> {
   late Future<String?> selectedUser = getSelectedUser();
   String? selectedUserId;
+  bool _isPurgeLoading = false;
 
   @override
   void initState() {
@@ -135,9 +136,18 @@ class _CohortHistoryState extends State<CohortHistory> {
   }
 
   Future<void> requestDataPurge() async {
+    setState(() {
+      _isPurgeLoading = true;
+    });
+
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? id = prefs.getString('cohort-user');
-    if (id == null) return;
+    if (id == null) {
+      setState(() {
+        _isPurgeLoading = false;
+      });
+      return;
+    }
 
     final response =
         await ApiSettings(endPoint: 'user/request-data-purge/$id').getMethod();
@@ -169,6 +179,10 @@ class _CohortHistoryState extends State<CohortHistory> {
         ),
       );
     }
+
+    setState(() {
+      _isPurgeLoading = false;
+    });
   }
 
   @override
@@ -177,120 +191,136 @@ class _CohortHistoryState extends State<CohortHistory> {
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.cohort_period_history),
       ),
-      body: FutureBuilder<String?>(
-        future: selectedUser,
-        builder: (context, selectedUserSnapshot) {
-          if (selectedUserSnapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          }
-
-          if (!selectedUserSnapshot.hasData ||
-              selectedUserSnapshot.data == null) {
-            return Center(
-                child: Text(AppLocalizations.of(context)!.no_user_selected));
-          }
-
-          return FutureBuilder<Map<String, List<dynamic>>>(
-            future: getAllHistoryData(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
+      body: Stack(
+        children: [
+          FutureBuilder<String?>(
+            future: selectedUser,
+            builder: (context, selectedUserSnapshot) {
+              if (selectedUserSnapshot.connectionState ==
+                  ConnectionState.waiting) {
                 return const Center(child: CircularProgressIndicator());
-              } else if (snapshot.hasError) {
+              }
+
+              if (!selectedUserSnapshot.hasData ||
+                  selectedUserSnapshot.data == null) {
                 return Center(
                     child:
-                        Text(AppLocalizations.of(context)!.error_loading_data));
-              } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                return Center(
-                    child: Text(
-                        AppLocalizations.of(context)!.no_history_available));
-              } else {
-                Map<String, List<dynamic>> groupedData = snapshot.data!;
-                return SingleChildScrollView(
-                  child: Padding(
-                    padding: Theme.of(context).largemainPadding,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: groupedData.entries.map((entry) {
-                        String year = entry.key;
-                        List<dynamic> historyList = entry.value;
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            FutureBuilder<Map<String, dynamic>>(
-                              future: getAllCohort(),
-                              builder: (context, cohortSnapshot) {
-                                if (cohortSnapshot.connectionState ==
-                                    ConnectionState.waiting) {
-                                  return const Center(
-                                      child: CircularProgressIndicator());
-                                } else if (cohortSnapshot.hasError) {
-                                  return Center(
-                                      child: Text(AppLocalizations.of(context)!
-                                          .error_loading_data));
-                                } else {
-                                  return Wrap(
-                                    direction: Axis.horizontal,
-                                    spacing: 15,
-                                    runSpacing: 15,
-                                    children: cohortSnapshot.data!['predicted']
-                                        .map<Widget>((user) {
-                                      return CircleImage(
-                                        image:
-                                            'assets/images/default_person.png',
-                                        isHighlighted:
-                                            selectedUserSnapshot.data ==
-                                                    user['id'].toString()
-                                                ? true
-                                                : false,
-                                        id: user['id'].toString(),
-                                        onSelect: onSelectUser,
-                                      );
-                                    }).toList(),
-                                  );
-                                }
-                              },
-                            ),
-                            const SizedBox(
-                              height: 20,
-                            ),
-                            Text(
-                              year,
-                              style: const TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.bold,
-                                color: ACCENT,
-                              ),
-                            ),
-                            const SizedBox(height: 10),
-                            Wrap(
-                              direction: Axis.horizontal,
-                              spacing: 15.0,
-                              runSpacing: 15.0,
-                              children: historyList.map((history) {
-                                int monthNumber = int.parse(
-                                    history['period_start'].split('-')[1]);
-                                String monthName = monthNames[monthNumber - 1];
-                                return HistoryComponent(
-                                  month: monthName,
-                                  day: history['period_start'].split('-')[2],
-                                  monthcycle:
-                                      history['days_between_period'].toString(),
-                                  anomalies:
-                                      history['anomalies'] == 'Regular' ? 1 : 2,
-                                );
-                              }).toList(),
-                            ),
-                            const SizedBox(height: 20),
-                          ],
-                        );
-                      }).toList(),
-                    ),
-                  ),
-                );
+                        Text(AppLocalizations.of(context)!.no_user_selected));
               }
+
+              return FutureBuilder<Map<String, List<dynamic>>>(
+                future: getAllHistoryData(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else if (snapshot.hasError) {
+                    return Center(
+                        child: Text(
+                            AppLocalizations.of(context)!.error_loading_data));
+                  } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                    return Center(
+                        child: Text(AppLocalizations.of(context)!
+                            .no_history_available));
+                  } else {
+                    Map<String, List<dynamic>> groupedData = snapshot.data!;
+                    return SingleChildScrollView(
+                      child: Padding(
+                        padding: Theme.of(context).largemainPadding,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: groupedData.entries.map((entry) {
+                            String year = entry.key;
+                            List<dynamic> historyList = entry.value;
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                FutureBuilder<Map<String, dynamic>>(
+                                  future: getAllCohort(),
+                                  builder: (context, cohortSnapshot) {
+                                    if (cohortSnapshot.connectionState ==
+                                        ConnectionState.waiting) {
+                                      return const Center(
+                                          child: CircularProgressIndicator());
+                                    } else if (cohortSnapshot.hasError) {
+                                      return Center(
+                                          child: Text(
+                                              AppLocalizations.of(context)!
+                                                  .error_loading_data));
+                                    } else {
+                                      return Wrap(
+                                        direction: Axis.horizontal,
+                                        spacing: 15,
+                                        runSpacing: 15,
+                                        children: cohortSnapshot
+                                            .data!['predicted']
+                                            .map<Widget>((user) {
+                                          return CircleImage(
+                                            image:
+                                                'assets/images/default_person.png',
+                                            isHighlighted:
+                                                selectedUserSnapshot.data ==
+                                                    user['id'].toString(),
+                                            id: user['id'].toString(),
+                                            anomalies: "Regular",
+                                            onSelect: onSelectUser,
+                                          );
+                                        }).toList(),
+                                      );
+                                    }
+                                  },
+                                ),
+                                const SizedBox(height: 20),
+                                Text(
+                                  year,
+                                  style: const TextStyle(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.bold,
+                                    color: ACCENT,
+                                  ),
+                                ),
+                                const SizedBox(height: 10),
+                                Wrap(
+                                  direction: Axis.horizontal,
+                                  spacing: 15.0,
+                                  runSpacing: 15.0,
+                                  children: historyList.map((history) {
+                                    int monthNumber = int.parse(
+                                        history['period_start'].split('-')[1]);
+                                    String monthName =
+                                        monthNames[monthNumber - 1];
+                                    return HistoryComponent(
+                                      month: monthName,
+                                      day:
+                                          history['period_start'].split('-')[2],
+                                      monthcycle: history['days_between_period']
+                                          .toString(),
+                                      anomalies:
+                                          history['anomalies'] == 'Regular'
+                                              ? 1
+                                              : 2,
+                                    );
+                                  }).toList(),
+                                ),
+                                const SizedBox(height: 30),
+                              ],
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                    );
+                  }
+                },
+              );
             },
-          );
-        },
+          ),
+          if (_isPurgeLoading)
+            Container(
+              color: Colors.black54,
+              child: const Center(
+                child: CircularProgressIndicator(),
+              ),
+            ),
+        ],
       ),
       floatingActionButton: Padding(
         padding: Theme.of(context).largemainPadding,

@@ -120,6 +120,7 @@ class _PeriodCycleInformationState extends State<PeriodCycleInformation> {
                 image: 'assets/images/default_person.png',
                 isHighlighted: user['id'].toString() == selectedUserId,
                 id: user['id'].toString(),
+                anomalies: widget.data['anomalies'],
                 onSelect: onSelectUser,
               );
             }).toList(),
@@ -367,6 +368,9 @@ class _PeriodCycleInformationState extends State<PeriodCycleInformation> {
               color: Colors.white,
             ),
           ),
+        ),
+        SizedBox(
+          height: 20,
         ),
       ],
     );

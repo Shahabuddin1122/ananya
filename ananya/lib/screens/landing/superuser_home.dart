@@ -6,6 +6,7 @@ import 'package:ananya/utils/api_sattings.dart';
 import 'package:ananya/utils/constants.dart';
 import 'package:ananya/utils/custom_theme.dart';
 import 'package:ananya/widgets/advance_info.dart';
+import 'package:ananya/widgets/dotted_container.dart';
 import 'package:ananya/widgets/help.dart';
 import 'package:ananya/widgets/hospital_pharmacy.dart';
 import 'package:ananya/widgets/knowledge_nexus_component.dart';
@@ -357,14 +358,14 @@ class _SuperuserHomeState extends State<SuperuserHome> {
                 child: StreamBuilder<Map<String, dynamic>>(
                   stream: _fetchData('user/advance-period-information', true),
                   builder: (context, snapshot) {
-                    if (snapshot.hasError) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(child: CircularProgressIndicator());
+                    } else if (snapshot.hasError) {
                       return const Center(child: Text('Error loading data'));
-                    } else if (snapshot.hasData && snapshot.data!.isNotEmpty) {
+                    } else {
                       return AdvanceInfo(
                         data: snapshot.data!,
                       );
-                    } else {
-                      return Container();
                     }
                   },
                 ),
@@ -393,6 +394,10 @@ class _SuperuserHomeState extends State<SuperuserHome> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
+                          DottedContainer(),
+                          const SizedBox(
+                            height: 30,
+                          ),
                           SvgPicture.asset(
                             'assets/images/period_cycle.svg',
                             width: 150,
