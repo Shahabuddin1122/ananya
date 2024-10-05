@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:ananya/utils/api_sattings.dart';
+import 'package:ananya/utils/api_settings.dart';
 import 'package:ananya/utils/constants.dart';
 import 'package:ananya/utils/custom_theme.dart';
 import 'package:ananya/widgets/custom_text_field.dart';
@@ -106,7 +106,11 @@ class _AddAUserState extends State<AddAUser> {
       ),
       body: Center(
         child: isLoading
-            ? const CircularProgressIndicator()
+            ? Image.asset(
+                'assets/gif/loading.gif',
+                height: 400,
+                fit: BoxFit.contain,
+              )
             : SingleChildScrollView(
                 child: Container(
                   width: double.infinity,

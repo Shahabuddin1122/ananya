@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:ananya/utils/api_sattings.dart';
+import 'package:ananya/utils/api_settings.dart';
 import 'package:ananya/utils/constants.dart';
 import 'package:ananya/utils/custom_theme.dart';
 import 'package:ananya/widgets/custom_app_bar_with_progress.dart';
@@ -45,8 +45,12 @@ class ChooseUser extends StatelessWidget {
           stream: getCohort(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(
-                child: CircularProgressIndicator(),
+              return Center(
+                child: Image.asset(
+                  'assets/gif/loading.gif',
+                  height: 400,
+                  fit: BoxFit.contain,
+                ),
               );
             } else if (snapshot.hasError) {
               return Center(

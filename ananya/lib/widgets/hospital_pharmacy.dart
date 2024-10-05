@@ -60,7 +60,12 @@ class HospitalPharmacyComponent extends StatelessWidget {
                 const SizedBox(height: 10),
                 ElevatedButton(
                   onPressed: _searchInMaps,
-                  child: Text(AppLocalizations.of(context)!.see_address),
+                  child: Text(
+                    AppLocalizations.of(context)!.see_address,
+                    style: const TextStyle(
+                      fontSize: 12,
+                    ),
+                  ),
                 ),
               ],
             ),

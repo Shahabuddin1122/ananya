@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:ananya/main.dart';
-import 'package:ananya/utils/api_sattings.dart';
+import 'package:ananya/utils/api_settings.dart';
 import 'package:ananya/utils/constants.dart';
 import 'package:ananya/utils/custom_theme.dart';
 import 'package:ananya/widgets/advance_info.dart';
@@ -18,6 +18,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
+import 'package:lottie/lottie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -214,8 +215,11 @@ class _UserHomeState extends State<UserHome> {
                   ],
                 ),
                 if (isProcessing)
-                  const Center(
-                    child: CircularProgressIndicator(),
+                  Center(
+                    child: LottieBuilder.asset(
+                      'assets/json/horizontal_loading.json',
+                      width: 100,
+                    ),
                   ),
               ],
             );
@@ -331,7 +335,10 @@ class _UserHomeState extends State<UserHome> {
                   stream: getAdvanceInfoStream(),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Center(child: CircularProgressIndicator());
+                      return LottieBuilder.asset(
+                        'assets/json/horizontal_loading.json',
+                        width: 100,
+                      );
                     } else if (snapshot.hasError) {
                       return const Center(child: Text('Error loading data'));
                     } else {
@@ -348,9 +355,7 @@ class _UserHomeState extends State<UserHome> {
               StreamBuilder<Map<String, dynamic>>(
                 stream: getPeriodDataStream(),
                 builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(child: CircularProgressIndicator());
-                  } else if (snapshot.hasError) {
+                  if (snapshot.hasError) {
                     return const Center(child: Text('Error loading data'));
                   } else if (snapshot.hasData && snapshot.data!.isNotEmpty) {
                     return PeriodCycleInformation(

@@ -20,6 +20,7 @@ import 'package:ananya/screens/sign_up.dart';
 import 'package:ananya/utils/local-notification.dart';
 import 'package:ananya/utils/scheme.dart';
 import 'package:ananya/screens/help.dart';
+import 'package:ananya/utils/splash-screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';

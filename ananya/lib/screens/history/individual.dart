@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:ananya/utils/api_sattings.dart';
+import 'package:ananya/utils/api_settings.dart';
 import 'package:ananya/utils/constants.dart';
 import 'package:ananya/utils/custom_theme.dart';
 import 'package:ananya/widgets/history_component.dart';
@@ -133,7 +133,12 @@ class _IndividualHistoryState extends State<IndividualHistory> {
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting &&
                   !_isPurgeLoading) {
-                return const Center(child: CircularProgressIndicator());
+                return Center(
+                    child: Image.asset(
+                  'assets/gif/loading.gif',
+                  height: 400,
+                  fit: BoxFit.contain,
+                ));
               } else if (snapshot.hasError) {
                 return Center(
                     child:
@@ -194,9 +199,13 @@ class _IndividualHistoryState extends State<IndividualHistory> {
           ),
           if (_isPurgeLoading)
             Container(
-              color: Colors.black54,
-              child: const Center(
-                child: CircularProgressIndicator(),
+              color: Colors.white,
+              child: Center(
+                child: Image.asset(
+                  'assets/gif/loading.gif',
+                  height: 400,
+                  fit: BoxFit.contain,
+                ),
               ),
             ),
         ],

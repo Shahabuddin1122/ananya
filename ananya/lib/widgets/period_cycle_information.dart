@@ -101,6 +101,9 @@ class _PeriodCycleInformationState extends State<PeriodCycleInformation> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        const SizedBox(
+          height: 10,
+        ),
         Text(
           AppLocalizations.of(context)!.prediction_of_next_cycle,
           style: const TextStyle(

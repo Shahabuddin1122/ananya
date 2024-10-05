@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:ananya/utils/api_sattings.dart';
+import 'package:ananya/utils/api_settings.dart';
 import 'package:ananya/utils/constants.dart';
 import 'package:ananya/utils/custom_theme.dart';
 import 'package:ananya/widgets/custom_text_field.dart';
@@ -59,6 +59,7 @@ class _SignInState extends State<SignIn> {
         final Map<String, dynamic> user = responseData['user'];
         await prefs.setString('userNumber', phoneController.text);
         await prefs.setString('userId', user['id'].toString());
+        await prefs.setString('userName', user['name']);
         await prefs.setBool('is_superuser', user['is_superuser']);
         await prefs.setString('token', responseData['token']);
         if (responseData['managed_users'].isNotEmpty) {
@@ -102,7 +103,11 @@ class _SignInState extends State<SignIn> {
       backgroundColor: const Color.fromARGB(255, 255, 235, 239),
       body: Center(
         child: isLoading
-            ? const CircularProgressIndicator()
+            ? Image.asset(
+                'assets/gif/loading.gif',
+                height: 400,
+                fit: BoxFit.contain,
+              )
             : SingleChildScrollView(
                 child: Container(
                   width: double.infinity,

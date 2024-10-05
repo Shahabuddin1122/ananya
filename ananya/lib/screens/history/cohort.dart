@@ -1,9 +1,10 @@
-import 'package:ananya/utils/api_sattings.dart';
+import 'package:ananya/utils/api_settings.dart';
 import 'package:ananya/utils/constants.dart';
 import 'package:ananya/utils/custom_theme.dart';
 import 'package:ananya/widgets/circle_image.dart';
 import 'package:ananya/widgets/history_component.dart';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -198,7 +199,12 @@ class _CohortHistoryState extends State<CohortHistory> {
             builder: (context, selectedUserSnapshot) {
               if (selectedUserSnapshot.connectionState ==
                   ConnectionState.waiting) {
-                return const Center(child: CircularProgressIndicator());
+                return Center(
+                  child: LottieBuilder.asset(
+                    'assets/json/horizontal_loading.json',
+                    width: 100,
+                  ),
+                );
               }
 
               if (!selectedUserSnapshot.hasData ||
@@ -212,7 +218,12 @@ class _CohortHistoryState extends State<CohortHistory> {
                 future: getAllHistoryData(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(child: CircularProgressIndicator());
+                    return Center(
+                        child: Image.asset(
+                      'assets/gif/loading.gif',
+                      height: 400,
+                      fit: BoxFit.contain,
+                    ));
                   } else if (snapshot.hasError) {
                     return Center(
                         child: Text(
@@ -315,9 +326,13 @@ class _CohortHistoryState extends State<CohortHistory> {
           ),
           if (_isPurgeLoading)
             Container(
-              color: Colors.black54,
-              child: const Center(
-                child: CircularProgressIndicator(),
+              color: Colors.white,
+              child: Center(
+                child: Image.asset(
+                  'assets/gif/loading.gif',
+                  height: 400,
+                  fit: BoxFit.contain,
+                ),
               ),
             ),
         ],
