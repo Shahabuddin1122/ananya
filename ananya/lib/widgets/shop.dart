@@ -57,7 +57,7 @@ class Shop extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             ElevatedButton(
-              onPressed: _searchInMaps,
+              onPressed: () {},
               child: Text(
                 AppLocalizations.of(context)!.view_product,
                 style: const TextStyle(

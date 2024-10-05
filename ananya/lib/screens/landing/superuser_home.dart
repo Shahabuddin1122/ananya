@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:ananya/main.dart';
-import 'package:ananya/utils/api_sattings.dart';
+import 'package:ananya/utils/api_settings.dart';
 import 'package:ananya/utils/constants.dart';
 import 'package:ananya/utils/custom_theme.dart';
 import 'package:ananya/widgets/advance_info.dart';
@@ -19,6 +19,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
+import 'package:lottie/lottie.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -234,7 +235,7 @@ class _SuperuserHomeState extends State<SuperuserHome> {
                   ],
                 ),
                 if (isProcessing)
-                  const Center(
+                  Center(
                     child: CircularProgressIndicator(),
                   ),
               ],
@@ -359,7 +360,10 @@ class _SuperuserHomeState extends State<SuperuserHome> {
                   stream: _fetchData('user/advance-period-information', true),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Center(child: CircularProgressIndicator());
+                      return LottieBuilder.asset(
+                        'assets/json/horizontal_loading.json',
+                        width: 100,
+                      );
                     } else if (snapshot.hasError) {
                       return const Center(child: Text('Error loading data'));
                     } else {
@@ -376,9 +380,7 @@ class _SuperuserHomeState extends State<SuperuserHome> {
               StreamBuilder<Map<String, dynamic>>(
                 stream: getCombinedStream(),
                 builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(child: CircularProgressIndicator());
-                  } else if (snapshot.hasError) {
+                  if (snapshot.hasError) {
                     return const Center(child: Text('Error loading data'));
                   } else if (snapshot.hasData &&
                       snapshot.data!['periodData']!.isNotEmpty &&

@@ -26,65 +26,66 @@ class _CustomDropdownState extends State<CustomDropdown> {
     return Container(
       margin: Theme.of(context).smallSubSectionDividerPadding,
       width: double.infinity,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Container(
-            width: 140,
-            height: 48,
-            padding: const EdgeInsets.symmetric(
-              horizontal: 20,
-              vertical: 7,
-            ),
-            decoration: const BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.all(
-                Radius.circular(5),
+      child: IntrinsicHeight(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Container(
+              width: 140,
+              padding: const EdgeInsets.symmetric(
+                horizontal: 20,
+                vertical: 7,
               ),
-            ),
-            child: Center(
-              child: Text(
-                widget.header,
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ),
-          ),
-          const SizedBox(width: 10),
-          Expanded(
-            child: Container(
-              height: 48,
               decoration: const BoxDecoration(
                 color: Colors.white,
-              ),
-              child: DropdownButtonFormField<String>(
-                dropdownColor: Colors.white,
-                decoration: const InputDecoration(
-                  contentPadding: EdgeInsets.symmetric(horizontal: 10),
-                  border: InputBorder.none,
+                borderRadius: BorderRadius.all(
+                  Radius.circular(5),
                 ),
-                value: _selectedValue,
-                items: widget.options.map((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-                onChanged: (newValue) {
-                  setState(() {
-                    _selectedValue = newValue;
-                  });
-                  if (widget.onChanged != null) {
-                    widget.onChanged!(newValue);
-                  }
-                },
-                hint: Text(AppLocalizations.of(context)!.choose_a),
+              ),
+              child: Center(
+                child: Text(
+                  widget.header,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
               ),
             ),
-          ),
-        ],
+            const SizedBox(width: 10),
+            Expanded(
+              child: Container(
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                ),
+                child: DropdownButtonFormField<String>(
+                  dropdownColor: Colors.white,
+                  decoration: const InputDecoration(
+                    contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                    border: InputBorder.none,
+                  ),
+                  value: _selectedValue,
+                  items: widget.options.map((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                  onChanged: (newValue) {
+                    setState(() {
+                      _selectedValue = newValue;
+                    });
+                    if (widget.onChanged != null) {
+                      widget.onChanged!(newValue);
+                    }
+                  },
+                  hint: Text(AppLocalizations.of(context)!.choose_a),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

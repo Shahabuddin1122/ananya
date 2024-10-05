@@ -1,7 +1,7 @@
 import 'package:ananya/screens/knowledge_nexus.dart';
 import 'package:ananya/screens/landing/superuser_home.dart';
 import 'package:ananya/screens/landing/user_home.dart';
-import 'package:ananya/utils/api_sattings.dart';
+import 'package:ananya/utils/api_settings.dart';
 import 'package:ananya/utils/constants.dart';
 import 'package:ananya/utils/custom_theme.dart';
 import 'package:ananya/widgets/user_sidebar.dart';

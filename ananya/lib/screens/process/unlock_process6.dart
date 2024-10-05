@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:ananya/models/period_state_questionnaire.dart';
 import 'package:ananya/screens/loading.dart';
-import 'package:ananya/utils/api_sattings.dart';
+import 'package:ananya/utils/api_settings.dart';
 import 'package:ananya/utils/constants.dart';
 import 'package:ananya/utils/custom_theme.dart';
 import 'package:ananya/widgets/choice_item_with_radio_icon.dart';

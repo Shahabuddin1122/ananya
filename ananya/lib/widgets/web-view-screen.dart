@@ -67,8 +67,12 @@ class _WebViewScreenState extends State<WebViewScreen> {
         children: [
           WebViewWidget(controller: controller),
           if (isLoading)
-            const Center(
-              child: CircularProgressIndicator(),
+            Center(
+              child: Image.asset(
+                'assets/gif/loading.gif',
+                width: 400,
+                fit: BoxFit.fill,
+              ),
             ),
         ],
       ),

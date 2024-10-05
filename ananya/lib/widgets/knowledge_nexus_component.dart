@@ -22,8 +22,7 @@ class KnowledgeNexusComponent extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Flexible(
-              flex: 1,
+            Expanded(
               child: SvgPicture.asset(
                 'assets/images/knowledge_nexus.svg',
                 fit: BoxFit.contain,
@@ -31,8 +30,7 @@ class KnowledgeNexusComponent extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 10),
-            Flexible(
-              flex: 1,
+            Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -57,7 +55,12 @@ class KnowledgeNexusComponent extends StatelessWidget {
                         onselect!(1);
                       }
                     },
-                    child: Text(AppLocalizations.of(context)!.go_to_nexus),
+                    child: Text(
+                      AppLocalizations.of(context)!.go_to_nexus,
+                      style: const TextStyle(
+                        fontSize: 12,
+                      ),
+                    ),
                   ),
                 ],
               ),
